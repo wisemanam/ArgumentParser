@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.*;
 
-public class PlaceholderTest {
+public class ArgumentParserTest {
 
   @Test
   public void testSomething() {
