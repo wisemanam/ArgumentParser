@@ -7,7 +7,30 @@ import org.junit.jupiter.api.*;
 public class ArgumentParserTest {
 
   @Test
-  public void testSomething() {
-    assertEquals(42, 42);
+  public void testArgumentParserTwoArg() {
+    String[] actualArguments = {"alice", "bob"}; // "alice bob"
+    ArgumentParser argParse = new ArgumentParser(actualArguments);
+    // argParse.hereAreMyActualArguments(actualArguments);
+    String x = argParse.getValue(0); // "bob"
+    String y = argParse.getValue(1);
+    assertEquals(x, "alice");
+    assertEquals(y, "bob");
+    // Demo needs to find out if x and y are equivalent
+  }
+  /*
+  @Test
+  public void testArgumentParserNoArg(){
+    ArgumentParser argParse = new ArgumentParser();
+
+
+  }
+  */
+
+  @Test
+  public void testArgumentParserOneArg() {
+    String[] actualArguments = {"hello"};
+    ArgumentParser argParse = new ArgumentParser(actualArguments);
+    String x = argParse.getValue(0);
+    assertEquals(x, "hello");
   }
 }
