@@ -9,7 +9,7 @@ public class ArgumentParserTest {
   @Test
   public void testArgumentParserTwoArg() {
     String arguments = "alice bob"; // "alice bob"
-    ArgumentParser argParse = new ArgumentParser(arguments);
+    ArgumentParser argParse = new ArgumentParser(2, arguments);
     String x = argParse.getValue(0); // "bob"
     String y = argParse.getValue(1);
     assertEquals(x, "alice");
@@ -26,7 +26,7 @@ public class ArgumentParserTest {
   @Test
   public void testArgumentParserOneArg() {
     String arguments = "hello";
-    ArgumentParser argParse = new ArgumentParser(arguments);
+    ArgumentParser argParse = new ArgumentParser(1, arguments);
     String x = argParse.getValue(0);
     assertEquals(x, "hello");
   }

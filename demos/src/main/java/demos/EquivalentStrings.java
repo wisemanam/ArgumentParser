@@ -11,10 +11,10 @@ public class EquivalentStrings {
   int num;
 
   public EquivalentStrings(String strings) {
-    ArgumentParser argParse = new ArgumentParser(strings);
+    ArgumentParser argParse = new ArgumentParser(2, strings);
     errors = false;
     error_message = "";
-    if (argParse.numArgs() != 2){
+    if (argParse.numArgs() != 2) {
       errors = true;
       num = argParse.numArgs();
       string1 = "";
@@ -23,10 +23,10 @@ public class EquivalentStrings {
         error_message = "EquivalentStrings error: the argument string1 is required";
       } else if (num == 1) {
         error_message = "EquivalentStrings error: the argument string2 is required";
-      }
-      else if (num > 2) {
+      } else if (num > 2) {
         String error_value = argParse.getValue(2);
-        error_message = "EquivalentStrings error: the value " + error_value + " matches no argument";
+        error_message =
+            "EquivalentStrings error: the value " + error_value + " matches no argument";
       }
     } else {
       string1 = argParse.getValue(0);
@@ -80,5 +80,6 @@ public class EquivalentStrings {
   }
 
   public static void main(String... args) {
+    // how do we get these arguments when someone does java EquivalentStrings bob mom
   }
 }

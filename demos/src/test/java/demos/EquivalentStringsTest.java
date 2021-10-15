@@ -17,7 +17,7 @@ class EquivalentStringsTest {
     assertEquals(answer, "equivalent");
   }
 
-  @Test 
+  @Test
   void testNotEquivalent() {
     String arguments = "emily hello";
     // String string1 = argParse.getValue(0);
