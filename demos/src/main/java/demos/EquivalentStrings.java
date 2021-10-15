@@ -25,7 +25,7 @@ public class EquivalentStrings {
         string_1_map[i] = hold;
         hold++;
       } else {
-        
+
       }
     }
     return string_1_map;
@@ -34,6 +34,6 @@ public class EquivalentStrings {
   public boolean checkEquivalent(String string1, String string2) {
     return false;
   }
-  public static void main(String... args) {
-  }
+
+  public static void main(String... args) {}
 }
