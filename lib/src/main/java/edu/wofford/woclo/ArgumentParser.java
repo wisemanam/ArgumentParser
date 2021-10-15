@@ -8,6 +8,11 @@ public class ArgumentParser {
   private int expectedArgs;
   private boolean help;
 
+  /**
+   * ArgumentParser takes an integer and a string and parses the arguments for the user to retreive.
+   * @param expectedArgs
+   * @param arguments
+   */
   public ArgumentParser(int expectedArgs, String arguments) {
     if (!arguments.equals("")) {
       args_list = arguments.split(" ");
