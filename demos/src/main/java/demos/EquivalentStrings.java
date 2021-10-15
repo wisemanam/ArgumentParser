@@ -23,7 +23,7 @@ public class EquivalentStrings {
         error_message = "EquivalentStrings error: the argument string1 is required";
       } else if (num == 1) {
         error_message = "EquivalentStrings error: the argument string2 is required";
-      } else if (num > 2) {
+      } else {
         String error_value = argParse.getValue(2);
         error_message =
             "EquivalentStrings error: the value " + error_value + " matches no argument";
