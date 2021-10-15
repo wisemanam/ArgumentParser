@@ -3,6 +3,10 @@ package demos;
 import edu.wofford.woclo.*;
 import java.util.*;
 
+/**
+ * Equivalent strings takes a string containing two words and returns a boolean that indicates whether
+ * the two words are equal (if the patterns of their letters are the same).
+ */
 public class EquivalentStrings {
   String string1;
   String string2;
