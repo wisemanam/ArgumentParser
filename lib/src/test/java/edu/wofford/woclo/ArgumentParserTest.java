@@ -8,9 +8,8 @@ public class ArgumentParserTest {
 
   @Test
   public void testArgumentParserTwoArg() {
-    String[] actualArguments = {"alice", "bob"}; // "alice bob"
-    ArgumentParser argParse = new ArgumentParser(actualArguments);
-    // argParse.hereAreMyActualArguments(actualArguments);
+    String arguments = "alice bob"; // "alice bob"
+    ArgumentParser argParse = new ArgumentParser(arguments);
     String x = argParse.getValue(0); // "bob"
     String y = argParse.getValue(1);
     assertEquals(x, "alice");
@@ -28,8 +27,8 @@ public class ArgumentParserTest {
 
   @Test
   public void testArgumentParserOneArg() {
-    String[] actualArguments = {"hello"};
-    ArgumentParser argParse = new ArgumentParser(actualArguments);
+    String arguments = "hello";
+    ArgumentParser argParse = new ArgumentParser(arguments);
     String x = argParse.getValue(0);
     assertEquals(x, "hello");
   }
