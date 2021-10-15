@@ -26,10 +26,19 @@ public class ArgumentParser {
     help = false;
   }
 
+  /**
+   * Takes an integer and returns the corresponding string.
+   * @param index
+   * @return
+   */
   public String getValue(int index) {
     return args_list[index];
   }
 
+  /**
+   * Returns the number of words in the string passed to ArgumentParser.
+   * @return
+   */
   public int numArgs() {
     return args_list.length;
   }
