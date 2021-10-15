@@ -6,16 +6,32 @@ import java.util.*;
 public class EquivalentStrings {
   String string1;
   String string2;
+  String error_message;
   boolean errors;
+  int num;
 
   public EquivalentStrings(String strings) {
-    ArguementParser argParse = new ArguementParser(strings);
-    if (argParse.numArgs() > 2){
-      errors = true;
-    }
+    ArgumentParser argParse = new ArgumentParser(strings);
     errors = false;
-    string1 = argParse.getValue(0);
-    string2 = argParse.getvalue(1);
+    error_message = "";
+    if (argParse.numArgs() != 2){
+      errors = true;
+      num = argParse.numArgs();
+      string1 = "";
+      string2 = "";
+      if (num == 0) {
+        error_message = "EquivalentStrings error: the argument string1 is required";
+      } else if (num == 1) {
+        error_message = "EquivalentStrings error: the argument string2 is required";
+      }
+      else if (num > 2) {
+        String error_value = argParse.getValue(2);
+        error_message = "EquivalentStrings error: the value " + error_value + " matches no argument";
+      }
+    } else {
+      string1 = argParse.getValue(0);
+      string2 = argParse.getValue(1);
+    }
   }
 
   public String getString1() {
@@ -55,8 +71,10 @@ public class EquivalentStrings {
     } else {
       equivalent = false;
     }
-    if (equivalent) {
+    if (equivalent && errors == false) {
       return "equivalent";
+    } else if (errors == true) {
+      return error_message;
     }
     return "not equivalent";
   }
