@@ -20,8 +20,6 @@ public class ArgumentParserTest {
   @Test
   public void testArgumentParserNoArg(){
     ArgumentParser argParse = new ArgumentParser();
-
-
   }
   */
 

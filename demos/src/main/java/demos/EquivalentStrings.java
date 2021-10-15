@@ -4,36 +4,81 @@ import edu.wofford.woclo.*;
 import java.util.*;
 
 public class EquivalentStrings {
-  private String string1;
-  private String string2;
-  private int[] string_1_array;
-  private int[] string_2_array;
+  String string1;
+  String string2;
+  String error_message;
+  boolean errors;
+  int num;
 
-  public EquivalentStrings(String string1, String string2) {
-    this.string1 = string1;
-    this.string2 = string2;
+  public EquivalentStrings(String strings) {
+    ArgumentParser argParse = new ArgumentParser(strings);
+    errors = false;
+    error_message = "";
+    if (argParse.numArgs() != 2){
+      errors = true;
+      num = argParse.numArgs();
+      string1 = "";
+      string2 = "";
+      if (num == 0) {
+        error_message = "EquivalentStrings error: the argument string1 is required";
+      } else if (num == 1) {
+        error_message = "EquivalentStrings error: the argument string2 is required";
+      }
+      else if (num > 2) {
+        String error_value = argParse.getValue(2);
+        error_message = "EquivalentStrings error: the value " + error_value + " matches no argument";
+      }
+    } else {
+      string1 = argParse.getValue(0);
+      string2 = argParse.getValue(1);
+    }
   }
 
-  public int[] mapString1(String string1) {
-    String[] string_1_hold = new String[string1.length()];
-    String[] string_1_as_arr = string1.split("", 0);
+  public String getString1() {
+    return string1;
+  }
+
+  public String getString2() {
+    return string2;
+  }
+
+  public int[] mapString(String str) {
+    String[] str_hold = new String[str.length()];
+    String[] str_arr = str.split("", 0);
     int hold = 0;
-    int[] string_1_map = new int[string1.length()];
+    int[] str_map = new int[str.length()];
     for (int i = 0; i < string1.length(); i++) {
-      if (Arrays.asList(string_1_hold).contains(string_1_as_arr[i]) == false) {
-        string_1_hold[hold] = string_1_as_arr[i];
-        string_1_map[i] = hold;
+      if (Arrays.asList(str_hold).contains(str_arr[i]) == false) {
+        str_hold[hold] = str_arr[i];
+        str_map[i] = hold;
         hold++;
       } else {
-
+        int num = Arrays.asList(str_hold).indexOf(str_arr[i]);
+        str_map[i] = num;
       }
     }
-    return string_1_map;
+    return str_map;
   }
 
-  public boolean checkEquivalent(String string1, String string2) {
-    return false;
+  public String checkEquivalent(int[] map1, int[] map2) {
+    boolean equivalent = true;
+    if (map1.length == map2.length) {
+      for (int i = 0; i < map1.length; i++) {
+        if (map1[i] != map2[i]) {
+          equivalent = false;
+        }
+      }
+    } else {
+      equivalent = false;
+    }
+    if (equivalent && errors == false) {
+      return "equivalent";
+    } else if (errors == true) {
+      return error_message;
+    }
+    return "not equivalent";
   }
 
-  public static void main(String... args) {}
+  public static void main(String... args) {
+  }
 }
