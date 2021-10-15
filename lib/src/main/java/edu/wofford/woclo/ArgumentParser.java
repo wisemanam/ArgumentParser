@@ -5,10 +5,15 @@ public class ArgumentParser {
   private String[] args_list;
 
   public ArgumentParser(String arguments) {
-    args_list = arguments.split(" ");
+    if (!arguments.equals("")) {
+      args_list = arguments.split(" ");
+    } else {
+      args_list = new String[0];
+    }
   }
 
   public String getValue(int index) {
+
     return args_list[index];
   }
 
