@@ -8,9 +8,9 @@ public class ArgumentParserTest {
 
   @Test
   public void testArgumentParserTwoArg() {
-    String arguments = "alice bob"; // "alice bob"
+    String arguments = "alice bob";
     ArgumentParser argParse = new ArgumentParser(2, arguments);
-    String x = argParse.getValue(0); // "bob"
+    String x = argParse.getValue(0);
     String y = argParse.getValue(1);
     assertEquals(x, "alice");
     assertEquals(y, "bob");
