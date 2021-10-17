@@ -23,4 +23,11 @@ public class ArgumentParserTest {
     String x = argParse.getValue(0);
     assertEquals(x, "hello");
   }
+
+  @Test
+  public void testNumWordsNotExpected() {
+    String arguments = "hello hey hi";
+    ArgumentParser argParse = new ArgumentParser(2, arguments);
+    assertTrue(argParse.numWordsNotExpected());
+  }
 }
