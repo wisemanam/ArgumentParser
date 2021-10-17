@@ -29,7 +29,7 @@ public class ArgumentParser {
   /**
    * Takes an integer and returns the corresponding string.
    * @param index
-   * @return
+   * @return string corresponding to the index
    */
   public String getValue(int index) {
     return args_list[index];
@@ -37,10 +37,17 @@ public class ArgumentParser {
 
   /**
    * Returns the number of words in the string passed to ArgumentParser.
-   * @return
+   * @return the number of words in the string
    */
   public int numArgs() {
     return args_list.length;
+  }
+
+  /**
+   * @return true if the number of words entered does not match the number of words expected
+   */
+  public boolean numWordsNotExpected() {
+    return args_list.length != expectedArgs;
   }
 
   // Feature 2 Implementation
