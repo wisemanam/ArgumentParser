@@ -14,14 +14,7 @@ public class ArgumentParserTest {
     String y = argParse.getValue(1);
     assertEquals(x, "alice");
     assertEquals(y, "bob");
-    // Demo needs to find out if x and y are equivalent
   }
-  /*
-  @Test
-  public void testArgumentParserNoArg(){
-    ArgumentParser argParse = new ArgumentParser();
-  }
-  */
 
   @Test
   public void testArgumentParserOneArg() {
