@@ -4,8 +4,8 @@ import edu.wofford.woclo.*;
 import java.util.*;
 
 /**
- * Equivalent strings takes a string containing two words and returns a boolean that indicates whether
- * the two words are equal (if the patterns of their letters are the same).
+ * Equivalent strings takes a string containing two words and returns a boolean that indicates
+ * whether the two words are equal (if the patterns of their letters are the same).
  */
 public class EquivalentStrings {
   String string1;
@@ -14,6 +14,11 @@ public class EquivalentStrings {
   boolean errors;
   int num;
 
+  /**
+   * Constructor that takes a string and uses ArgumentParser to extract the two words to be checked
+   * for equivalence. If the number of words given does not match the number of words expected then 
+   * an error message is printed.
+   */
   public EquivalentStrings(String strings) {
     ArgumentParser argParse = new ArgumentParser(2, strings);
     errors = false;
@@ -38,10 +43,16 @@ public class EquivalentStrings {
     }
   }
 
+  /** 
+   * Returns the first string that is being compared
+   */
   public String getString1() {
     return string1;
   }
 
+  /**
+   * Returns the second string that is being compared
+   */
   public String getString2() {
     return string2;
   }
