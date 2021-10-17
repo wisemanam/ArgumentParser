@@ -56,7 +56,6 @@ public class ArgumentParser {
   public boolean needsHelp() {
     return help;
     // need to change this to add more info
-    // i.e. 0 args, 1 arg, 3+ args
-    // find way to return extra arguments
+    // in the constructor add a string to print when we need help
   }
 }
