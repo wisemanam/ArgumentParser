@@ -16,7 +16,7 @@ public class EquivalentStrings {
 
   /**
    * Constructor that takes a string and uses ArgumentParser to extract the two words to be checked
-   * for equivalence. If the number of words given does not match the number of words expected then 
+   * for equivalence. If the number of words given does not match the number of words expected then
    * an error message is printed.
    */
   public EquivalentStrings(String strings) {
@@ -43,16 +43,12 @@ public class EquivalentStrings {
     }
   }
 
-  /** 
-   * Returns the first string that is being compared
-   */
+  /** Returns the first string that is being compared */
   public String getString1() {
     return string1;
   }
 
-  /**
-   * Returns the second string that is being compared
-   */
+  /** Returns the second string that is being compared */
   public String getString2() {
     return string2;
   }
