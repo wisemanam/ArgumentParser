@@ -15,6 +15,7 @@ public class ArgumentParser {
   public ArgumentParser(int expectedArgs, String[] arguments) {
     // add help message
     args_list = arguments.clone();
+    this.expectedArgs = expectedArgs;
 
     if (numWordsNotExpected()) {
       throw new MismatchException("Unexpected number of arguments.");
@@ -23,8 +24,6 @@ public class ArgumentParser {
     if (Arrays.asList(args_list).contains("--help") || Arrays.asList(args_list).contains("--h")) {
       throw new HelpException("Help needed.");
     }
-    
-    this.expectedArgs = expectedArgs;
   }
 
   /**
