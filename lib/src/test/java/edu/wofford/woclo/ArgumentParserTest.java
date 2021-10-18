@@ -34,5 +34,13 @@ public class ArgumentParserTest {
               ArgumentParser argParse = new ArgumentParser(2, arguments);
             });
     assertEquals(e.getFirstExtra(), "hi");
+    TooFewException e1 =
+        assertThrows(
+            TooFewException.class,
+            () -> {
+              String[] arguments = {"hello"};
+              ArgumentParser argParse = new ArgumentParser(2, arguments);
+            });
+    assertEquals(e1.getNextExpected(), "string2");
   }
 }
