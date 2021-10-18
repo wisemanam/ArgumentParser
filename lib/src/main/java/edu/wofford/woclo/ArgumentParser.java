@@ -3,7 +3,6 @@ package edu.wofford.woclo;
 import java.util.*;
 
 public class ArgumentParser {
-  // Feature 1 Implementation
   private String[] args_list;
   private int expectedArgs;
   private boolean help;
@@ -14,15 +13,12 @@ public class ArgumentParser {
    * @param expectedArgs
    * @param arguments
    */
-  public ArgumentParser(int expectedArgs, String arguments) {
+  public ArgumentParser(int expectedArgs, String[] arguments) {
     // add help message
-    if (!arguments.equals("")) {
-      args_list = arguments.split(" ");
-      if (Arrays.asList(args_list).contains("--help") || Arrays.asList(args_list).contains("--h")) {
-        help = true;
-      }
-    } else {
-      args_list = new String[0];
+    args_list = arguments.clone();
+    
+    if (Arrays.asList(args_list).contains("--help") || Arrays.asList(args_list).contains("--h")) {
+      help = true;
     }
     this.expectedArgs = expectedArgs;
     help = false;
