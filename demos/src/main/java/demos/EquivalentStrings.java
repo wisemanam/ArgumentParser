@@ -21,7 +21,7 @@ public class EquivalentStrings {
    * 
    * @param strings
    */
-  public EquivalentStrings(String strings) {
+  public EquivalentStrings(String[] strings) {
     ArgumentParser argParse = new ArgumentParser(2, strings);
     errors = false;
     error_message = "";
@@ -109,13 +109,7 @@ public class EquivalentStrings {
 
   public static void main(String... args) {
     // how do we get these arguments when someone does java EquivalentStrings bob mom
-    String arguments = "";
-    for (int i = 0; i < (args.length - 1); i++) {
-      arguments = arguments + args[i] + " ";
-    }
-    arguments = arguments + args[args.length - 1];
-    System.out.println(arguments);
-    EquivalentStrings equivStrings = new EquivalentStrings(arguments);
+    EquivalentStrings equivStrings = new EquivalentStrings(args);
     String string1 = equivStrings.getString1();
     String string2 = equivStrings.getString2();
     int[] map1 = equivStrings.mapString(string1);
