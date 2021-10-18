@@ -3,7 +3,6 @@ package demos;
 import edu.wofford.woclo.*;
 import java.util.*;
 
-
 public class EquivalentStrings {
   String string1;
   String string2;
@@ -25,13 +24,14 @@ public class EquivalentStrings {
       } else if (argParse.numArgs() == 1) {
         error_message = "EquivalentStrings error: the argument string2 is required";
       } else {
-          String error_value = argParse.getValue(2);
-          error_message =
-              "EquivalentStrings error: the value " + error_value + " matches no argument";
+        String error_value = argParse.getValue(2);
+        error_message =
+            "EquivalentStrings error: the value " + error_value + " matches no argument";
       }
     } catch (HelpException e2) {
       errors = true;
-      error_message = "usage: java EquivalentStrings [-h] string1 string2\n\nDetermine if two strings are equivalent.\n\npositional arguments:\n string1     (string)      the first string\n string2     (string)      the second string\n\nnamed arguments:\n -h, --help  show this help message and exit";
+      error_message =
+          "usage: java EquivalentStrings [-h] string1 string2\n\nDetermine if two strings are equivalent.\n\npositional arguments:\n string1     (string)      the first string\n string2     (string)      the second string\n\nnamed arguments:\n -h, --help  show this help message and exit";
     }
   }
 
@@ -63,21 +63,24 @@ public class EquivalentStrings {
 
   public String checkEquivalent(int[] map1, int[] map2) {
     boolean equivalent = true;
-    if (map1.length == map2.length) {
-      for (int i = 0; i < map1.length; i++) {
-        if (map1[i] != map2[i]) {
-          equivalent = false;
+    if (errors == false) {
+      if (map1.length == map2.length) {
+        for (int i = 0; i < map1.length; i++) {
+          if (map1[i] != map2[i]) {
+            equivalent = false;
+          }
         }
+      } else {
+        equivalent = false;
+      }
+      if (equivalent) {
+        return "equivalent";
+      } else {
+        return "not equivalent";
       }
     } else {
-      equivalent = false;
-    }
-    if (equivalent && errors == false) {
-      return "equivalent";
-    } else if (errors == true) {
       return error_message;
     }
-    return "not equivalent";
   }
 
   public static void main(String... args) {
