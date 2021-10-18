@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class EquivalentStringsTest {
   @Test
   void testEquivelent() {
-    String arguments = "coccon xyxxyz";
+    String[] arguments = {"coccon", "xyxxyz"};
     EquivalentStrings test = new EquivalentStrings(arguments);
     int[] map1 = test.mapString(test.getString1());
     int[] map2 = test.mapString(test.getString2());
@@ -17,7 +17,7 @@ class EquivalentStringsTest {
 
   @Test
   void testNotEquivalent() {
-    String arguments = "emily hello";
+    String[] arguments = {"emily", "hello"};
     EquivalentStrings test = new EquivalentStrings(arguments);
     int[] map1 = test.mapString(test.getString1());
     int[] map2 = test.mapString(test.getString2());
@@ -27,7 +27,7 @@ class EquivalentStringsTest {
 
   @Test
   void stringsDifLengths() {
-    String arguments = "audrey savannah";
+    String[] arguments = {"audrey", "savannah"};
     EquivalentStrings test = new EquivalentStrings(arguments);
     int[] map1 = test.mapString(test.getString1());
     int[] map2 = test.mapString(test.getString2());
@@ -37,7 +37,7 @@ class EquivalentStringsTest {
 
   @Test
   void noArgsGiven() {
-    String arguments = "";
+    String[] arguments = {};
     EquivalentStrings test = new EquivalentStrings(arguments);
     int[] map1 = test.mapString(test.getString1());
     int[] map2 = test.mapString(test.getString2());
@@ -47,7 +47,7 @@ class EquivalentStringsTest {
 
   @Test
   void oneArgGiven() {
-    String arguments = "bob";
+    String[] arguments = {"bob"};
     EquivalentStrings test = new EquivalentStrings(arguments);
     int[] map1 = test.mapString(test.getString1());
     int[] map2 = test.mapString(test.getString2());
@@ -57,7 +57,7 @@ class EquivalentStringsTest {
 
   @Test
   void tooManyArgsGiven() {
-    String arguments = "bob dad mom";
+    String[] arguments = {"bob", "dad", "mom"};
     EquivalentStrings test = new EquivalentStrings(arguments);
     int[] map1 = test.mapString(test.getString1());
     int[] map2 = test.mapString(test.getString2());
