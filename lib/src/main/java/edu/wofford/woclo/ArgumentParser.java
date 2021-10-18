@@ -15,6 +15,7 @@ public class ArgumentParser {
    * @param arguments
    */
   public ArgumentParser(int expectedArgs, String arguments) {
+    // add help message
     if (!arguments.equals("")) {
       args_list = arguments.split(" ");
       if (Arrays.asList(args_list).contains("--help") || Arrays.asList(args_list).contains("--h")) {

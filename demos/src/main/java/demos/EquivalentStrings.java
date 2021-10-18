@@ -96,5 +96,18 @@ public class EquivalentStrings {
 
   public static void main(String... args) {
     // how do we get these arguments when someone does java EquivalentStrings bob mom
+    String arguments = "";
+    for (int i = 0; i < (args.length - 1); i++) {
+      arguments = arguments + args[i] + " ";
+    }
+    arguments = arguments + args[args.length - 1];
+    System.out.println(arguments);
+    EquivalentStrings equivStrings = new EquivalentStrings(arguments);
+    String string1 = equivStrings.getString1();
+    String string2 = equivStrings.getString2();
+    int[] map1 = equivStrings.mapString(string1);
+    int[] map2 = equivStrings.mapString(string2);
+    String equivalence = equivStrings.checkEquivalent(map1, map2);
+    System.out.println(equivalence);
   }
 }
