@@ -17,8 +17,10 @@ public class ArgumentParser {
     args_list = arguments.clone();
     this.expectedArgs = expectedArgs;
 
-    if (numWordsNotExpected()) {
-      throw new MismatchException("Unexpected number of arguments.");
+    if (expectedArgs > args_list.length) {
+      throw new tooFewException(expectedArgs, args_list);
+    } else if (expectedArgs < args_list.length) {
+      throw new tooManyException(expectedArgs, args_list);
     }
 
     if (Arrays.asList(args_list).contains("--help") || Arrays.asList(args_list).contains("--h")) {
@@ -43,11 +45,6 @@ public class ArgumentParser {
    */
   public int numArgs() {
     return args_list.length;
-  }
-
-  /** @return true if the number of words entered does not match the number of words expected */
-  public boolean numWordsNotExpected() {
-    return args_list.length != expectedArgs;
   }
 
   // Feature 2 Implementation
