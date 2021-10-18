@@ -4,7 +4,6 @@ import java.util.*;
 
 public class ArgumentParser {
   private String[] args_list;
-  private int expectedArgs;
 
   /**
    * ArgumentParser takes an integer and a string and parses the arguments for the user to retreive.
@@ -12,15 +11,15 @@ public class ArgumentParser {
    * @param expectedArgs the number of values that the client expects to receive
    * @param arguments a list of the arguments the client would like to parse
    */
-  public ArgumentParser(int expectedArgs, String[] arguments) {
+  public ArgumentParser(int expected_args, String[] arguments) {
     // add help message
     args_list = arguments.clone();
-    this.expectedArgs = expectedArgs;
+    int expectedArgs = expected_args;
 
     if (expectedArgs > args_list.length) {
-      throw new tooFewException(expectedArgs, args_list);
+      throw new TooFewException(expectedArgs, args_list);
     } else if (expectedArgs < args_list.length) {
-      throw new tooManyException(expectedArgs, args_list);
+      throw new TooManyException(expectedArgs, args_list);
     }
 
     if (Arrays.asList(args_list).contains("--help") || Arrays.asList(args_list).contains("--h")) {

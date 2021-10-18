@@ -8,7 +8,6 @@ public class EquivalentStrings {
   String string2;
   String error_message;
   boolean errors;
-  int num;
 
   public EquivalentStrings(String[] strings) {
     ArgumentParser argParse = new ArgumentParser(2, strings);
@@ -17,16 +16,15 @@ public class EquivalentStrings {
     try {
       string1 = argParse.getValue(0);
       string2 = argParse.getValue(1);
-    } catch (tooFewException e1) {
+    } catch (TooFewException e1) {
       errors = true;
-      String nextExpected = e1.getNextExpected()
+      String nextExpected = e1.getNextExpected();
       error_message = "EquivalentStrings error: the argument " + nextExpected + " is required";
-    
-    } catch (tooManyException e2) {
-      errors = true
+
+    } catch (TooManyException e2) {
+      errors = true;
       String firstExtra = e2.getFirstExtra();
-      error_message =
-            "EquivalentStrings error: the value " + firstExtra + " matches no argument";
+      error_message = "EquivalentStrings error: the value " + firstExtra + " matches no argument";
 
     } catch (HelpException e3) {
       errors = true;
@@ -41,6 +39,10 @@ public class EquivalentStrings {
 
   public String getString2() {
     return string2;
+  }
+
+  public String getErrorMessage() {
+    return error_message;
   }
 
   public int[] mapString(String str) {

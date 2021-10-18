@@ -1,12 +1,12 @@
 package edu.wofford.woclo;
 
-public class tooManyException extends RuntimeException {
+public class TooManyException extends RuntimeException {
   int expected;
   String[] args_list;
 
-  public tooManyException(int expected, String[] args_list) {
+  public TooManyException(int expected, String[] args_list) {
     this.expected = expected;
-    this.args_list = args_list;
+    this.args_list = args_list.clone();
   }
 
   public String getFirstExtra() {

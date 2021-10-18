@@ -26,12 +26,13 @@ public class ArgumentParserTest {
 
   @Test
   public void testNumWordsNotExpected() {
-    tooManyException e =
+    TooManyException e =
         assertThrows(
-            tooManyException.class,
+            TooManyException.class,
             () -> {
               String[] arguments = {"hello", "hey", "hi"};
               ArgumentParser argParse = new ArgumentParser(2, arguments);
             });
+    assertEquals(e.getFirstExtra(), "hi");
   }
 }

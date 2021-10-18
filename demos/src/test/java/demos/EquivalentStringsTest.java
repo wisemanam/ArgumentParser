@@ -2,8 +2,6 @@ package demos;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Test;
-
 class EquivalentStringsTest {
   @Test
   void testEquivelent() {
@@ -39,10 +37,8 @@ class EquivalentStringsTest {
   void noArgsGiven() {
     String[] arguments = {};
     EquivalentStrings test = new EquivalentStrings(arguments);
-    int[] map1 = test.mapString(test.getString1());
-    int[] map2 = test.mapString(test.getString2());
-    String answer = test.checkEquivalent(map1, map2);
-    assertEquals(answer, "EquivalentStrings error: the argument string1 is required");
+    assertEquals(
+        test.getErrorMessage(), "EquivalentStrings error: the argument string1 is required");
   }
 
   @Test
