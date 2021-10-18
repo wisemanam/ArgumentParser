@@ -10,8 +10,8 @@ public class ArgumentParser {
   /**
    * ArgumentParser takes an integer and a string and parses the arguments for the user to retreive.
    *
-   * @param expectedArgs
-   * @param arguments
+   * @param expectedArgs the number of values that the client expects to receive
+   * @param arguments a list of the arguments
    */
   public ArgumentParser(int expectedArgs, String[] arguments) {
     // add help message
@@ -54,5 +54,9 @@ public class ArgumentParser {
     return help;
     // need to change this to add more info
     // in the constructor add a string to print when we need help
+  }
+
+  public boolean isEmpty() {
+    return args_list.length == 0;
   }
 }
