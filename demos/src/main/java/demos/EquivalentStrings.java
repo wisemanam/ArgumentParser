@@ -19,8 +19,8 @@ public class EquivalentStrings {
       string1 = argParse.getValue(0);
       string2 = argParse.getValue(1);
     } catch (MismatchException e1) {
+      errors = true;
       if (argParse.isEmpty()) {
-        errors = true;
         error_message = "EquivalentStrings error: the argument string1 is required";
       } else if (argParse.numArgs() == 1) {
         error_message = "EquivalentStrings error: the argument string2 is required";
@@ -30,6 +30,7 @@ public class EquivalentStrings {
               "EquivalentStrings error: the value " + error_value + " matches no argument";
       }
     } catch (HelpException e2) {
+      errors = true;
       error_message = "usage: java EquivalentStrings [-h] string1 string2\n\nDetermine if two strings are equivalent.\n\npositional arguments:\n string1     (string)      the first string\n string2     (string)      the second string\n\nnamed arguments:\n -h, --help  show this help message and exit";
     }
   }
