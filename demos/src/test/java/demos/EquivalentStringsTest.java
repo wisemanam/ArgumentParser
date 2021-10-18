@@ -57,7 +57,7 @@ class EquivalentStringsTest {
 
   @Test
   void tooManyArgsGiven() {
-    String arguments = {"bob", "dad", "mom"};
+    String[] arguments = {"bob", "dad", "mom"};
     EquivalentStrings test = new EquivalentStrings(arguments);
     int[] map1 = test.mapString(test.getString1());
     int[] map2 = test.mapString(test.getString2());
