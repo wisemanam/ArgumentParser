@@ -18,6 +18,8 @@ public class EquivalentStrings {
    * Constructor that takes a string and uses ArgumentParser to extract the two words to be checked
    * for equivalence. If the number of words given does not match the number of words expected then
    * an error message is printed.
+   * 
+   * @param strings
    */
   public EquivalentStrings(String strings) {
     ArgumentParser argParse = new ArgumentParser(2, strings);
@@ -52,7 +54,12 @@ public class EquivalentStrings {
   public String getString2() {
     return string2;
   }
-
+  
+  /**
+   * Takes a string and returns...
+   * 
+   * @param str
+   */
   public int[] mapString(String str) {
     String[] str_hold = new String[str.length()];
     String[] str_arr = str.split("", 0);
@@ -71,6 +78,16 @@ public class EquivalentStrings {
     return str_map;
   }
 
+  /**
+   * Compares the mapped strings to check for equivalence.
+   * Returns equivalent if the mapped integer arays of the two strings are equivalent.
+   * Returns not equivalent if the mapped integer arrays of the two strings are not equivalent.
+   * 
+   * @param map1
+   * @param map2
+   * 
+   * @return equivalent or not equivalent
+   */
   public String checkEquivalent(int[] map1, int[] map2) {
     boolean equivalent = true;
     if (map1.length == map2.length) {
