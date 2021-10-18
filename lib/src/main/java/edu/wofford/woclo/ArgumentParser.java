@@ -11,7 +11,7 @@ public class ArgumentParser {
    * ArgumentParser takes an integer and a string and parses the arguments for the user to retreive.
    *
    * @param expectedArgs the number of values that the client expects to receive
-   * @param arguments a list of the arguments
+   * @param arguments a list of the arguments the client would like to parse
    */
   public ArgumentParser(int expectedArgs, String[] arguments) {
     // add help message
@@ -27,7 +27,7 @@ public class ArgumentParser {
   /**
    * Takes an integer and returns the corresponding string.
    *
-   * @param index
+   * @param index index of the string to be returned
    * @return string corresponding to the index
    */
   public String getValue(int index) {
