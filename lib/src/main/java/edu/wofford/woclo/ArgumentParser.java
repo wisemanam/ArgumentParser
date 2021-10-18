@@ -16,7 +16,7 @@ public class ArgumentParser {
   public ArgumentParser(int expectedArgs, String[] arguments) {
     // add help message
     args_list = arguments.clone();
-    
+
     if (Arrays.asList(args_list).contains("--help") || Arrays.asList(args_list).contains("--h")) {
       help = true;
     }
@@ -50,12 +50,14 @@ public class ArgumentParser {
 
   // Feature 2 Implementation
 
+  /** @return true if the help flag is present */
   public boolean needsHelp() {
     return help;
     // need to change this to add more info
     // in the constructor add a string to print when we need help
   }
 
+  /** @return true if there are no arguments given */
   public boolean isEmpty() {
     return args_list.length == 0;
   }
