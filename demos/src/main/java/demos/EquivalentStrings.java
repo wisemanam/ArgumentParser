@@ -17,18 +17,18 @@ public class EquivalentStrings {
     try {
       string1 = argParse.getValue(0);
       string2 = argParse.getValue(1);
-    } catch (MismatchException e1) {
+    } catch (tooFewException e1) {
       errors = true;
-      if (argParse.isEmpty()) {
-        error_message = "EquivalentStrings error: the argument string1 is required";
-      } else if (argParse.numArgs() == 1) {
-        error_message = "EquivalentStrings error: the argument string2 is required";
-      } else {
-        String error_value = argParse.getValue(2);
-        error_message =
-            "EquivalentStrings error: the value " + error_value + " matches no argument";
-      }
-    } catch (HelpException e2) {
+      String nextExpected = e1.getNextExpected()
+      error_message = "EquivalentStrings error: the argument " + nextExpected + " is required";
+    
+    } catch (tooManyException e2) {
+      errors = true
+      String firstExtra = e2.getFirstExtra();
+      error_message =
+            "EquivalentStrings error: the value " + firstExtra + " matches no argument";
+
+    } catch (HelpException e3) {
       errors = true;
       error_message =
           "usage: java EquivalentStrings [-h] string1 string2\n\nDetermine if two strings are equivalent.\n\npositional arguments:\n string1     (string)      the first string\n string2     (string)      the second string\n\nnamed arguments:\n -h, --help  show this help message and exit";
