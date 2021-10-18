@@ -24,10 +24,10 @@ public class ArgumentParserTest {
     assertEquals(x, "hello");
   }
 
-  @Test
-  public void testNumWordsNotExpected() {
-    String[] arguments = {"hello", "hey", "hi"};
-    ArgumentParser argParse = new ArgumentParser(2, arguments);
-    assertTrue(argParse.numWordsNotExpected());
-  }
+  // @Test
+  // public void testNumWordsNotExpected() {
+  //   String[] arguments = {"hello", "hey", "hi"};
+  //   ArgumentParser argParse = new ArgumentParser(2, arguments);
+  //   tooManyException e = assertThrows(tooManyException.class);
+  // }
 }

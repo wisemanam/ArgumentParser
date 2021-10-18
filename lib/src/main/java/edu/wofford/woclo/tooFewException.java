@@ -10,6 +10,6 @@ public class tooFewException extends RuntimeException {
   }
 
   public String getNextExpected() {
-    return "string" + args_list.length;
+    return "string" + String.valueOf(args_list.length + 1);
   }
 }
