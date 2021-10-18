@@ -5,7 +5,6 @@ import java.util.*;
 public class ArgumentParser {
   private String[] args_list;
   private int expectedArgs;
-  private boolean help;
 
   /**
    * ArgumentParser takes an integer and a string and parses the arguments for the user to retreive.
@@ -17,11 +16,15 @@ public class ArgumentParser {
     // add help message
     args_list = arguments.clone();
 
-    if (Arrays.asList(args_list).contains("--help") || Arrays.asList(args_list).contains("--h")) {
-      help = true;
+    if (numWordsNotExpected()) {
+      throw new MismatchException("Unexpected number of arguments.");
     }
+
+    if (Arrays.asList(args_list).contains("--help") || Arrays.asList(args_list).contains("--h")) {
+      throw new HelpException("Help needed.");
+    }
+    
     this.expectedArgs = expectedArgs;
-    help = false;
   }
 
   /**
@@ -49,13 +52,6 @@ public class ArgumentParser {
   }
 
   // Feature 2 Implementation
-
-  /** @return true if the help flag is present */
-  public boolean needsHelp() {
-    return help;
-    // need to change this to add more info
-    // in the constructor add a string to print when we need help
-  }
 
   /** @return true if there are no arguments given */
   public boolean isEmpty() {
