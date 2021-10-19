@@ -85,9 +85,9 @@ public class EquivalentStrings {
   }
 
   public static void main(String... args) {
-    // how do we get these arguments when someone does java EquivalentStrings bob mom
+    // We need to check for errors down here instead of in checkEquivalent
     EquivalentStrings equivStrings = new EquivalentStrings(args);
-    String string1 = equivStrings.getString1();
+    String string1 = equivStrings.getString1(); 
     String string2 = equivStrings.getString2();
     int[] map1 = equivStrings.mapString(string1);
     int[] map2 = equivStrings.mapString(string2);
