@@ -20,10 +20,10 @@ public class EquivalentStrings {
   public EquivalentStrings(String[] strings) {
     try {
       ArgumentParser argParse = new ArgumentParser(2, strings);
-      error = Error.NONE;
-      error_message = "";
       string1 = argParse.getValue(0);
       string2 = argParse.getValue(1);
+      error = Error.NONE;
+      error_message = "";
 
     } catch (HelpException e1) {
       error = Error.HELP;
@@ -59,7 +59,7 @@ public class EquivalentStrings {
     String[] str_arr = str.split("", 0);
     int hold = 0;
     int[] str_map = new int[str.length()];
-    for (int i = 0; i < string1.length(); i++) {
+    for (int i = 0; i < str.length(); i++) {
       if (Arrays.asList(str_hold).contains(str_arr[i]) == false) {
         str_hold[hold] = str_arr[i];
         str_map[i] = hold;
