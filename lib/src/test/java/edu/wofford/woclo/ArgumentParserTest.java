@@ -57,4 +57,11 @@ public class ArgumentParserTest {
           ArgumentParser argParse = new ArgumentParser(2, arguments);
         });
   }
+
+  @Test
+  public void testNumArgs() {
+    String[] arguments = {"alice", "bob"};
+    ArgumentParser argParse = new ArgumentParser(2, arguments);
+    assertEquals(2, argParse.numArgs());
+  }
 }

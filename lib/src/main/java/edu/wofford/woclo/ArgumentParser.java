@@ -51,11 +51,4 @@ public class ArgumentParser {
   public int numArgs() {
     return args_list.length;
   }
-
-  // Feature 2 Implementation
-
-  /** @return true if there are no arguments given */
-  public boolean isEmpty() {
-    return args_list.length == 0;
-  }
 }
