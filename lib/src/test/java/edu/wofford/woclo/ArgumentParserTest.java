@@ -17,11 +17,15 @@ public class ArgumentParserTest {
   }
 
   @Test
-  public void testArgumentParserOneArg() {
-    String[] arguments = {"hello"};
-    ArgumentParser argParse = new ArgumentParser(1, arguments);
-    String x = argParse.getValue(0);
-    assertEquals(x, "hello");
+  public void testArgumentParserNoArg() {
+    TooFewException e =
+        assertThrows(
+            TooFewException.class,
+            () -> {
+              String[] arguments = {};
+              ArgumentParser argParse = new ArgumentParser(2, arguments);
+            });
+    assertEquals(e.getNextExpected(), "string1");
   }
 
   @Test
@@ -42,5 +46,15 @@ public class ArgumentParserTest {
               ArgumentParser argParse = new ArgumentParser(2, arguments);
             });
     assertEquals(e1.getNextExpected(), "string2");
+  }
+
+  @Test
+  public void testHelp() {
+    assertThrows(
+        HelpException.class,
+        () -> {
+          String[] arguments = {"hello", "--h"};
+          ArgumentParser argParse = new ArgumentParser(2, arguments);
+        });
   }
 }

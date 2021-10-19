@@ -10,10 +10,10 @@ public class EquivalentStrings {
   boolean errors;
 
   public EquivalentStrings(String[] strings) {
-    ArgumentParser argParse = new ArgumentParser(2, strings);
-    errors = false;
-    error_message = "";
     try {
+      ArgumentParser argParse = new ArgumentParser(2, strings);
+      errors = false;
+      error_message = "";
       string1 = argParse.getValue(0);
       string2 = argParse.getValue(1);
     } catch (TooFewException e1) {
@@ -56,8 +56,7 @@ public class EquivalentStrings {
         str_map[i] = hold;
         hold++;
       } else {
-        int num = Arrays.asList(str_hold).indexOf(str_arr[i]);
-        str_map[i] = num;
+        str_map[i] = Arrays.asList(str_hold).indexOf(str_arr[i]);
       }
     }
     return str_map;

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="edu.wofford.woclo.ArgumentParserTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-10-18T20:12:02" hostname="MacBook-Air-5.wofford.int" time="0.079">
+<testsuite name="edu.wofford.woclo.ArgumentParserTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2021-10-19T00:58:43" hostname="MacBook-Air-5.wofford.int" time="0.078">
   <properties/>
-  <testcase name="testArgumentParserOneArg()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.069"/>
-  <testcase name="testArgumentParserTwoArg()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
-  <testcase name="testNumWordsNotExpected()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.005"/>
+  <testcase name="testHelp()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.056"/>
+  <testcase name="testArgumentParserTwoArg()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.007"/>
+  <testcase name="testNumWordsNotExpected()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
+  <testcase name="testArgumentParserNoArg()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.008"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
