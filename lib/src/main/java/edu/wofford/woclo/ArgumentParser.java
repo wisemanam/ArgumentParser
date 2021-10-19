@@ -14,12 +14,12 @@ public class ArgumentParser {
 
   /**
    * ArgumentParser takes an integer and a string and parses the arguments for the user to retreive.
-   *
+   * If there are fewer or more arguments than expeted, the constructor throws an exception. It will 
+   * also throw an exception if arguments contains "--help" or "--h".
    * @param expected_args the number of values that the client expects to receive
    * @param arguments a list of the arguments the client would like to parse
    */
   public ArgumentParser(int expected_args, String[] arguments) {
-    // add help message
     args_list = arguments.clone();
     int expectedArgs = expected_args;
 
