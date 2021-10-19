@@ -7,29 +7,38 @@ public class EquivalentStrings {
   String string1;
   String string2;
   String error_message;
-  boolean errors;
+
+  enum Error {
+    HELP,
+    TOO_MANY,
+    TOO_FEW,
+    NONE
+  }
+
+  Error error;
 
   public EquivalentStrings(String[] strings) {
     try {
       ArgumentParser argParse = new ArgumentParser(2, strings);
-      errors = false;
+      error = Error.NONE;
       error_message = "";
       string1 = argParse.getValue(0);
       string2 = argParse.getValue(1);
-    } catch (TooFewException e1) {
-      errors = true;
-      String nextExpected = e1.getNextExpected();
-      error_message = "EquivalentStrings error: the argument " + nextExpected + " is required";
 
-    } catch (TooManyException e2) {
-      errors = true;
-      String firstExtra = e2.getFirstExtra();
-      error_message = "EquivalentStrings error: the value " + firstExtra + " matches no argument";
-
-    } catch (HelpException e3) {
-      errors = true;
+    } catch (HelpException e1) {
+      error = Error.HELP;
       error_message =
           "usage: java EquivalentStrings [-h] string1 string2\n\nDetermine if two strings are equivalent.\n\npositional arguments:\n string1     (string)      the first string\n string2     (string)      the second string\n\nnamed arguments:\n -h, --help  show this help message and exit";
+
+    } catch (TooFewException e2) {
+      error = Error.TOO_FEW;
+      String nextExpected = e2.getNextExpected();
+      error_message = "EquivalentStrings error: the argument " + nextExpected + " is required";
+
+    } catch (TooManyException e3) {
+      error = Error.TOO_MANY;
+      String firstExtra = e3.getFirstExtra();
+      error_message = "EquivalentStrings error: the value " + firstExtra + " matches no argument";
     }
   }
 
@@ -64,34 +73,33 @@ public class EquivalentStrings {
 
   public String checkEquivalent(int[] map1, int[] map2) {
     boolean equivalent = true;
-    if (errors == false) {
-      if (map1.length == map2.length) {
-        for (int i = 0; i < map1.length; i++) {
-          if (map1[i] != map2[i]) {
-            equivalent = false;
-          }
+    if (map1.length == map2.length) {
+      for (int i = 0; i < map1.length; i++) {
+        if (map1[i] != map2[i]) {
+          equivalent = false;
         }
-      } else {
-        equivalent = false;
-      }
-      if (equivalent) {
-        return "equivalent";
-      } else {
-        return "not equivalent";
       }
     } else {
-      return error_message;
+      equivalent = false;
+    }
+    if (equivalent) {
+      return "equivalent";
+    } else {
+      return "not equivalent";
     }
   }
 
   public static void main(String... args) {
-    // We need to check for errors down here instead of in checkEquivalent
     EquivalentStrings equivStrings = new EquivalentStrings(args);
-    String string1 = equivStrings.getString1(); 
-    String string2 = equivStrings.getString2();
-    int[] map1 = equivStrings.mapString(string1);
-    int[] map2 = equivStrings.mapString(string2);
-    String equivalence = equivStrings.checkEquivalent(map1, map2);
-    System.out.println(equivalence);
+    if (equivStrings.error == Error.NONE) {
+      String string1 = equivStrings.getString1();
+      String string2 = equivStrings.getString2();
+      int[] map1 = equivStrings.mapString(string1);
+      int[] map2 = equivStrings.mapString(string2);
+      String equivalence = equivStrings.checkEquivalent(map1, map2);
+      System.out.println(equivalence);
+    } else {
+      System.out.println(equivStrings.getErrorMessage());
+    }
   }
 }

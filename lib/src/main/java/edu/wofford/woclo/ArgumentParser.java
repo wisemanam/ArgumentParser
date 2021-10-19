@@ -23,14 +23,12 @@ public class ArgumentParser {
     args_list = arguments.clone();
     int expectedArgs = expected_args;
 
-    if (expectedArgs > args_list.length) {
+    if (Arrays.asList(args_list).contains("--help") || Arrays.asList(args_list).contains("--h")) {
+      throw new HelpException("Help needed.");
+    } else if (expectedArgs > args_list.length) {
       throw new TooFewException(expectedArgs, args_list);
     } else if (expectedArgs < args_list.length) {
       throw new TooManyException(expectedArgs, args_list);
-    }
-
-    if (Arrays.asList(args_list).contains("--help") || Arrays.asList(args_list).contains("--h")) {
-      throw new HelpException("Help needed.");
     }
   }
 
