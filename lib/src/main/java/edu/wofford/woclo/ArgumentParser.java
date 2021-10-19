@@ -1,7 +1,13 @@
 package edu.wofford.woclo;
 
 import java.util.*;
-
+/**
+ * The ArgumentParser class takes the arguments entered into the command line and parses each
+ * argument as strings. The class includes methods for examining the number of arguments given
+ * to the constructor as well as a method for returning the argument at a certain index.
+ * ArgumentParsers are constant and changing the list of arguments that was given to the constructor
+ * will not change the contents of the ArgumentParser.
+ */
 public class ArgumentParser {
   private String[] args_list;
 
