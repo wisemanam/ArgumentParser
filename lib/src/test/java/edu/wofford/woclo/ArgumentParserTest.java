@@ -56,6 +56,12 @@ public class ArgumentParserTest {
           String[] arguments = {"hello", "-h"};
           ArgumentParser argParse = new ArgumentParser(2, arguments);
         });
+    assertThrows(
+        HelpException.class,
+        () -> {
+          String[] arguments = {"hello", "hi", "--help"};
+          ArgumentParser argParse = new ArgumentParser(2, arguments);
+        });
   }
 
   @Test
