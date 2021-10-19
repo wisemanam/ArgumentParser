@@ -59,4 +59,18 @@ public class EquivalentStringsTest {
     assertEquals(
         test.getErrorMessage(), "EquivalentStrings error: the value mom matches no argument");
   }
+
+  @Test
+  public void helpTest() {
+    String[] arguments = {"bob", "dad", "--help"};
+    EquivalentStrings test = new EquivalentStrings(arguments);
+    assertEquals(
+        test.getErrorMessage(),
+        "usage: java EquivalentStrings [-h] string1 string2\n\nDetermine if two strings are equivalent.\n\npositional arguments:\n string1     (string)      the first string\n string2     (string)      the second string\n\nnamed arguments:\n -h, --help  show this help message and exit");
+    String[] arguments2 = {"bob", "dad", "-h"};
+    EquivalentStrings test2 = new EquivalentStrings(arguments2);
+    assertEquals(
+        test2.getErrorMessage(),
+        "usage: java EquivalentStrings [-h] string1 string2\n\nDetermine if two strings are equivalent.\n\npositional arguments:\n string1     (string)      the first string\n string2     (string)      the second string\n\nnamed arguments:\n -h, --help  show this help message and exit");
+  }
 }
