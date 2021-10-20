@@ -4,9 +4,9 @@ import edu.wofford.woclo.*;
 import java.util.*;
 
 public class EquivalentStrings {
-  String string1;
-  String string2;
-  String error_message;
+  private String string1;
+  private String string2;
+  private String error_message;
 
   enum Error {
     HELP,
@@ -72,6 +72,7 @@ public class EquivalentStrings {
   }
 
   public String checkEquivalent(String string1, String string2) {
+
     int[] map1 = mapString(string1);
     int[] map2 = mapString(string2);
     boolean equivalent = true;
