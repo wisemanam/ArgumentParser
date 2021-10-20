@@ -71,7 +71,9 @@ public class EquivalentStrings {
     return str_map;
   }
 
-  public String checkEquivalent(int[] map1, int[] map2) {
+  public String checkEquivalent(String string1, String string2) {
+    int[] map1 = mapString(string1);
+    int[] map2 = mapString(string2);
     boolean equivalent = true;
     if (map1.length == map2.length) {
       for (int i = 0; i < map1.length; i++) {
@@ -92,11 +94,8 @@ public class EquivalentStrings {
   public static void main(String... args) {
     EquivalentStrings equivStrings = new EquivalentStrings(args);
     if (equivStrings.error == Error.NONE) {
-      String string1 = equivStrings.getString1();
-      String string2 = equivStrings.getString2();
-      int[] map1 = equivStrings.mapString(string1);
-      int[] map2 = equivStrings.mapString(string2);
-      String equivalence = equivStrings.checkEquivalent(map1, map2);
+      String equivalence =
+          equivStrings.checkEquivalent(equivStrings.getString1(), equivStrings.getString2());
       System.out.println(equivalence);
     } else {
       System.out.println(equivStrings.getErrorMessage());

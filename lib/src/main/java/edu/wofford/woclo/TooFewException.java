@@ -1,7 +1,7 @@
 package edu.wofford.woclo;
 /**
- * The TooManyException is thrown when the number of arguments given to ArgumentParser is less
- * than the number expected. The exception requires the expected number of arguments and the list of
+ * The TooManyException is thrown when the number of arguments given to ArgumentParser is less than
+ * the number expected. The exception requires the expected number of arguments and the list of
  * arguments given. It includes methods that return the name of the next expected argument.
  */
 public class TooFewException extends RuntimeException {
@@ -20,6 +20,7 @@ public class TooFewException extends RuntimeException {
   }
   /**
    * Gets the name of the next argument that ArgumentParser expects.
+   *
    * @return the name of next argument
    */
   public String getNextExpected() {

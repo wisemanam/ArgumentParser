@@ -10,9 +10,7 @@ public class EquivalentStringsTest {
   public void testEquivalent() {
     String[] arguments = {"coccon", "xyxxyz"};
     EquivalentStrings test = new EquivalentStrings(arguments);
-    int[] map1 = test.mapString(test.getString1());
-    int[] map2 = test.mapString(test.getString2());
-    String answer = test.checkEquivalent(map1, map2);
+    String answer = test.checkEquivalent(test.getString1(), test.getString2());
     assertEquals(answer, "equivalent");
   }
 
@@ -20,9 +18,7 @@ public class EquivalentStringsTest {
   public void testNotEquivalent() {
     String[] arguments = {"emily", "hello"};
     EquivalentStrings test = new EquivalentStrings(arguments);
-    int[] map1 = test.mapString(test.getString1());
-    int[] map2 = test.mapString(test.getString2());
-    String answer = test.checkEquivalent(map1, map2);
+    String answer = test.checkEquivalent(test.getString1(), test.getString2());
     assertEquals(answer, "not equivalent");
   }
 
@@ -30,9 +26,7 @@ public class EquivalentStringsTest {
   public void stringsDifLengths() {
     String[] arguments = {"audrey", "savannah"};
     EquivalentStrings test = new EquivalentStrings(arguments);
-    int[] map1 = test.mapString(test.getString1());
-    int[] map2 = test.mapString(test.getString2());
-    String answer = test.checkEquivalent(map1, map2);
+    String answer = test.checkEquivalent(test.getString1(), test.getString2());
     assertEquals(answer, "not equivalent");
   }
 
