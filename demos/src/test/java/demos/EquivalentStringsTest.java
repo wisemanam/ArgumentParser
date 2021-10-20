@@ -8,7 +8,7 @@ public class EquivalentStringsTest {
 
   @Test
   public void testEquivalent() {
-    String[] arguments = {"coccon", "xyxxyz"};
+    String[] arguments = {"cocoon", "xyxyyz"};
     EquivalentStrings test = new EquivalentStrings(arguments);
     String answer = test.checkEquivalent(test.getString1(), test.getString2());
     assertEquals(answer, "equivalent");
