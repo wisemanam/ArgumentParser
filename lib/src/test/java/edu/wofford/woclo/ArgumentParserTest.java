@@ -10,8 +10,8 @@ public class ArgumentParserTest {
   public void testArgumentParserTwoArg() {
     String[] arguments = {"alice", "bob"};
     ArgumentParser argParse = new ArgumentParser(2, arguments);
-    String x = argParse.getValue(0);
-    String y = argParse.getValue(1);
+    String x = argParse.getString(0);
+    String y = argParse.getString(1);
     assertEquals(x, "alice");
     assertEquals(y, "bob");
   }
@@ -69,5 +69,51 @@ public class ArgumentParserTest {
     String[] arguments = {"alice", "bob"};
     ArgumentParser argParse = new ArgumentParser(2, arguments);
     assertEquals(2, argParse.numArgs());
+  }
+
+  @Test
+  public void testGetInt() {
+    String[] arguments = {"1", "2", "3"};
+    ArgumentParser argParse = new ArgumentParser(3, arguments);
+    int int1 = argParse.getInt(0);
+    int int2 = argParse.getInt(1);
+    int int3 = argParse.getInt(2);
+    assertEquals(int1, 1);
+    assertEquals(int2, 2);
+    assertEquals(int3, 3);
+  }
+
+  @Test
+  public void testGetFloat() {
+    String[] arguments = {"1.5", "2.3", "3.4"};
+    ArgumentParser argParse = new ArgumentParser(3, arguments);
+    float float1 = argParse.getFloat(0);
+    float float2 = argParse.getFloat(1);
+    float float3 = argParse.getFloat(2);
+    assertEquals(float1, 1.5, 0.1);
+    assertEquals(float2, 2.3, 0.1);
+    assertEquals(float3, 3.4, 0.1);
+  }
+
+  @Test
+  public void testWrongTypeExceptionInt() {
+    assertThrows(
+        WrongTypeException.class,
+        () -> {
+          String[] arguments = {"hello"};
+          ArgumentParser argParse = new ArgumentParser(1, arguments);
+          int int1 = argParse.getInt(0);
+        });
+  }
+
+  @Test
+  public void testWrongTypeExceptionFloat() {
+    assertThrows(
+        WrongTypeException.class,
+        () -> {
+          String[] arguments = {"awesome"};
+          ArgumentParser argParse = new ArgumentParser(1, arguments);
+          float float1 = argParse.getFloat(0);
+        });
   }
 }

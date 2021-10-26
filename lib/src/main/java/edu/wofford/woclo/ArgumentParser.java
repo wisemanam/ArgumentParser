@@ -39,8 +39,40 @@ public class ArgumentParser {
    * @param index index of the string to be returned
    * @return string corresponding to the index
    */
-  public String getValue(int index) {
+  public String getString(int index) {
     return args_list[index];
+  }
+
+  /**
+   * Takes an integer and returns the corresponding integer value. If the value at the index give
+   * cannot be converted to an integer, a WrongTypeException will be thrown.
+   *
+   * @param index index of the integer to be returned
+   * @return integer corresponding to the index
+   */
+  public int getInt(int index) {
+    try {
+      int argument = Integer.parseInt(args_list[index]);
+      return argument;
+    } catch (NumberFormatException e) {
+      throw new WrongTypeException("Value cannot be converted to integer.");
+    }
+  }
+
+  /**
+   * Takes an integer and returns the corresponding float value. If the value at the index give
+   * cannot be converted to a float, a WrongTypeException will be thrown.
+   *
+   * @param index index of the float to be returned
+   * @return float corresponding to the index
+   */
+  public float getFloat(int index) {
+    try {
+      float argument = Float.parseFloat(args_list[index]);
+      return argument;
+    } catch (NumberFormatException e) {
+      throw new WrongTypeException("Value cannot be converted to float.");
+    }
   }
 
   /**

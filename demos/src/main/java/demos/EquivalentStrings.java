@@ -20,8 +20,8 @@ public class EquivalentStrings {
   public EquivalentStrings(String[] strings) {
     try {
       ArgumentParser argParse = new ArgumentParser(2, strings);
-      string1 = argParse.getValue(0);
-      string2 = argParse.getValue(1);
+      string1 = argParse.getString(0);
+      string2 = argParse.getString(1);
       error = Error.NONE;
       error_message = "";
 
