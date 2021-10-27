@@ -11,7 +11,7 @@ public class OverlappingRectanglesTest {
     String[] args = {"-3", "0", "3", "4", "0", "-1", "9", "2"};
     OverlappingRectangles o = new OverlappingRectangles();
     String s = o.overlappingRectangles(args);
-    assertEquals(s, "6 45");
+    assertEquals("6 45", s);
   }
 
   @Test
@@ -19,6 +19,22 @@ public class OverlappingRectanglesTest {
     String[] args = {"-6", "2", "6", "6", "-5", "-5", "-2", "3"};
     OverlappingRectangles o = new OverlappingRectangles();
     String s = o.overlappingRectangles(args);
-    assertEquals(s, "3 69");
+    assertEquals("3 69", s);
+  }
+
+  @Test
+  public void testTooFew() {
+    String[] args = {"-6", "2", "6", "6", "-5", "-5", "-2"};
+    OverlappingRectangles o = new OverlappingRectangles();
+    String s = o.overlappingRectangles(args);
+    assertEquals("OverlappingRectangles error: the argument string8 is required", s);
+  }
+
+  @Test
+  public void testTooMany() {
+    String[] args = {"-6", "2", "6", "6", "-5", "-5", "-2", "3", "8"};
+    OverlappingRectangles o = new OverlappingRectangles();
+    String s = o.overlappingRectangles(args);
+    assertEquals("OverlappingRectangles error: the value 8 matches no argument", s);
   }
 }
