@@ -55,7 +55,7 @@ public class ArgumentParser {
       int argument = Integer.parseInt(args_list[index]);
       return argument;
     } catch (NumberFormatException e) {
-      throw new WrongTypeException("Value cannot be converted to integer.");
+      throw new WrongTypeException(args_list[index]);
     }
   }
 
