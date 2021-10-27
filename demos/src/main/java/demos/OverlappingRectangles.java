@@ -5,7 +5,7 @@ import edu.wofford.woclo.*;
 public class OverlappingRectangles {
 
   // make one function and call it in main
-  public String overlappingRectangles(String[] arguments) {
+  public String OverlappingRectangles(String[] arguments) {
     try {
       ArgumentParser argParse = new ArgumentParser(8, arguments);
       int x1rec1 = argParse.getInt(0);
