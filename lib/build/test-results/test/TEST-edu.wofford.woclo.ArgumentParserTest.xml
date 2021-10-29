@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="edu.wofford.woclo.ArgumentParserTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2021-10-26T23:56:56" hostname="Emilys-Air-4.wofford.int" time="0.085">
+<testsuite name="edu.wofford.woclo.ArgumentParserTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2021-10-29T03:55:18" hostname="Emilys-MacBook-Air-4.local" time="0.101">
   <properties/>
-  <testcase name="testWrongTypeExceptionInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.047"/>
-  <testcase name="testGetFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.014"/>
+  <testcase name="testWrongTypeExceptionInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.064"/>
+  <testcase name="testGetFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
   <testcase name="testWrongTypeExceptionFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testHelp()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testArgumentParserTwoArg()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
+  <testcase name="testHelp()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
+  <testcase name="testArgumentParserTwoArg()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
   <testcase name="testNumWordsNotExpected()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
-  <testcase name="testGetInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
-  <testcase name="testArgumentParserNoArg()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testNumArgs()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testGetInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
+  <testcase name="testArgumentParserNoArg()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testNumArgs()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

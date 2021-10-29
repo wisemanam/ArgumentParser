@@ -25,7 +25,7 @@ public class ArgumentParserTest {
               String[] arguments = {};
               ArgumentParser argParse = new ArgumentParser(2, arguments);
             });
-    assertEquals(e.getNextExpected(), "string1");
+    assertEquals(e.getNextExpected(), 0);
   }
 
   @Test
@@ -45,7 +45,7 @@ public class ArgumentParserTest {
               String[] arguments = {"hello"};
               ArgumentParser argParse = new ArgumentParser(2, arguments);
             });
-    assertEquals(e1.getNextExpected(), "string2");
+    assertEquals(e1.getNextExpected(), 1);
   }
 
   @Test
@@ -97,23 +97,27 @@ public class ArgumentParserTest {
 
   @Test
   public void testWrongTypeExceptionInt() {
-    assertThrows(
-        WrongTypeException.class,
-        () -> {
-          String[] arguments = {"hello"};
-          ArgumentParser argParse = new ArgumentParser(1, arguments);
-          int int1 = argParse.getInt(0);
-        });
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              String[] arguments = {"hello"};
+              ArgumentParser argParse = new ArgumentParser(1, arguments);
+              int int1 = argParse.getInt(0);
+            });
+    assertEquals(e.getWrongValue(), "hello");
   }
 
   @Test
   public void testWrongTypeExceptionFloat() {
-    assertThrows(
-        WrongTypeException.class,
-        () -> {
-          String[] arguments = {"awesome"};
-          ArgumentParser argParse = new ArgumentParser(1, arguments);
-          float float1 = argParse.getFloat(0);
-        });
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              String[] arguments = {"awesome"};
+              ArgumentParser argParse = new ArgumentParser(1, arguments);
+              float float1 = argParse.getFloat(0);
+            });
+    assertEquals(e.getWrongValue(), "awesome");
   }
 }

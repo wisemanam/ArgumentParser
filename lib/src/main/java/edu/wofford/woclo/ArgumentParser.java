@@ -23,7 +23,6 @@ public class ArgumentParser {
   public ArgumentParser(int expected_args, String[] arguments) {
     args_list = arguments.clone();
     int expectedArgs = expected_args;
-
     if (Arrays.asList(args_list).contains("--help") || Arrays.asList(args_list).contains("-h")) {
       throw new HelpException("Help needed.");
     } else if (expectedArgs > args_list.length) {
@@ -71,7 +70,7 @@ public class ArgumentParser {
       float argument = Float.parseFloat(args_list[index]);
       return argument;
     } catch (NumberFormatException e) {
-      throw new WrongTypeException("Value cannot be converted to float.");
+      throw new WrongTypeException(args_list[index]);
     }
   }
 

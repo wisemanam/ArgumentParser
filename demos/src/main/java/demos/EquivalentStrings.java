@@ -18,6 +18,7 @@ public class EquivalentStrings {
   Error error;
 
   public EquivalentStrings(String[] strings) {
+    String[] expectedArgs = {"string1", "string2"};
     try {
       ArgumentParser argParse = new ArgumentParser(2, strings);
       string1 = argParse.getString(0);
@@ -32,8 +33,9 @@ public class EquivalentStrings {
 
     } catch (TooFewException e2) {
       error = Error.TOO_FEW;
-      String nextExpected = e2.getNextExpected();
-      error_message = "EquivalentStrings error: the argument " + nextExpected + " is required";
+      int nextExpected = e2.getNextExpected();
+      error_message =
+          "EquivalentStrings error: the argument " + expectedArgs[nextExpected] + " is required";
 
     } catch (TooManyException e3) {
       error = Error.TOO_MANY;

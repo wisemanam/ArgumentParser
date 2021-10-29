@@ -19,11 +19,11 @@ public class TooFewException extends RuntimeException {
     this.args_list = args_list.clone();
   }
   /**
-   * Gets the name of the next argument that ArgumentParser expects.
+   * Gets the index of the next argument that ArgumentParser expects.
    *
-   * @return the name of next argument
+   * @return the index of the the next expected argument
    */
-  public String getNextExpected() {
-    return "string" + String.valueOf(args_list.length + 1);
+  public int getNextExpected() {
+    return args_list.length;
   }
 }
