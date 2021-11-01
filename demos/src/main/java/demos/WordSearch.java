@@ -5,13 +5,13 @@ import edu.wofford.woclo.*;
 public class WordSearch {
 
   public boolean search(args){
-    ArgumentParser argParse = new ArgumentParser(args);
+    ArgumentParser argParse = new ArgumentParser();
     argParse.addPositional("grid");
     argParse.addPositional("target");
     argParse.addNonPositional("width", "5");
     argParse.addNonPositional("height", "5");
 
-    argParse.parse();
+    argParse.parse(args);
     
     String grid = getString("grid");
     String target = getString("target");
