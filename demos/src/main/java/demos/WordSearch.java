@@ -5,9 +5,14 @@ import edu.wofford.woclo.*;
 public class WordSearch {
 
   public boolean search(args){
-    ArgumentParser argParse = new ArgumentParser(args, 4);
-    argParse.addPositional("grid", "string");
-    argParse.addPositional("target", "string");
+    ArgumentParser argParse = new ArgumentParser(args);
+    argParse.addPositional("grid");
+    argParse.addPositional("target");
+    argParse.addNonPositional("width", "5");
+    argParse.addNonPositional("height", "5");
+
+    argParse.parse();
+    
   }
   // need expected args (grid, word, [optional]: width, height)
   // String[] expectedArgs = {grid, word, width, height};
