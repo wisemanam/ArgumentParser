@@ -13,6 +13,12 @@ public class WordSearch {
 
     argParse.parse();
     
+    String grid = getString("grid");
+    String target = getString("target");
+    int width = getInt("width");
+    int height = getInt("height");
+
+    //word search
   }
   // need expected args (grid, word, [optional]: width, height)
   // String[] expectedArgs = {grid, word, width, height};
