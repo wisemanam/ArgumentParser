@@ -21,9 +21,10 @@ public class ArgumentParser {
    * @param expected_args the number of values that the client expects to receive
    * @param arguments a list of the arguments the client would like to parse
    */
-  public ArgumentParser(int expected_args, String[] arguments) {
+  public ArgumentParser(String[] arguments, String[] expected_names) {
     args = new HashMap<String, String>();
-    int expectedArgs = expected_args;
+    int expectedArgs = expected_names.length;
+    this.expected_names = expected_names;
     if (Arrays.asList(arguments).contains("--help") || Arrays.asList(arguments).contains("-h")) {
       throw new HelpException("Help needed.");
     } else if (expectedArgs > arguments.length) {
@@ -32,14 +33,16 @@ public class ArgumentParser {
       throw new TooManyException(expectedArgs, arguments);
     }
     int i = 0;
-    int numDefaults = 1;
+    int numDefaults = 0;
     while (i < arguments.length) {
       if (arguments[i].contains("--")) {
         String name = arguments[i].substring(2, arguments[i].length());
         args.put(name, arguments[i + 1]);
         i = i + 2;
+        int index = Arrays.asList(arguments).indexOf(name);
+        Arrays.asList(expected_names).remove(index);
       } else {
-        String name = "__default" + Integer.toString(numDefaults);
+        String name = expected_names[numDefaults];
         args.put(name, arguments[i]);
         i++;
         numDefaults++;
@@ -66,10 +69,14 @@ public class ArgumentParser {
     return expected_names[index];
   }
 
+  public void setDefault(String name, String value) {
+    String val = args.replace(name, value);
+  }
+
   /**
    * Takes an integer and returns the corresponding string.
    *
-   * @param index index of the string to be returned
+   * @param position index of the string to be returned
    * @return string corresponding to the index
    */
   public String getString(int position) {
@@ -114,7 +121,6 @@ public class ArgumentParser {
     }
   }
 
-
   /**
    * Takes an integer and returns the corresponding float value. If the value at the index give
    * cannot be converted to a float, a WrongTypeException will be thrown.
@@ -131,7 +137,6 @@ public class ArgumentParser {
       throw new WrongTypeException(args.get(name));
     }
   }
-
 
   // this is for when they give us the name of a non-positional argument
   public float getFloat(String arg_name) {

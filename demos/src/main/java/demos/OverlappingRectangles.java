@@ -8,7 +8,7 @@ public class OverlappingRectangles {
   public String overlappingRectangles(String[] arguments) {
     String[] expectedArgs = {"x1", "y1", "x2", "y2", "x3", "y3", "x4", "y4"};
     try {
-      ArgumentParser argParse = new ArgumentParser(8, arguments);
+      ArgumentParser argParse = new ArgumentParser(arguments, expectedArgs);
       argParse.setExpectedArgNames(expectedArgs);
       int x1rec1 = argParse.getInt(0);
       int y1rec1 = argParse.getInt(1);

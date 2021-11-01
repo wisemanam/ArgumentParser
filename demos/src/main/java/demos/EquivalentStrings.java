@@ -20,7 +20,7 @@ public class EquivalentStrings {
   public EquivalentStrings(String[] strings) {
     String[] expectedArgs = {"string1", "string2"};
     try {
-      ArgumentParser argParse = new ArgumentParser(2, strings);
+      ArgumentParser argParse = new ArgumentParser(strings, expectedArgs);
       string1 = argParse.getString(0);
       string2 = argParse.getString(1);
       error = Error.NONE;
