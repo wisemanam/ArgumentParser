@@ -4,7 +4,7 @@ import edu.wofford.woclo.*;
 
 public class WordSearch {
 
-  public boolean search(args){
+  public boolean search(String[] args){
     ArgumentParser argParse = new ArgumentParser();
     argParse.addPositional("grid");
     argParse.addPositional("target");
