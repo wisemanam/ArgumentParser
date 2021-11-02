@@ -3,20 +3,23 @@ package demos;
 import edu.wofford.woclo.*;
 
 public class WordSearch {
-
+  public boolean is_legal(int row, int column, String grid, int width, int height) {
+    return (0 <= row) && (row < height) && (0 <= column) && (column < width);
+  }
+  
   public boolean search(String[] args){
     ArgumentParser argParse = new ArgumentParser();
-    argParse.addPositional("grid");
-    argParse.addPositional("target");
-    argParse.addNonPositional("width", "5");
-    argParse.addNonPositional("height", "5");
+    argParse.addPositional("grid", type, "the grid to search");
+    argParse.addPositional("target", type, "the target word");
+    argParse.addNonPositional("width", type, "5", "the grid width");
+    argParse.addNonPositional("height", type, "5", "the grid height");
 
     argParse.parse(args);
     
-    String grid = getString("grid");
-    String target = getString("target");
-    int width = getInt("width");
-    int height = getInt("height");
+    String grid = getValue("grid");
+    String target = getValue("target");
+    int width = getValue("width");
+    int height = getValue("height");
 
     // word search
   }
