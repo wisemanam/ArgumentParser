@@ -12,7 +12,9 @@ import java.util.*;
 public class ArgumentParser {
   private HashMap<String, Argument> args;
   private List<String> positional_names;
+  private List<String> nonpositional_names;
   private int positional_counter;
+  private int named_counter;
 
   /**
    * ArgumentParser takes an integer and a string and parses the arguments for the user to retreive.
@@ -34,9 +36,11 @@ public class ArgumentParser {
     positional_counter++;
   }
 
-  public void addNonPositional(String name, String type, String description, String value) {
+  public void addNonPositional(String name, String type, String description, T value) {
     OptionalArgument arg = new OptionalArgument(name, type, description, value);
+    nonpositional_names.add(name);
     args.put(name, arg);
+    named_counter++;
   }
    
   public void parse(String[] arguments) {
@@ -119,9 +123,51 @@ public class ArgumentParser {
     }
   }
 
-  public String constructHelp() {
+  public String constructHelp(String prog_name, String prog_description) {
     String help = "";
-    return "";
+    String usage = "usage: java " + prog_name + " [-h] ";
+    for (int i = 0; i < nonpositional_names.size(); i++) {
+      String name = nonpositional_names.get(i);
+      usage = usage + "[--" + name + " " + name.toUpperCase() + "] "; 
+    }
+    for (int i = 0; i < (positional_names.size() - 1); i++) {
+      String name = positional_names.get(i);
+      usage = usage + name + " ";
+    }
+    String _name = positional_names.get(positional_names.size() - 1);
+    usage = usage + _name + "\n";
+    String prog_des = prog_description + "\n\n";
+    String positional = "positional arguments:\n";
+    String positional_args = "";
+    for (int i = 0; i < positional_names.size(); i++) {
+      String name = positional_names.get(i);
+      Argument arg = args.get(name);
+      String type = arg.getType();
+      String description = arg.getDescription();
+      positional_args = positional_args + " " + name + "\t(" + type + ")\t" + description + "\n";
+    }
+    String extra_space = "\n";
+    String named = "named arguments:\n";
+    String help_desc = " -h, --help\tshow this help message and exit";
+    String named_args = "";
+    if (named_counter > 0) {
+      for (int i = 0; i < (nonpositional_names.size() - 1); i++) {
+        String name = nonpositional_names.get(i);
+        Argument arg = args.get(name);
+        String type = arg.getType();
+        String description = arg.getDescription();
+        String value = arg.getValue();
+        named_args = named_args + " --" + name + " " + name.toUpperCase() + "\t(" + type + ")\t" + description + "(default: " + value + ")\n";
+      }
+      String __name = nonpositional_names.get(nonpositional_names.size() - 1);
+      Argument arg = args.get(__name);
+      String type = arg.getType();
+      String description = arg.getDescription();
+      String value = arg.getValue();
+      named_args = named_args + " --" + __name + " " + __name.toUpperCase() + "\t(" + type + ")\t" + description + "(default: " + value + ")";
+    }
+    help = usage + prog_des + positional + positional_args + extra_space + named + help_desc + named_args;
+    return help;
   }
 
   /**
