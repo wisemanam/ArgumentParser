@@ -55,20 +55,28 @@ public class ArgumentParser {
         String value = arguments[i + 1];
         Argument arg = args.get(name);
         arg.setValue(value);
-        args.replace(name, arg);
+        try {
+          args.replace(name, arg);
+        } catch (ArgumentNameNotSpecifiedException e) {
+          System.out.println(e.getArgName() + " does not match expected argument name");
+        }
         i = i + 2;
       } else {
         String name = positional_names.get(positional);
         String value = arguments[i];
         Argument arg = args.get(name);
         arg.setValue(value);
-        args.replace(name, arg);
+        try {
+          args.replace(name, arg);
+        } catch (ArgumentNameNotSpecifiedException e) {
+          System.out.println(e.getArgName() + " does not match expected argument name");
+        }
         i++;
         positional++;
       }
-    } if (positional_counter > args.size()) {
+    } if (positional_counter > positional) {
         throw new TooFewException(positional_counter, arguments);
-    } else if (positional_counter < args.size()) {
+    } else if (positional_counter < positional || arguments.length > positional_counter + named_counter) {
         throw new TooManyException(positional_counter, arguments);
     }
   }
