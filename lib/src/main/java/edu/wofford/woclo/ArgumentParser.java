@@ -27,13 +27,16 @@ public class ArgumentParser {
     positional_counter = 0;
   }
 
-  public void addPositional(String name, String type) {
+  public void addPositional(String name, String type, String description) {
+    Argument arg = new Argument(name, type, description);
     positional_names.add(name);
+    args.put(name, arg);
     positional_counter++;
   }
 
-  public void addNonPositional(String name, String default_value) {
-    args.put(name, default_value);
+  public void addNonPositional(String name, String type, String description, String value) {
+    OptionalArgument arg = new OptionalArgument(name, type, description, value);
+    args.put(name, arg);
   }
    
   public void parse(String[] arguments) {
@@ -46,12 +49,16 @@ public class ArgumentParser {
       if (arguments[i].startsWith("--")) {
         String name = arguments[i].substring(2, arguments[i].length());
         String value = arguments[i + 1];
-        args.replace(name, value);
+        Argument arg = args.get(name);
+        arg.setValue(value);
+        args.replace(name, arg);
         i = i + 2;
       } else {
         String name = positional_names.get(positional);
         String value = arguments[i];
-        args.put(name, value);
+        Argument arg = args.get(name);
+        arg.setValue(value);
+        args.replace(name, arg);
         i++;
         positional++;
       }
@@ -110,6 +117,11 @@ public class ArgumentParser {
     } catch (NumberFormatException e) {
       throw new WrongTypeException(args.get(arg_name));
     }
+  }
+
+  public String constructHelp() {
+    String help = "";
+    return "";
   }
 
   /**
