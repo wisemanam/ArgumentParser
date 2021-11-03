@@ -93,11 +93,14 @@ public class ArgumentParser {
     return arg.getValue();
   }
 
-  public int maxNameLength(Object[] names) {
+  public int maxNameLength(String[] names) {
     if (names.length == 1) {
-      return names[0];
+      return names[0].length;
     } else {
-      int rec_call = maxNameLength(Arrays.copyOfRange(names, 1, names.length)
+      int rec_call = maxNameLength(Arrays.copyOfRange(names, 1, names.length));
+      if (names[0].startsWith("--")){
+        names[0] += " " + names[0].substring(2);
+      }
       if (names[0].length > rec_call) {
         return names[0].length;
       } else {
@@ -107,7 +110,8 @@ public class ArgumentParser {
   }
 
   public String constructHelp(String prog_name, String prog_description) {
-    int maxWordLen = maxNameLength(args.keySet().toArray());
+    String[] nameArray = Arrays.copyOf(args.keySet().toArray(), args.keySet().toArray().length, String[].class);
+    int maxWordLen = maxNameLength(nameArray);
     String help = "";
     String usage = "usage: java " + prog_name + " [-h] ";
     for (int i = 0; i < nonpositional_names.size(); i++) {
@@ -147,8 +151,7 @@ public class ArgumentParser {
                 + name
                 + " "
                 + name.toUpperCase()
-                + "\t"
-                + "\t"
+                + String.join("", Collections.nCopies(maxWordLen, " ")) + "  "
                 + "("
                 + type
                 + ") \t"
