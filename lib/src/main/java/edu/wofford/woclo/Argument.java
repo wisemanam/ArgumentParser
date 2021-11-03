@@ -23,13 +23,17 @@ public class Argument {
     } else if (type == "integer") {
       try {
         int val = Integer.parseInt(value);
-        return (T) val;
+        return (T)val;
       } catch (NumberFormatException e) {
         throw new WrongTypeException(value);
       }
     } else {
-      float val = Float.parseFloat(value);
-      return (T)val;
+      try {
+        float val = Float.parseFloat(value);
+        return (T)val;
+      } catch (NumberFormatException e) {
+        throw new WrongTypeException(value);
+      }
     }
   }
 

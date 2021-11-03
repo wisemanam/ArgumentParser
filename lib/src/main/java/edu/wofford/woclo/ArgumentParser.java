@@ -54,8 +54,8 @@ public class ArgumentParser {
     while (!box_of_garbage.isEmpty()) {
       if (box_of_garbage.peek().startsWith("--")) {
         String name = box_of_garbage.poll().substring(2);
-        if (box_of_garbage.isEmpty() || box_of_garbage.peek().startsWith("--")) {
-          throw new NoValueException("There is no value available");
+        if (box_of_garbage.isEmpty()) {
+          throw new NoValueException(name);
         } 
         String value = box_of_garbage.poll();
         Argument arg = args.get(name);
