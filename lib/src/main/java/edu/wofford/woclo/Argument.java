@@ -22,14 +22,16 @@ public class Argument {
       return (T)value;
     } else if (type == "integer") {
       try {
-        int val = Integer.parseInt(value);
-        return (T) val;
+        return (T)Integer.valueOf(value);
       } catch (NumberFormatException e) {
         throw new WrongTypeException(value);
       }
     } else {
-      float val = Float.parseFloat(value);
-      return (T)val;
+      try {
+        return (T)Float.valueOf(value);
+      } catch (NumberFormatException e) {
+        throw new WrongTypeException(value);
+      }
     }
   }
 

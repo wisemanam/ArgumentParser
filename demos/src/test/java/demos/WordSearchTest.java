@@ -1,5 +1,6 @@
-package demos;
+// package demos;
 
+<<<<<<< HEAD
 import org.junit.jupiter.api.Test;
 
 public class WordSearchTest {
@@ -30,3 +31,21 @@ public class WordSearchTest {
     String grid = ""
   }
 }
+=======
+// public class WordSearchTest {
+//   /*
+//     @Test
+//     public void testDefaultGrid() {
+//         String grid = "h    a    l    ifax      ";
+//         WordSearch wordsearch = new WordSearch();
+//         assertTrue(wordsearch.search({grid, "halifax"}));
+
+//         String grid2 = "softsweskaolzilklqmtreyoy";
+//         WordSearch wordsearch2 = new WordSearch();
+//         assertTrue(wordsearch2.search({grid2, "yellow"}));
+
+//         String grid3 = "";
+//   }
+//   */
+// }
+>>>>>>> 777e124b90619481a356abe540883943e45def55
