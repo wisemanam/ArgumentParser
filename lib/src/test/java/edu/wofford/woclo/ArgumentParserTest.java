@@ -9,10 +9,12 @@ public class ArgumentParserTest {
   @Test
   public void testArgumentParserTwoArg() {
     String[] arguments = {"alice", "bob"};
-    String[] expected = {}
-    ArgumentParser argParse = new ArgumentParser(2, arguments);
-    String x = argParse.getString(0);
-    String y = argParse.getString(1);
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("string1", "String", "the first string argument");
+    argParse.addPositional("string2", "String", "the second string argument");
+    argParse.parse(arguments);
+    String x = argParse.getValueString("string1");
+    String y = argParse.getValueString("string2");
     assertEquals(x, "alice");
     assertEquals(y, "bob");
   }
@@ -24,10 +26,11 @@ public class ArgumentParserTest {
             TooFewException.class,
             () -> {
               String[] arguments = {};
-              String[] expected = {"string1", "string2"};
-              ArgumentParser argParse = new ArgumentParser(arguments, expected);
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("string1", "String", "the first string argument");
+              argParse.parse(arguments);
             });
-    assertEquals(e.getNextExpected(), 0);
+    assertEquals(e.getNextExpectedValue(), 0);
   }
 
   @Test
@@ -37,8 +40,10 @@ public class ArgumentParserTest {
             TooManyException.class,
             () -> {
               String[] arguments = {"hello", "hey", "hi"};
-              String[] expected = {"string1", "string2"};
-              ArgumentParser argParse = new ArgumentParser(arguments, expected);
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("string1", "String", "the first string argument");
+              argParse.addPositional("string2", "String", "the second string argument");
+              argParse.parse(arguments);
             });
     assertEquals(e.getFirstExtra(), "hi");
     TooFewException e1 =
@@ -46,10 +51,12 @@ public class ArgumentParserTest {
             TooFewException.class,
             () -> {
               String[] arguments = {"hello"};
-              String[] expected = {"string1", "string2"};
-              ArgumentParser argParse = new ArgumentParser(arguments, expected);
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("string1", "String", "the first string argument");
+              argParse.addPositional("string2", "String", "the second string argument");
+              argParse.parse(arguments);
             });
-    assertEquals(e1.getNextExpected(), 1);
+    assertEquals(e1.getNextExpectedValue(), 1);
   }
 
   @Test
@@ -58,33 +65,42 @@ public class ArgumentParserTest {
         HelpException.class,
         () -> {
           String[] arguments = {"hello", "-h"};
-          String[] expected = {"string1", "string2"};
-          ArgumentParser argParse = new ArgumentParser(arguments, expected);
+          ArgumentParser argParse = new ArgumentParser();
+          argParse.addPositional("string1", "String", "the first string argument");
+          argParse.addPositional("string2", "String", "The second string argument");
+          argParse.parse(arguments);
         });
     assertThrows(
         HelpException.class,
         () -> {
           String[] arguments = {"hello", "hi", "--help"};
-          ArgumentParser argParse = new ArgumentParser(arguments);
+          ArgumentParser argParse = new ArgumentParser();
+          argParse.addPositional("string1", "String", "the first string argument");
+          argParse.parse(arguments);
         });
   }
 
   @Test
   public void testNumArgs() {
     String[] arguments = {"alice", "bob"};
-    String[] expected = {"string1", "string2"};
-    ArgumentParser argParse = new ArgumentParser(arguments, expected);
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("string1", "String", "the first string argument");
+    argParse.addPositional("string2", "String", "the second string argument");
+    argParse.parse(arguments);
     assertEquals(2, argParse.numArgs());
   }
 
   @Test
   public void testGetInt() {
     String[] arguments = {"1", "2", "3"};
-    String[] expected = {"x1", "x2", "x3"};
-    ArgumentParser argParse = new ArgumentParser(arguments, expected);
-    int int1 = argParse.getInt("x1");
-    int int2 = argParse.getInt("x2");
-    int int3 = argParse.getInt("x3");
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("x1", "int", "the first int argument");
+    argParse.addPositional("x2", "int", "the second int argument");
+    argParse.addPositional("x3", "int", "the third int argument");
+    argParse.parse(arguments);
+    int int1 = argParse.getValueInt("x1");
+    int int2 = argParse.getValueInt("x2");
+    int int3 = argParse.getValueInt("x3");
     assertEquals(int1, 1);
     assertEquals(int2, 2);
     assertEquals(int3, 3);
@@ -93,11 +109,14 @@ public class ArgumentParserTest {
   @Test
   public void testGetFloat() {
     String[] arguments = {"1.5", "2.3", "3.4"};
-    String[] expected = {"x1", "x2", "x3"};
-    ArgumentParser argParse = new ArgumentParser(arguments, expected);
-    float float1 = argParse.getFloat("x1");
-    float float2 = argParse.getFloat("x2");
-    float float3 = argParse.getFloat("x3");
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("x1", "float", "the first float argument");
+    argParse.addPositional("x2", "float", "the second float argument");
+    argParse.addPositional("x3", "float", "the third float argument");
+    argParse.parse(arguments);
+    float float1 = argParse.getValueFloat("x1");
+    float float2 = argParse.getValueFloat("x2");
+    float float3 = argParse.getValueFloat("x3");
     assertEquals(float1, 1.5, 0.1);
     assertEquals(float2, 2.3, 0.1);
     assertEquals(float3, 3.4, 0.1);
@@ -110,9 +129,10 @@ public class ArgumentParserTest {
             WrongTypeException.class,
             () -> {
               String[] arguments = {"hello"};
-              ArgumentParser argParse = new ArgumentParser(arguments);
-              argParse.addPositional()
-              int int1 = argParse.getInt(0);
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("x1", "int", "the first int argument");
+              argParse.parse(arguments);
+              int int1 = argParse.getValueInt("x1");
             });
     assertEquals(e.getWrongValue(), "hello");
   }
@@ -124,14 +144,16 @@ public class ArgumentParserTest {
             WrongTypeException.class,
             () -> {
               String[] arguments = {"awesome"};
-              ArgumentParser argParse = new ArgumentParser(arguments);
-              float float1 = argParse.getFloat(0);
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("x1", "float", "the first float argument");
+              argParse.parse(arguments);
+              float float1 = argParse.getValueFloat("x1");
             });
     assertEquals(e.getWrongValue(), "awesome");
   }
 
   // @Test
   // public void testNamedArgs() {
-    
+
   // }
 }

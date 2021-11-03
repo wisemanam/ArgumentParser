@@ -26,7 +26,9 @@ public class ArgumentParser {
   public ArgumentParser() {
     args = new HashMap<String, Argument>();
     positional_names = new ArrayList<String>();
+    nonpositional_names = new ArrayList<String>();
     positional_counter = 0;
+    named_counter = 0;
   }
 
   public void addPositional(String name, String type, String description) {
@@ -40,94 +42,101 @@ public class ArgumentParser {
     OptionalArgument arg = new OptionalArgument(name, type, description, value);
     nonpositional_names.add(name);
     args.put(name, arg);
-    named_counter++;
   }
-   
+
   public void parse(String[] arguments) {
+    int total_positional = positional_counter;
+    int total_named = named_counter;
+    int total_arguments = total_positional + total_named;
     if (Arrays.asList(arguments).contains("--help") || Arrays.asList(arguments).contains("-h")) {
       throw new HelpException("Help needed.");
     }
     int i = 0;
     int positional = 0;
+    int actual_total = 0;
     while (i < arguments.length) {
       if (arguments[i].startsWith("--")) {
         String name = arguments[i].substring(2, arguments[i].length());
         String value = arguments[i + 1];
         Argument arg = args.get(name);
         arg.setValue(value);
-        try {
-          args.replace(name, arg);
-        } catch (ArgumentNameNotSpecifiedException e) {
-          System.out.println(e.getArgName() + " does not match expected argument name");
+        Argument check = args.replace(name, arg);
+        if (check == null) {
+          throw new ArgumentNameNotSpecifiedException(name);
+        } else {
+          i = i + 2;
+          actual_total++;
         }
-        i = i + 2;
       } else {
         String name = positional_names.get(positional);
         String value = arguments[i];
         Argument arg = args.get(name);
         arg.setValue(value);
-        try {
-          args.replace(name, arg);
-        } catch (ArgumentNameNotSpecifiedException e) {
-          System.out.println(e.getArgName() + " does not match expected argument name");
+        Argument check = args.replace(name, arg);
+        if (check == null) {
+          throw new ArgumentNameNotSpecifiedException(name);
+        } else {
+          i++;
+          positional++;
+          actual_total++;
         }
-        i++;
-        positional++;
       }
-    } if (positional_counter > positional) {
-        throw new TooFewException(positional_counter, arguments);
-    } else if (positional_counter < positional || arguments.length > positional_counter + named_counter) {
-        throw new TooManyException(positional_counter, arguments);
+    }
+    if (total_positional > positional) {
+      throw new TooFewException(positional, positional_names, args);
+    } else if (total_positional < positional || actual_total > total_arguments) {
+      throw new TooManyException(total_arguments, arguments);
     }
   }
 
   /**
-   * Takes a string and returns the corresponding string.
+   * Takes a string and returns the corresponding string if the type specified by the client is type
+   * string.
    *
    * @param arg_name name of the argument wanted
    * @return string corresponding to the name
    */
-
-  public String getString(String arg_name) {
-    try {
-      String argument = args.get(arg_name);
-      return argument;
-    } catch (NumberFormatException e) {
-      throw new WrongTypeException(args.get(arg_name));
+  public String getValueString(String arg_name) {
+    Argument arg = args.get(arg_name);
+    if (arg.getType() == "string") {
+      String value = arg.getValue();
+      return value;
+    } else {
+      throw new WrongTypeException(arg);
     }
   }
 
   /**
-   * Takes a string and returns the corresponding integer value. If the value at the index give
-   * cannot be converted to an integer, a WrongTypeException will be thrown.
+   * Takes a string and returns the corresponding int if the type specified by the client is type
+   * int.
    *
    * @param arg_name name of the argument wanted
-   * @return integer corresponding to the name
+   * @return int corresponding to the name
    */
-
-  public int getInt(String arg_name) {
-    try {
-      int argument = Integer.parseInt(args.get(arg_name));
-      return argument;
-    } catch (NumberFormatException e) {
-      throw new WrongTypeException(args.get(arg_name));
+  public int getValueInt(String arg_name) {
+    Argument arg = args.get(arg_name);
+    if (arg.getType() == "integer") {
+      int value = arg.getValue();
+      return value;
+    } else {
+      throw new WrongTypeException(arg);
     }
   }
 
   /**
-   * Takes an integer and returns the corresponding float value. If the value at the index give
-   * cannot be converted to a float, a WrongTypeException will be thrown.
+   * Takes a string and returns the corresponding float if the type specified by the client is type
+   * float.
    *
    * @param arg_name name of the argument wanted
    * @return float corresponding to the name
    */
-
-  public float getFloat(String arg_name) {
-    try {
-      float argument = Float.parseFloat(args.get(arg_name));
-      return argument;
-    } catch (NumberFormatException e) {
-      throw new WrongTypeException(args.get(arg_name));
+  public float getValueFloat(String arg_name) {
+    Argument arg = args.get(arg_name);
+    if (arg.getType() == "float") {
+      float value = arg.getValue();
+      return value;
+    } else {
+      throw new WrongTypeException(arg);
     }
   }
 
@@ -136,14 +145,14 @@ public class ArgumentParser {
     String usage = "usage: java " + prog_name + " [-h] ";
     for (int i = 0; i < nonpositional_names.size(); i++) {
       String name = nonpositional_names.get(i);
-      usage = usage + "[--" + name + " " + name.toUpperCase() + "] "; 
+      usage = usage + "[--" + name + " " + name.toUpperCase() + "] ";
     }
     for (int i = 0; i < (positional_names.size() - 1); i++) {
       String name = positional_names.get(i);
       usage = usage + name + " ";
     }
     String _name = positional_names.get(positional_names.size() - 1);
-    usage = usage + _name + "\n";
+    usage = usage + _name + "\n\n";
     String prog_des = prog_description + "\n\n";
     String positional = "positional arguments:\n";
     String positional_args = "";
@@ -165,23 +174,55 @@ public class ArgumentParser {
         String type = arg.getType();
         String description = arg.getDescription();
         String value = arg.getValue();
-        named_args = named_args + " --" + name + " " + name.toUpperCase() + "\t(" + type + ")\t" + description + "(default: " + value + ")\n";
+        named_args =
+            named_args
+                + " --"
+                + name
+                + " "
+                + name.toUpperCase()
+                + "\t \t("
+                + type
+                + ")\t"
+                + description
+                + "(default: "
+                + value
+                + ")\n";
       }
       String __name = nonpositional_names.get(nonpositional_names.size() - 1);
       Argument arg = args.get(__name);
       String type = arg.getType();
       String description = arg.getDescription();
       String value = arg.getValue();
-      named_args = named_args + " --" + __name + " " + __name.toUpperCase() + "\t(" + type + ")\t" + description + "(default: " + value + ")";
+      named_args =
+          named_args
+              + " --"
+              + __name
+              + " "
+              + __name.toUpperCase()
+              + "\t \t("
+              + type
+              + ")\t"
+              + description
+              + "(default: "
+              + value
+              + ")";
     }
-    help = usage + prog_des + positional + positional_args + extra_space + named + help_desc + named_args;
+    help =
+        usage
+            + prog_des
+            + positional
+            + positional_args
+            + extra_space
+            + named
+            + help_desc
+            + named_args;
     return help;
   }
 
   /**
-   * Returns the number of words in the string passed to ArgumentParser.
+   * Returns the number of arguments passed to ArgumentParser.
    *
-   * @return the number of words in the string
+   * @return an int value of how many arguments there are to be parsed.
    */
   public int numArgs() {
     return args.size();

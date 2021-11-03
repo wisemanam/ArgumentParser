@@ -18,24 +18,29 @@ public class EquivalentStrings {
   Error error;
 
   public EquivalentStrings(String[] strings) {
-    String[] expectedArgs = {"string1", "string2"};
+    ArgumentParser argParse = new ArgumentParser();
     try {
-      ArgumentParser argParse = new ArgumentParser(strings, expectedArgs);
-      string1 = argParse.getString(0);
-      string2 = argParse.getString(1);
+      argParse.addPositional("string1", "string", "the first string");
+      argParse.addPositional("string2", "string", "the second string");
+      argParse.parse(strings);
+      string1 = argParse.getValueString("string1");
+      string2 = argParse.getValueString("string2");
       error = Error.NONE;
       error_message = "";
 
     } catch (HelpException e1) {
       error = Error.HELP;
       error_message =
-          "usage: java EquivalentStrings [-h] string1 string2\n\nDetermine if two strings are equivalent.\n\npositional arguments:\n string1     (string)      the first string\n string2     (string)      the second string\n\nnamed arguments:\n -h, --help  show this help message and exit";
+          argParse.constructHelp("EquivalentStrings", "Determine if two strings are equivalent.");
+      // "usage: java EquivalentStrings [-h] string1 string2\n\nDetermine if two strings are
+      // equivalent.\n\npositional arguments:\n string1     (string)      the first string\n string2
+      //     (string)      the second string\n\nnamed arguments:\n -h, --help  show this help
+      // message and exit";
 
     } catch (TooFewException e2) {
       error = Error.TOO_FEW;
-      int nextExpected = e2.getNextExpected();
-      error_message =
-          "EquivalentStrings error: the argument " + expectedArgs[nextExpected] + " is required";
+      String value = e2.getNextExpectedName();
+      error_message = "EquivalentStrings error: the argument " + value + " is required";
 
     } catch (TooManyException e3) {
       error = Error.TOO_MANY;

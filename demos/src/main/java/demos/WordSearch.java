@@ -6,21 +6,22 @@ public class WordSearch {
   public boolean is_legal(int row, int column, String grid, int width, int height) {
     return (0 <= row) && (row < height) && (0 <= column) && (column < width);
   }
-  
-  public boolean search(String[] args){
+
+  public boolean search(String[] args) {
     ArgumentParser argParse = new ArgumentParser();
-    argParse.addPositional("grid", type, "the grid to search");
-    argParse.addPositional("target", type, "the target word");
-    argParse.addNonPositional("width", type, "5", "the grid width");
-    argParse.addNonPositional("height", type, "5", "the grid height");
+    argParse.addPositional("grid", "String", "the grid to search");
+    argParse.addPositional("target", "String", "the target word");
+    argParse.addNonPositional("width", "int", "the grid width", "5");
+    argParse.addNonPositional("height", "int", "the grid height", "5");
 
     argParse.parse(args);
-    
-    String grid = getValue("grid");
-    String target = getValue("target");
-    int width = getValue("width");
-    int height = getValue("height");
 
+    String grid = argParse.getValueString("grid");
+    String target = argParse.getValueString("target");
+    int width = argParse.getValueInt("width");
+    int height = argParse.getValueInt("height");
+
+    return true;
     // word search
   }
   // need expected args (grid, word, [optional]: width, height)

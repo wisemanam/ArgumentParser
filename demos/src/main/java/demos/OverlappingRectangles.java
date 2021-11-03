@@ -6,18 +6,25 @@ public class OverlappingRectangles {
 
   // make one function and call it in main
   public String overlappingRectangles(String[] arguments) {
-    String[] expectedArgs = {"x1", "y1", "x2", "y2", "x3", "y3", "x4", "y4"};
+    ArgumentParser argParse = new ArgumentParser();
     try {
-      ArgumentParser argParse = new ArgumentParser(arguments, expectedArgs);
-      argParse.setExpectedArgNames(expectedArgs);
-      int x1rec1 = argParse.getInt(0);
-      int y1rec1 = argParse.getInt(1);
-      int x2rec1 = argParse.getInt(2);
-      int y2rec1 = argParse.getInt(3);
-      int x1rec2 = argParse.getInt(4);
-      int y1rec2 = argParse.getInt(5);
-      int x2rec2 = argParse.getInt(6);
-      int y2rec2 = argParse.getInt(7);
+      argParse.addPositional("x1", "integer", "lower-left x for rectangle 1");
+      argParse.addPositional("y1", "integer", "lower-left y for rectangle 1");
+      argParse.addPositional("x2", "integer", "upper-right x for rectangle 1");
+      argParse.addPositional("y2", "integer", "upper-right y for rectangle 1");
+      argParse.addPositional("x3", "integer", "lower-left x for rectangle 2");
+      argParse.addPositional("y3", "integer", "lower-left y for rectangle 2");
+      argParse.addPositional("x4", "integer", "upper-right x for rectangle 2");
+      argParse.addPositional("y4", "integer", "upper-right y for rectangle 2");
+      argParse.parse(arguments);
+      int x1rec1 = argParse.getValueInt("x1");
+      int y1rec1 = argParse.getValueInt("y1");
+      int x2rec1 = argParse.getValueInt("x2");
+      int y2rec1 = argParse.getValueInt("y2");
+      int x1rec2 = argParse.getValueInt("x3");
+      int y1rec2 = argParse.getValueInt("y3");
+      int x2rec2 = argParse.getValueInt("x4");
+      int y2rec2 = argParse.getValueInt("y4");
       int rec1width = Math.abs(x2rec1 - x1rec1);
       int rec1height = Math.abs(y2rec1 - y1rec1);
       int rec2width = Math.abs(x2rec2 - x1rec2);
@@ -28,17 +35,27 @@ public class OverlappingRectangles {
       int overlapheight = Math.min(y2rec1, y2rec2) - Math.max(y1rec1, y1rec2);
       int overlap = overlapwidth * overlapheight;
       int total = rec1area + rec2area - overlap;
-      String strOverlap = Integer.toString(overlap);
-      String strTotal = Integer.toString(total);
-      return strOverlap + " " + strTotal;
+      String strOverlap = String.valueOf(overlap);
+      String strTotal = String.valueOf(total);
+      String finalStr = strOverlap + " " + strTotal;
+      return finalStr;
     } catch (TooFewException e1) {
-      int index = e1.getNextExpected();
-      return "OverlappingRectangles error: the argument " + expectedArgs[index] + " is required";
+      String next = e1.getNextExpectedName();
+      return "OverlappingRectangles error: the argument " + next + " is required";
     } catch (TooManyException e2) {
       String firstExtra = e2.getFirstExtra();
       return "OverlappingRectangles error: the value " + firstExtra + " matches no argument";
     } catch (HelpException e3) {
-      return "usage: java OverlappingRectangles [-h] x1 y1 x2 y2 x3 y3 x4 y4\n\nDetermine the overlap and total area of two rectangles.\n\npositional arguments:\n x1          (integer)     lower-left x for rectangle 1\n y1          (integer)     lower-left y for rectangle 1\n x2          (integer)     upper-right x for rectangle 1\n y2          (integer)     upper-right y for rectangle 1\n x3          (integer)     lower-left x for rectangle 2\n y3          (integer)     lower-left y for rectangle 2\n x4          (integer)     upper-right x for rectangle 2\n y4          (integer)     upper-right y for rectangle 2\n\nnamed arguments:\n -h, --help  show this help message and exit";
+      return argParse.constructHelp(
+          "OverlappingRectangles", "Determine the overlap and total area of two rectangles.");
+      // "usage: java OverlappingRectangles [-h] x1 y1 x2 y2 x3 y3 x4 y4\n\nDetermine the overlap
+      // and total area of two rectangles.\n\npositional arguments:\n x1          (integer)
+      // lower-left x for rectangle 1\n y1          (integer)     lower-left y for rectangle 1\n x2
+      //         (integer)     upper-right x for rectangle 1\n y2          (integer)     upper-right
+      // y for rectangle 1\n x3          (integer)     lower-left x for rectangle 2\n y3
+      // (integer)     lower-left y for rectangle 2\n x4          (integer)     upper-right x for
+      // rectangle 2\n y4          (integer)     upper-right y for rectangle 2\n\nnamed arguments:\n
+      // -h, --help  show this help message and exit";
     } catch (WrongTypeException e4) {
       String wrongValue = e4.getWrongValue();
       return "OverlappingRectangles error: the value " + wrongValue + " is not of type integer";
