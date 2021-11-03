@@ -4,18 +4,17 @@ package edu.wofford.woclo;
  * designated type
  */
 public class WrongTypeException extends RuntimeException {
-  Argument argument;
+  String value;
   /**
    * Takes a message and prints it when WrongTypeException is thrown.
    *
    * @param value the value that was attempting to be converted
    */
-  public WrongTypeException(Argument argument) {
-    this.argument = argument;
+  public WrongTypeException(String value) {
+    this.value = value;
   }
 
   public String getWrongValue() {
-    String value = argument.getValue();
     return value;
   }
 }

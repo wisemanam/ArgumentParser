@@ -18,7 +18,23 @@ public class Argument {
   }
 
   public <T> T getValue() {
-    return (T) value;
+    if (type == "string") {
+      return (T)value;
+    } else if (type == "integer") {
+      try {
+        int val = Integer.parseInt(value);
+        return (T)val;
+      } catch (NumberFormatException e) {
+        throw new WrongTypeException(value);
+      }
+    } else {
+      try {
+        float val = Float.parseFloat(value);
+        return (T)val;
+      } catch (NumberFormatException e) {
+        throw new WrongTypeException(value);
+      }
+    }
   }
 
   public String getType() {
