@@ -26,6 +26,6 @@ public class TooManyException extends RuntimeException {
    * @return the first additional argument that is given on the command line
    */
   public String getFirstExtra() {
-    return args_list[expected - 1];
+    return args_list[expected];
   }
 }
