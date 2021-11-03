@@ -36,7 +36,7 @@ public class ArgumentParser {
     positional_counter++;
   }
 
-  public void addNonPositional(String name, String type, String description, T value) {
+  public void addNonPositional(String name, String type, String description, String value) {
     OptionalArgument arg = new OptionalArgument(name, type, description, value);
     nonpositional_names.add(name);
     args.put(name, arg);

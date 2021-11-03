@@ -17,8 +17,8 @@ public class Argument {
         this.value = value;
     }
 
-    public String getValue() {
-        return value;
+    public <T> T getValue() {
+        return (T)value;
     }
 
     public String getType() {
