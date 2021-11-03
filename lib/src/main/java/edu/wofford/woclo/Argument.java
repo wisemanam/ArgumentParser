@@ -11,7 +11,6 @@ public class Argument {
     this.name = name;
     this.type = type;
     this.description = description;
-    value = "";
   }
 
   public void setValue(String value) {

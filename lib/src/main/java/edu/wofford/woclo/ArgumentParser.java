@@ -98,10 +98,14 @@ public class ArgumentParser {
    */
   public String getValueString(String arg_name) {
     Argument arg = args.get(arg_name);
-    if (arg.getType() == "string") {
-      String value = arg.getValue();
-      return value;
-    } else {
+    try {
+      if (arg.getType() == "string") {
+        String value = arg.getValue();
+        return value;
+      } else {
+        throw new WrongTypeException(arg);
+      }
+    } catch (NumberFormatException e) {
       throw new WrongTypeException(arg);
     }
   }
@@ -115,10 +119,14 @@ public class ArgumentParser {
    */
   public int getValueInt(String arg_name) {
     Argument arg = args.get(arg_name);
-    if (arg.getType() == "integer") {
-      int value = arg.getValue();
-      return value;
-    } else {
+    try {
+      if (arg.getType() == "integer") {
+        int value = arg.getValue();
+        return value;
+      } else {
+        throw new WrongTypeException(arg);
+      }
+    } catch (NumberFormatException e) {
       throw new WrongTypeException(arg);
     }
   }
@@ -132,10 +140,14 @@ public class ArgumentParser {
    */
   public float getValueFloat(String arg_name) {
     Argument arg = args.get(arg_name);
-    if (arg.getType() == "float") {
-      float value = arg.getValue();
-      return value;
-    } else {
+    try {
+      if (arg.getType() == "float") {
+        float value = arg.getValue();
+        return value;
+      } else {
+        throw new WrongTypeException(arg);
+      }
+    } catch (NumberFormatException e) {
       throw new WrongTypeException(arg);
     }
   }
@@ -180,7 +192,9 @@ public class ArgumentParser {
                 + name
                 + " "
                 + name.toUpperCase()
-                + "\t \t("
+                + "\t"
+                + "\t"
+                + "("
                 + type
                 + ")\t"
                 + description
@@ -199,7 +213,9 @@ public class ArgumentParser {
               + __name
               + " "
               + __name.toUpperCase()
-              + "\t \t("
+              + "\t"
+              + "\t"
+              + "("
               + type
               + ")\t"
               + description
