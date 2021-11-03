@@ -10,7 +10,7 @@ import java.util.*;
  * will not change the contents of the ArgumentParser.
  */
 public class ArgumentParser {
-  private HashMap<String, Argument> args;
+  private Map<String, Argument> args;
   private List<String> positional_names;
   private List<String> nonpositional_names;
   private int named_counter;
