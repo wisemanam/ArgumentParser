@@ -42,7 +42,7 @@ public class ArgumentParser {
     args.put(name, arg);
     named_counter++;
   }
-   
+
   public void parse(String[] arguments) {
     if (Arrays.asList(arguments).contains("--help") || Arrays.asList(arguments).contains("-h")) {
       throw new HelpException("Help needed.");
@@ -74,10 +74,12 @@ public class ArgumentParser {
         i++;
         positional++;
       }
-    } if (positional_counter > positional) {
-        throw new TooFewException(positional_counter, arguments);
-    } else if (positional_counter < positional || arguments.length > positional_counter + named_counter) {
-        throw new TooManyException(positional_counter, arguments);
+    }
+    if (positional_counter > positional) {
+      throw new TooFewException(positional_counter, arguments);
+    } else if (positional_counter < positional
+        || arguments.length > positional_counter + named_counter) {
+      throw new TooManyException(positional_counter, arguments);
     }
   }
 
@@ -87,13 +89,12 @@ public class ArgumentParser {
    * @param arg_name name of the argument wanted
    * @return string corresponding to the name
    */
-
   public String getString(String arg_name) {
     try {
-      String argument = args.get(arg_name);
+      String argument = args.get(arg_name).getValue();
       return argument;
     } catch (NumberFormatException e) {
-      throw new WrongTypeException(args.get(arg_name));
+      throw new WrongTypeException(args.get(arg_name).getValue());
     }
   }
 
@@ -104,13 +105,12 @@ public class ArgumentParser {
    * @param arg_name name of the argument wanted
    * @return integer corresponding to the name
    */
-
   public int getInt(String arg_name) {
     try {
-      int argument = Integer.parseInt(args.get(arg_name));
+      int argument = Integer.parseInt(args.get(arg_name).getValue());
       return argument;
     } catch (NumberFormatException e) {
-      throw new WrongTypeException(args.get(arg_name));
+      throw new WrongTypeException(args.get(arg_name).getValue());
     }
   }
 
@@ -121,13 +121,12 @@ public class ArgumentParser {
    * @param arg_name name of the argument wanted
    * @return float corresponding to the name
    */
-
   public float getFloat(String arg_name) {
     try {
-      float argument = Float.parseFloat(args.get(arg_name));
+      float argument = Float.parseFloat(args.get(arg_name).getValue());
       return argument;
     } catch (NumberFormatException e) {
-      throw new WrongTypeException(args.get(arg_name));
+      throw new WrongTypeException(args.get(arg_name).getValue());
     }
   }
 
@@ -136,7 +135,7 @@ public class ArgumentParser {
     String usage = "usage: java " + prog_name + " [-h] ";
     for (int i = 0; i < nonpositional_names.size(); i++) {
       String name = nonpositional_names.get(i);
-      usage = usage + "[--" + name + " " + name.toUpperCase() + "] "; 
+      usage = usage + "[--" + name + " " + name.toUpperCase() + "] ";
     }
     for (int i = 0; i < (positional_names.size() - 1); i++) {
       String name = positional_names.get(i);
@@ -165,16 +164,48 @@ public class ArgumentParser {
         String type = arg.getType();
         String description = arg.getDescription();
         String value = arg.getValue();
-        named_args = named_args + " --" + name + " " + name.toUpperCase() + "\t(" + type + ")\t" + description + "(default: " + value + ")\n";
+        named_args =
+            named_args
+                + " --"
+                + name
+                + " "
+                + name.toUpperCase()
+                + "\t("
+                + type
+                + ")\t"
+                + description
+                + "(default: "
+                + value
+                + ")\n";
       }
       String __name = nonpositional_names.get(nonpositional_names.size() - 1);
       Argument arg = args.get(__name);
       String type = arg.getType();
       String description = arg.getDescription();
       String value = arg.getValue();
-      named_args = named_args + " --" + __name + " " + __name.toUpperCase() + "\t(" + type + ")\t" + description + "(default: " + value + ")";
+      named_args =
+          named_args
+              + " --"
+              + __name
+              + " "
+              + __name.toUpperCase()
+              + "\t("
+              + type
+              + ")\t"
+              + description
+              + "(default: "
+              + value
+              + ")";
     }
-    help = usage + prog_des + positional + positional_args + extra_space + named + help_desc + named_args;
+    help =
+        usage
+            + prog_des
+            + positional
+            + positional_args
+            + extra_space
+            + named
+            + help_desc
+            + named_args;
     return help;
   }
 
