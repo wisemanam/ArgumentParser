@@ -9,7 +9,7 @@ import java.util.*;
  * ArgumentParser.
  */
 public class TooManyException extends RuntimeException {
-  int expected;
+  String value;
   String[] args_list;
   List<String> separated_args;
 
@@ -19,8 +19,8 @@ public class TooManyException extends RuntimeException {
    * @param expected the expected number of arguments given from the command line
    * @param args_list the list of arguments from the command line
    */
-  public TooManyException(int expected, String[] args_list) {
-    this.expected = expected;
+  public TooManyException(String value) {
+    this.value = value;
     this.args_list = args_list.clone();
     List<String> separated_args = new ArrayList<>();
     int i = 0;
@@ -40,6 +40,6 @@ public class TooManyException extends RuntimeException {
    * @return the first additional argument that is given on the command line
    */
   public String getFirstExtra() {
-    return separated_args.get(expected);
+    return value;
   }
 }

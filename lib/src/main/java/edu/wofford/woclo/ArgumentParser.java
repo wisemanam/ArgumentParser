@@ -13,7 +13,6 @@ public class ArgumentParser {
   private HashMap<String, Argument> args;
   private List<String> positional_names;
   private List<String> nonpositional_names;
-  private int positional_counter;
   private int named_counter;
 
   /**
@@ -27,65 +26,58 @@ public class ArgumentParser {
     args = new HashMap<String, Argument>();
     positional_names = new ArrayList<String>();
     nonpositional_names = new ArrayList<String>();
-    positional_counter = 0;
-    named_counter = 0;
   }
 
   public void addPositional(String name, String type, String description) {
     Argument arg = new Argument(name, type, description);
     positional_names.add(name);
     args.put(name, arg);
-    positional_counter++;
   }
 
   public void addNonPositional(String name, String type, String description, String value) {
     OptionalArgument arg = new OptionalArgument(name, type, description, value);
     nonpositional_names.add(name);
     args.put(name, arg);
+    named_counter++;
   }
 
   public void parse(String[] arguments) {
-    int total_positional = positional_counter;
-    int total_named = named_counter;
-    int total_arguments = total_positional + total_named;
+    int expected_positional = positional_names.size();
     if (Arrays.asList(arguments).contains("--help") || Arrays.asList(arguments).contains("-h")) {
       throw new HelpException("Help needed.");
     }
-    int i = 0;
-    int positional = 0;
-    int actual_total = 0;
-    while (i < arguments.length) {
-      if (arguments[i].startsWith("--")) {
-        String name = arguments[i].substring(2, arguments[i].length());
-        String value = arguments[i + 1];
+    Queue<String> box_of_garbage = new PriorityQueue<String>();
+    for (int i = 0; i < arguments.length; i++) {
+      box_of_garbage.add(arguments[i]);
+    }
+    int current_positional_name_index = 0;
+    while (!box_of_garbage.isEmpty()) {
+      if (box_of_garbage.peek().startsWith("--")) {
+        String name = box_of_garbage.poll().substring(2);
+        if (box_of_garbage.isEmpty() || box_of_garbage.peek().startsWith("--")) {
+          throw new NoValueException("There is no value available");
+        } 
+        String value = box_of_garbage.poll();
         Argument arg = args.get(name);
-        arg.setValue(value);
-        Argument check = args.replace(name, arg);
-        if (check == null) {
+        if (arg == null) {
           throw new ArgumentNameNotSpecifiedException(name);
         } else {
-          i = i + 2;
-          actual_total++;
+          arg.setValue(value);
         }
       } else {
-        String name = positional_names.get(positional);
-        String value = arguments[i];
-        Argument arg = args.get(name);
-        arg.setValue(value);
-        Argument check = args.replace(name, arg);
-        if (check == null) {
-          throw new ArgumentNameNotSpecifiedException(name);
-        } else {
-          i++;
-          positional++;
-          actual_total++;
+        String value = box_of_garbage.poll();
+        try {
+          String name = positional_names.get(current_positional_name_index);
+          Argument arg = args.get(name);
+          arg.setValue(value);
+          current_positional_name_index++;
+        } catch (IndexOutOfBoundsException e) {
+          throw new TooManyException(value);
         }
       }
     }
-    if (total_positional > positional) {
-      throw new TooFewException(positional, positional_names, args);
-    } else if (total_positional < positional || actual_total > total_arguments) {
-      throw new TooManyException(total_arguments, arguments);
+    if (expected_positional > current_positional_name_index) {
+      throw new TooFewException(current_positional_name_index, positional_names, args);
     }
   }
 
@@ -96,60 +88,9 @@ public class ArgumentParser {
    * @param arg_name name of the argument wanted
    * @return string corresponding to the name
    */
-  public String getValueString(String arg_name) {
+  public <T> T getValue(String arg_name) {
     Argument arg = args.get(arg_name);
-    try {
-      if (arg.getType() == "string") {
-        String value = arg.getValue();
-        return value;
-      } else {
-        throw new WrongTypeException(arg);
-      }
-    } catch (NumberFormatException e) {
-      throw new WrongTypeException(arg);
-    }
-  }
-
-  /**
-   * Takes a string and returns the corresponding int if the type specified by the client is type
-   * int.
-   *
-   * @param arg_name name of the argument wanted
-   * @return int corresponding to the name
-   */
-  public int getValueInt(String arg_name) {
-    Argument arg = args.get(arg_name);
-    try {
-      if (arg.getType() == "integer") {
-        int value = arg.getValue();
-        return value;
-      } else {
-        throw new WrongTypeException(arg);
-      }
-    } catch (NumberFormatException e) {
-      throw new WrongTypeException(arg);
-    }
-  }
-
-  /**
-   * Takes a string and returns the corresponding float if the type specified by the client is type
-   * float.
-   *
-   * @param arg_name name of the argument wanted
-   * @return float corresponding to the name
-   */
-  public float getValueFloat(String arg_name) {
-    Argument arg = args.get(arg_name);
-    try {
-      if (arg.getType() == "float") {
-        float value = arg.getValue();
-        return value;
-      } else {
-        throw new WrongTypeException(arg);
-      }
-    } catch (NumberFormatException e) {
-      throw new WrongTypeException(arg);
-    }
+    return arg.getValue();
   }
 
   public String constructHelp(String prog_name, String prog_description) {
