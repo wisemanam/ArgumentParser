@@ -85,7 +85,7 @@ public class ArgumentParser {
     if (total_positional > positional) {
       throw new TooFewException(positional, positional_names, args);
     } else if (total_positional < positional || actual_total > total_arguments) {
-      throw new TooManyException(actual_total, arguments);
+      throw new TooManyException(total_arguments, arguments);
     }
   }
 

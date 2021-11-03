@@ -1,4 +1,5 @@
 package edu.wofford.woclo;
+import java.util.*;
 
 /**
  * The TooManyException is thrown when the number of arguments given to ArgumentParser is greater
@@ -9,6 +10,7 @@ package edu.wofford.woclo;
 public class TooManyException extends RuntimeException {
   int expected;
   String[] args_list;
+  List<String> separated_args;
 
   /**
    * The constructor for the exception thrown when the number of arguments is greater than expected.
@@ -19,6 +21,17 @@ public class TooManyException extends RuntimeException {
   public TooManyException(int expected, String[] args_list) {
     this.expected = expected;
     this.args_list = args_list.clone();
+    List<String> separated_args = new ArrayList<>();
+    int i = 0;
+    while (i < args_list.length) {
+      if (args_list[i].startsWith("--")) {
+        separated_args.add(args_list[i + 1]);
+        i = i + 2;
+      } else {
+        separated_args.add(args_list[i]);
+        i++;
+      }
+    }
   }
   /**
    * Gets the first argument after the initial expected arguments.
@@ -26,6 +39,6 @@ public class TooManyException extends RuntimeException {
    * @return the first additional argument that is given on the command line
    */
   public String getFirstExtra() {
-    return args_list[expected];
+    return separated_args.get(expected);
   }
 }
