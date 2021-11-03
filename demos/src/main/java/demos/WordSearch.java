@@ -3,8 +3,26 @@ package demos;
 import edu.wofford.woclo.*;
 
 public class WordSearch {
+
   public boolean is_legal(int row, int column, String grid, int width, int height) {
     return (0 <= row) && (row < height) && (0 <= column) && (column < width);
+  }
+
+  public String longest_path(String grid, int[][] longest, int row, int col) {
+    // if not is_legal(row, col, grid):
+        // return -1
+    // else
+      if (longest[row][col] < 0) {
+        // vals = [-1]
+        // neighbors = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        // for offrow, offcol in neighbors:
+            // nrow, ncol = row + offrow, col + offcol
+            // if is_legal(nrow, ncol, grid) and grid[nrow][ncol] > grid[row][col]:
+            // longest[nrow][ncol] = longest_path(grid, longest, nrow, ncol)
+            // vals.append(longest[nrow][ncol])
+        // longest[row][col] = max(vals) + 1
+      // return longest[row][col]
+      }
   }
 
   public boolean search(String[] args) {
