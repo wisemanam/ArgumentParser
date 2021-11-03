@@ -93,9 +93,21 @@ public class ArgumentParser {
     return arg.getValue();
   }
 
-  
+  public int maxNameLength(Object[] names) {
+    if (names.length == 1) {
+      return names[0];
+    } else {
+      int rec_call = maxNameLength(Arrays.copyOfRange(names, 1, names.length)
+      if (names[0].length > rec_call) {
+        return names[0].length;
+      } else {
+        return rec_call;
+      }
+    }
+  }
 
   public String constructHelp(String prog_name, String prog_description) {
+    int maxWordLen = maxNameLength(args.keySet().toArray());
     String help = "";
     String usage = "usage: java " + prog_name + " [-h] ";
     for (int i = 0; i < nonpositional_names.size(); i++) {
