@@ -8,24 +8,24 @@ public class WordSearch {
     return (0 <= row) && (row < height) && (0 <= column) && (column < width);
   }
 
-  public String longest_path(String grid, int[][] longest, int row, int col) {
+  public boolean search(String grid, String target, int row, int col) {
     // if not is_legal(row, col, grid):
         // return -1
     // else
-      if (longest[row][col] < 0) {
-        // vals = [-1]
-        // neighbors = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-        // for offrow, offcol in neighbors:
-            // nrow, ncol = row + offrow, col + offcol
-            // if is_legal(nrow, ncol, grid) and grid[nrow][ncol] > grid[row][col]:
-            // longest[nrow][ncol] = longest_path(grid, longest, nrow, ncol)
-            // vals.append(longest[nrow][ncol])
-        // longest[row][col] = max(vals) + 1
-      // return longest[row][col]
-      }
+    if (longest[row][col] < 0) {
+      // vals = [-1]
+      // neighbors = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+      // for offrow, offcol in neighbors:
+          // nrow, ncol = row + offrow, col + offcol
+          // if is_legal(nrow, ncol, grid) and grid[nrow][ncol] > grid[row][col]:
+          // longest[nrow][ncol] = longest_path(grid, longest, nrow, ncol)
+          // vals.append(longest[nrow][ncol])
+      // longest[row][col] = max(vals) + 1
+    // return longest[row][col]
+    }
   }
 
-  public boolean search(String[] args) {
+  public ArgumentParser parseArguments(String[] args) {
     ArgumentParser argParse = new ArgumentParser();
     argParse.addPositional("grid", "String", "the grid to search");
     argParse.addPositional("target", "String", "the target word");
@@ -34,18 +34,19 @@ public class WordSearch {
 
     argParse.parse(args);
 
+    return argParse;
+  }
+
+  public static void main(String... args) {
+    WordSearch w = new WordSearch();
+    ArgumentParser argParse= w.parseArguments(args);
+
     String grid = argParse.getValueString("grid");
     String target = argParse.getValueString("target");
     int width = argParse.getValueInt("width");
     int height = argParse.getValueInt("height");
 
-    return true;
-    // word search
-  }
-
-  public static void main(String... args) {
-    WordSearch w = new WordSearch();
-    boolean b = w.search(args);
+    boolean b = w.search(grid, target, width, height);
     System.out.println(b);
   }
 }
