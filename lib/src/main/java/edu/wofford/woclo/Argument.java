@@ -18,8 +18,13 @@ public class Argument {
     this.value = value;
   }
 
+<<<<<<< HEAD
   public <T> T getValue() {
     return (T) value;
+=======
+  public String getValue() {
+    return value;
+>>>>>>> 3950e2dd0013ec3b48980df9415cca71ad8d2995
   }
 
   public String getType() {

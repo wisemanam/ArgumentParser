@@ -82,10 +82,18 @@ public class ArgumentParser {
         }
       }
     }
+<<<<<<< HEAD
     if (total_positional > positional) {
       throw new TooFewException(positional, positional_names, args);
     } else if (total_positional < positional || actual_total > total_arguments) {
       throw new TooManyException(total_arguments, arguments);
+=======
+    if (positional_counter > positional) {
+      throw new TooFewException(positional_counter, arguments);
+    } else if (positional_counter < positional
+        || arguments.length > positional_counter + named_counter) {
+      throw new TooManyException(positional_counter, arguments);
+>>>>>>> 3950e2dd0013ec3b48980df9415cca71ad8d2995
     }
   }
 
@@ -96,6 +104,7 @@ public class ArgumentParser {
    * @param arg_name name of the argument wanted
    * @return string corresponding to the name
    */
+<<<<<<< HEAD
   public String getValueString(String arg_name) {
     Argument arg = args.get(arg_name);
     if (arg.getType() == "string") {
@@ -103,6 +112,14 @@ public class ArgumentParser {
       return value;
     } else {
       throw new WrongTypeException(arg);
+=======
+  public String getString(String arg_name) {
+    try {
+      String argument = args.get(arg_name).getValue();
+      return argument;
+    } catch (NumberFormatException e) {
+      throw new WrongTypeException(args.get(arg_name).getValue());
+>>>>>>> 3950e2dd0013ec3b48980df9415cca71ad8d2995
     }
   }
 
@@ -113,6 +130,7 @@ public class ArgumentParser {
    * @param arg_name name of the argument wanted
    * @return int corresponding to the name
    */
+<<<<<<< HEAD
   public int getValueInt(String arg_name) {
     Argument arg = args.get(arg_name);
     if (arg.getType() == "integer") {
@@ -120,6 +138,14 @@ public class ArgumentParser {
       return value;
     } else {
       throw new WrongTypeException(arg);
+=======
+  public int getInt(String arg_name) {
+    try {
+      int argument = Integer.parseInt(args.get(arg_name).getValue());
+      return argument;
+    } catch (NumberFormatException e) {
+      throw new WrongTypeException(args.get(arg_name).getValue());
+>>>>>>> 3950e2dd0013ec3b48980df9415cca71ad8d2995
     }
   }
 
@@ -130,6 +156,7 @@ public class ArgumentParser {
    * @param arg_name name of the argument wanted
    * @return float corresponding to the name
    */
+<<<<<<< HEAD
   public float getValueFloat(String arg_name) {
     Argument arg = args.get(arg_name);
     if (arg.getType() == "float") {
@@ -137,6 +164,14 @@ public class ArgumentParser {
       return value;
     } else {
       throw new WrongTypeException(arg);
+=======
+  public float getFloat(String arg_name) {
+    try {
+      float argument = Float.parseFloat(args.get(arg_name).getValue());
+      return argument;
+    } catch (NumberFormatException e) {
+      throw new WrongTypeException(args.get(arg_name).getValue());
+>>>>>>> 3950e2dd0013ec3b48980df9415cca71ad8d2995
     }
   }
 
@@ -180,7 +215,11 @@ public class ArgumentParser {
                 + name
                 + " "
                 + name.toUpperCase()
+<<<<<<< HEAD
                 + "\t \t("
+=======
+                + "\t("
+>>>>>>> 3950e2dd0013ec3b48980df9415cca71ad8d2995
                 + type
                 + ")\t"
                 + description
@@ -199,7 +238,11 @@ public class ArgumentParser {
               + __name
               + " "
               + __name.toUpperCase()
+<<<<<<< HEAD
               + "\t \t("
+=======
+              + "\t("
+>>>>>>> 3950e2dd0013ec3b48980df9415cca71ad8d2995
               + type
               + ")\t"
               + description
