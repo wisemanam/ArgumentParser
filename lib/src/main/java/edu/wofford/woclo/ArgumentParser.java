@@ -46,7 +46,7 @@ public class ArgumentParser {
     if (Arrays.asList(arguments).contains("--help") || Arrays.asList(arguments).contains("-h")) {
       throw new HelpException("Help needed.");
     }
-    Queue<String> box_of_garbage = new PriorityQueue<String>();
+    Queue<String> box_of_garbage = new LinkedList<String>();
     for (int i = 0; i < arguments.length; i++) {
       box_of_garbage.add(arguments[i]);
     }

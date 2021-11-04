@@ -10,8 +10,8 @@ public class ArgumentParserTest {
   public void testArgumentParserTwoArg() {
     String[] arguments = {"alice", "bob"};
     ArgumentParser argParse = new ArgumentParser();
-    argParse.addPositional("string1", "String", "the first string argument");
-    argParse.addPositional("string2", "String", "the second string argument");
+    argParse.addPositional("string1", "string", "the first string argument");
+    argParse.addPositional("string2", "string", "the second string argument");
     argParse.parse(arguments);
     String x = argParse.getValue("string1");
     String y = argParse.getValue("string2");
