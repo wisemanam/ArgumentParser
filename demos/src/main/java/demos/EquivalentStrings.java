@@ -30,8 +30,9 @@ public class EquivalentStrings {
 
     } catch (HelpException e1) {
       error = Error.HELP;
-      error_message = "usage: java EquivalentStrings [-h] string1 string2\n\nDetermine if two strings are equivalent.\n\npositional arguments:\n string1     (string)      the first string\n string2     (string)      the second string\n\nnamed arguments:\n -h, --help  show this help message and exit";
-          // argParse.constructHelp("EquivalentStrings", "Determine if two strings are equivalent.");
+      error_message =
+          "usage: java EquivalentStrings [-h] string1 string2\n\nDetermine if two strings are equivalent.\n\npositional arguments:\n string1     (string)      the first string\n string2     (string)      the second string\n\nnamed arguments:\n -h, --help  show this help message and exit";
+      // argParse.constructHelp("EquivalentStrings", "Determine if two strings are equivalent.");
       // "usage: java EquivalentStrings [-h] string1 string2\n\nDetermine if two strings are
       // equivalent.\n\npositional arguments:\n string1     (string)      the first string\n string2
       //     (string)      the second string\n\nnamed arguments:\n -h, --help  show this help
