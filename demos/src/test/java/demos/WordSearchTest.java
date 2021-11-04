@@ -1,6 +1,5 @@
 // package demos;
 
-<<<<<<< HEAD
 import org.junit.jupiter.api.Test;
 
 public class WordSearchTest {
@@ -31,7 +30,6 @@ public class WordSearchTest {
     String grid = ""
   }
 }
-=======
 // public class WordSearchTest {
 //   /*
 //     @Test
@@ -48,4 +46,3 @@ public class WordSearchTest {
 //   }
 //   */
 // }
->>>>>>> 777e124b90619481a356abe540883943e45def55
