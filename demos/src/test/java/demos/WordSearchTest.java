@@ -75,9 +75,9 @@ public class WordSearchTest {
   public void help() {
     String[] args = {"--height", "2", "ashutnrk", "--width", "--help", "4"};
     WordSearch w = new WordSearch();
-    assertEquals(w.wordsearch(args), "help");
+    assertEquals(w.wordsearch(args), "usage: java WordSearch [-h] [--width WIDTH] [--height HEIGHT] grid target\n\nFind a target word in a grid.\n\npositional arguments:\n grid             (string)      the grid to search\n target           (string)      the target word\n\nnamed arguments:\n -h, --help       show this help message and exit\n --width WIDTH    (integer)     the grid width (default: 5)\n --height HEIGHT  (integer)     the grid height (default: 5)");
   }
-  
+
   // //insert when wrongType error is fixed in ArgumentParser
   // @Test
   // public void wrongType() {
