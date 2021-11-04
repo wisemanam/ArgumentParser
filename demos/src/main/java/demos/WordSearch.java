@@ -4,8 +4,6 @@ import edu.wofford.woclo.*;
 import java.awt.*;
 import java.util.*;
 
-import org.omg.CORBA.IntHolder;
-
 public class WordSearch {
 
   public String wordsearch(String[] arguments) {
@@ -21,14 +19,20 @@ public class WordSearch {
       int width = parser.getValue("width");
       int height = parser.getValue("height");
       if (grid.length() != width * height) {
-        return "WordSearch error: grid dimensions (" + width + " x " + height + ") do not match grid length (" + grid.length() + ")";
+        return "WordSearch error: grid dimensions ("
+            + width
+            + " x "
+            + height
+            + ") do not match grid length ("
+            + grid.length()
+            + ")";
       }
       String[] grid_split = grid.split("", 0);
       String[][] g = new String[height][width];
       int k = 0;
       for (int i = 0; i < height; i++) {
         for (int j = 0; i < width; j++) {
-          g[i][j] =  grid_split[k];
+          g[i][j] = grid_split[k];
           k++;
         }
       }
@@ -55,8 +59,8 @@ public class WordSearch {
         }
       }
       return target + " not found";
-    } catch (HelpException e){
-      return parser.constructHelp("WordSearch", "Find a target word in a grid.");
+    } catch (HelpException e) {
+      return "help";
     } catch (TooManyException e) {
       String firstExtra = e.getFirstExtra();
       return "WordSearch error: the value " + firstExtra + " matches no argument";
@@ -72,18 +76,20 @@ public class WordSearch {
     }
   }
 
-  public Deque<Point> findWord(String[] targetSplit, String[][] grid, Deque<Point> locations, int currentTargetIndex) {
+  public Deque<Point> findWord(
+      String[] targetSplit, String[][] grid, Deque<Point> locations, int currentTargetIndex) {
     if (currentTargetIndex == (targetSplit.length - 1)) {
       return locations;
     }
     Point p = locations.getLast();
-    int row = (int)p.getX();
-    int col = (int)p.getY();
-    int[] neighbors = {-1,0,1,0,0,-1,0,1};
-    for (int i = 0; i < neighbors.length; i+=2) {
+    int row = (int) p.getX();
+    int col = (int) p.getY();
+    int[] neighbors = {-1, 0, 1, 0, 0, -1, 0, 1};
+    for (int i = 0; i < neighbors.length; i += 2) {
       int nrow = row + neighbors[i];
-      int ncol = col + neighbors[i+1];
-      if (is_legal(nrow, ncol, grid) && grid[nrow][ncol] == targetSplit[currentTargetIndex +1]) {
+      int ncol = col + neighbors[i + 1];
+      Point npoint = new Point(nrow, ncol);
+      if (is_legal(nrow, ncol, grid) && grid[nrow][ncol] == targetSplit[currentTargetIndex + 1] && !locations.contains(npoint)) {
         locations.add(p);
         findWord(targetSplit, grid, locations, currentTargetIndex + 1);
       }
@@ -101,7 +107,7 @@ public class WordSearch {
       Point p = locations.pop();
       string += targetSplit[i] + ":" + p.getX() + "," + p.getY() + " ";
     }
-    return string.substring(0, string.length() -1);
+    return string.substring(0, string.length() - 1);
   }
 
   public static void main(String... args) {
