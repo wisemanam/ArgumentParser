@@ -77,7 +77,7 @@ public class WordSearchTest {
     WordSearch w = new WordSearch();
     assertEquals(w.wordsearch(args), "help");
   }
-  
+
   // //insert when wrongType error is fixed in ArgumentParser
   // @Test
   // public void wrongType() {

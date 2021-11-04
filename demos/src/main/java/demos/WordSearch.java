@@ -54,7 +54,7 @@ public class WordSearch {
       }
       return target + " not found";
     } catch (HelpException e) {
-      return "help";
+      return "usage: java WordSearch [-h] [--width WIDTH] [--height HEIGHT] grid target\n\nFind a target word in a grid.\n\npositional arguments:\n grid             (string)      the grid to search\n target           (string)      the target word\n\nnamed arguments:\n -h, --help       show this help message and exit\n --width WIDTH    (integer)     the grid width (default: 5)\n --height HEIGHT  (integer)     the grid height (default: 5)";
     } catch (WrongTypeException e) {
       String wrongValue = e.getWrongValue();
       return "WordSearch error: the value " + wrongValue + " is not of type integer";
