@@ -28,12 +28,27 @@ public class ArgumentParser {
     nonpositional_names = new ArrayList<String>();
   }
 
+  /**
+   * The addPositional method adds an expected argument to ArgumentParser that will not be named
+   * when arguments are given on the command line.
+   * @param name the name that will be used to retrieve this argument from ArgumentParser
+   * @param type the type that the value will be when it is retreived from ArgumentParser
+   * @param description the description of the argument used in the help message
+   */
   public void addPositional(String name, String type, String description) {
     Argument arg = new Argument(name, type, description);
     positional_names.add(name);
     args.put(name, arg);
   }
 
+  /**
+   * The addNonPositional method adds an expected argument to ArgumentParser that when given on the command
+   * line should be named.
+   * @param name the name that will be used to retrieve this argument from ArgumentParser
+   * @param type the type that the value will be when it is retreived from ArgumentParser
+   * @param description the description of the argument used in the help message
+   * @param value the default value that the argument is given in the case that it is not one of the arguments passed into the command line
+   */
   public void addNonPositional(String name, String type, String description, String value) {
     OptionalArgument arg = new OptionalArgument(name, type, description, value);
     nonpositional_names.add(name);
@@ -41,6 +56,11 @@ public class ArgumentParser {
     named_counter++;
   }
 
+  /**
+   * The parse method takes the arguments given on the command line and sorts them into the expected arguments
+   * that are defined using addPositional and addNonPositional
+   * @param arguments the arguments entered into the command line
+   */
   public void parse(String[] arguments) {
     int expected_positional = positional_names.size();
     if (Arrays.asList(arguments).contains("--help") || Arrays.asList(arguments).contains("-h")) {
@@ -82,128 +102,25 @@ public class ArgumentParser {
   }
 
   /**
-   * Takes a string and returns the corresponding string if the type specified by the client is type
-   * string.
+   * Takes a string and returns the corresponding value in the type that is specified in either
+   * addPositional or addNonPositional
    *
    * @param arg_name name of the argument wanted
-   * @return string corresponding to the name
+   * @return value corresponding to the name
    */
   public <T> T getValue(String arg_name) {
     Argument arg = args.get(arg_name);
     return arg.getValue();
   }
 
+  /**
+   * Returns the Argument corresponding to the name given in addPositional or addNonPositional
+   * @param name
+   * @return Argument associated with the name 
+   */
   public Argument getArgument(String name) {
     return args.get(name);
   }
-
-  /*
-    public int maxNameLength(String[] names) {
-      if (names.length == 1) {
-        return names[0].length();
-      } else {
-        int rec_call = maxNameLength(Arrays.copyOfRange(names, 1, names.length));
-        if (names[0].length() > rec_call) {
-          return names[0].length();
-        } else {
-          return rec_call;
-        }
-      }
-    }
-
-    public String constructHelp(String prog_name, String prog_description) {
-
-      String[] all_names_list = new String[nonpositional_names.size() + positional_names.size()];
-
-      String help = "";
-      String usage = "usage: java " + prog_name + " [-h] ";
-      for (int i = 0; i < nonpositional_names.size(); i++) {
-        String name = nonpositional_names.get(i);
-        usage = usage + "[--" + name + " " + name.toUpperCase() + "] ";
-        all_names_list[i] = "--" + name + " " + name.toUpperCase();
-      }
-      for (int i = 0; i < (positional_names.size() - 1); i++) {
-        String name = positional_names.get(i);
-        usage = usage + name + " ";
-        all_names_list[i + nonpositional_names.size() - 1] = name;
-      }
-      int maxWordLen = maxNameLength(all_names_list);
-
-      String _name = positional_names.get(positional_names.size() - 1);
-      usage = usage + _name + "\n\n";
-      String prog_des = prog_description + "\n\n";
-      String positional = "positional arguments:\n";
-      String positional_args = "";
-
-      for (int i = 0; i < positional_names.size(); i++) {
-        String name = positional_names.get(i);
-        Argument arg = args.get(name);
-        String type = arg.getType();
-        String description = arg.getDescription();
-        positional_args = positional_args + " " + name + "\t(" + type + ")\t" + description + "\n";
-      }
-      String extra_space = "\n";
-      String named = "named arguments:\n";
-      String help_desc = " -h, --help\tshow this help message and exit";
-      String named_args = "";
-      if (named_counter > 0) {
-        for (int i = 0; i < (nonpositional_names.size() - 1); i++) {
-          String name = nonpositional_names.get(i);
-          Argument arg = args.get(name);
-          String type = arg.getType();
-          String description = arg.getDescription();
-          String value = arg.getValue();
-          String name_with_extra_stuff = name + " " + name.toUpperCase();
-          named_args =
-              named_args
-                  + " --"
-                  + name
-                  + " "
-                  + name.toUpperCase()
-                  + String.join(
-                      "", Collections.nCopies(maxWordLen - name_with_extra_stuff.length(), " "))
-                  + "  "
-                  + "("
-                  + type
-                  + ") \t"
-                  + description
-                  + "(default: "
-                  + value
-                  + ")\n";
-        }
-        String __name = nonpositional_names.get(nonpositional_names.size() - 1);
-        Argument arg = args.get(__name);
-        String type = arg.getType();
-        String description = arg.getDescription();
-        String value = arg.getValue();
-        named_args =
-            named_args
-                + " --"
-                + __name
-                + " "
-                + __name.toUpperCase()
-                + String.join("", Collections.nCopies(maxWordLen - __name.length(), " "))
-                + "  "
-                + "("
-                + type
-                + ")\t"
-                + description
-                + "(default: "
-                + value
-                + ")";
-      }
-      help =
-          usage
-              + prog_des
-              + positional
-              + positional_args
-              + extra_space
-              + named
-              + help_desc
-              + named_args;
-      return help;
-    }
-  */
 
   /**
    * Returns the number of arguments passed to ArgumentParser.
