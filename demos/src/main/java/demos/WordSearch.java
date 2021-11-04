@@ -6,7 +6,7 @@ import java.util.*;
 
 public class WordSearch {
 
-  public static String wordsearch(String[] arguments) {
+  public String wordsearch(String[] arguments) {
     ArgumentParser parser = new ArgumentParser();
     try {
       parser.addPositional("grid", "string", "the grid to search");
@@ -27,35 +27,29 @@ public class WordSearch {
             + grid.length()
             + ")";
       }
-      String[] grid_split = grid.split("", 0);
-      String[][] g = new String[height][width];
+      char[][] g = new char[height][width];
       int k = 0;
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-          g[i][j] = grid_split[k];
+          g[i][j] = grid.charAt(k);
           k++;
         }
       }
-      String[] target_split = target.split("", 0);
-      String first = target_split[0];
       Deque<Point> potentialStart = new ArrayDeque<Point>();
-      for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-          if (g[i][j] == first) {
+      for (int i = 0; i < g.length; i++) {
+        for (int j = 0; j < g[i].length; j++) {
+          if (g[i][j] == target.charAt(0)) {
             Point p = new Point(i, j);
-            potentialStart.add(p);
+            potentialStart.addLast(p);
           }
         }
       }
-      Deque<Point> location = new ArrayDeque<Point>();
       while (!potentialStart.isEmpty()) {
+        Deque<Point> location = new ArrayDeque<Point>();
         location.add(potentialStart.getFirst());
-        location = findWord(target_split, g, location, 0);
+        location = findWord(target.substring(1), g, location);
         if (location.size() == target.length()) {
-          return toString(target_split, location);
-        } else {
-          location.clear();
-          potentialStart.removeFirst();
+          return asString(target, location);
         }
       }
       return target + " not found";
@@ -76,10 +70,9 @@ public class WordSearch {
     }
   }
 
-  public static Deque<Point> findWord(
-      String[] targetSplit, String[][] grid, Deque<Point> locations, int currentTargetIndex) {
-    if (currentTargetIndex == (targetSplit.length - 1)) {
-      return locations;
+  public Deque<Point> findWord(String target, char[][] grid, Deque<Point> locations) {
+    if (target.length() == 0) {
+      return new ArrayDeque<Point>(locations);
     }
     Point p = locations.getLast();
     int row = (int) p.getX();
@@ -90,30 +83,36 @@ public class WordSearch {
       int ncol = col + neighbors[i + 1];
       Point npoint = new Point(nrow, ncol);
       if (is_legal(nrow, ncol, grid)
-          && grid[nrow][ncol] == targetSplit[currentTargetIndex + 1]
+          && grid[nrow][ncol] == target.charAt(0)
           && !locations.contains(npoint)) {
-        locations.add(p);
-        findWord(targetSplit, grid, locations, currentTargetIndex + 1);
+        Deque<Point> tmp = new ArrayDeque<Point>(locations);
+        tmp.add(npoint);
+        Deque<Point> result = findWord(target.substring(1), grid, tmp);
+        if (result.size() == target.length() + tmp.size() - 1) {
+          return result;
+        }
       }
     }
-    return locations;
+    return new ArrayDeque<Point>();
   }
 
-  public static boolean is_legal(int row, int column, String[][] grid) {
-    return (0 <= row) && (row < grid[0].length) && (0 <= column) && (column < grid.length);
+  public boolean is_legal(int row, int column, char[][] grid) {
+    return (0 <= row) && (row < grid.length) && (0 <= column) && (column < grid[0].length);
   }
 
-  public static String toString(String[] targetSplit, Deque<Point> locations) {
-    String string = "";
-    for (int i = 0; i < targetSplit.length; i++) {
+  public String asString(String target, Deque<Point> locations) {
+    StringBuffer buff = new StringBuffer();
+    for (int i = 0; i < target.length(); i++) {
       Point p = locations.pop();
-      string += targetSplit[i] + ":" + p.getX() + "," + p.getY() + " ";
+      buff.append(target.charAt(i) + ":" + (int) p.getX() + "," + (int) p.getY() + " ");
     }
-    return string.substring(0, string.length() - 1);
+    String string = buff.toString();
+    return string.trim();
   }
 
   public static void main(String... args) {
-    String find = wordsearch(args);
-    System.out.println(find);
+    WordSearch w = new WordSearch();
+    String p = w.wordsearch(args);
+    System.out.println(p);
   }
 }
