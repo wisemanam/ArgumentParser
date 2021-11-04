@@ -18,9 +18,15 @@ public class Argument {
   }
 
   public <T> T getValue() {
+<<<<<<< HEAD
     if (type == "string") {
       return (T) value;
     } else if (type == "integer") {
+=======
+    if (type.equals("string")) {
+      return (T) value;
+    } else if (type.equals("integer")) {
+>>>>>>> 797b7a432fbbd12c716fea2a185bc95b9ac2d17d
       try {
         return (T) Integer.valueOf(value);
       } catch (NumberFormatException e) {
