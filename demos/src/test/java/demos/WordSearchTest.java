@@ -41,4 +41,48 @@ public class WordSearchTest {
     WordSearch w2 = new WordSearch();
     assertEquals(w2.wordsearch(args2), "d:5,2 r:4,2 g:4,1 a:3,1 r:3,2 r:2,2 e:2,1 t:1,1 t:1,2");
   }
+
+  @Test
+  public void testOverwriteWidthandHeight() {
+    String[] args = {"--height", "3", "aaaaerduyaaa", "audrey", "--width", "4"};
+    WordSearch w = new WordSearch();
+    assertEquals(w.wordsearch(args), "a:1,4 u:2,4 d:2,3 r:2,2 e:2,1 y:3,1");
+  }
+
+  @Test
+  public void testTooFewPositional() {
+    String[] args = {"--height", "2", "ashutnrk", "--width", "4"};
+    WordSearch w = new WordSearch();
+    assertEquals(w.wordsearch(args), "WordSearch error: the argument target is required");
+  }
+
+  @Test
+  public void testTooManyPositional() {
+    String[] args = {"--height", "2", "ashutnrk", "--width", "4", "hut", "tire"};
+    WordSearch w = new WordSearch();
+    assertEquals(w.wordsearch(args), "WordSearch error: the value tire matches no argument");
+  }
+
+  @Test
+  public void missingValue() {
+    String[] args = {"--height", "2", "ashutnrk", "--width"};
+    WordSearch w = new WordSearch();
+    assertEquals(w.wordsearch(args), "WordSearch error: no value for width");
+  }
+
+  // update when help message is fixed
+  @Test
+  public void help() {
+    String[] args = {"--height", "2", "ashutnrk", "--width", "--help", "4"};
+    WordSearch w = new WordSearch();
+    assertEquals(w.wordsearch(args), "help");
+  }
+  
+  // //insert when wrongType error is fixed in ArgumentParser
+  // @Test
+  // public void wrongType() {
+  //   String[] args = {"--height", "2", "ashutnrk", "--width", "hut"};
+  //   WordSearch w = new WordSearch();
+  //   assertEquals(w.wordsearch(args), "WordSearch error: the value hut is not of type integer");
+  // }
 }
