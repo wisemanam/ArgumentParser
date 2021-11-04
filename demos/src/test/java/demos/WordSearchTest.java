@@ -1,10 +1,7 @@
-// package demos;
+package demos;
 
-<<<<<<< HEAD
-=======
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
->>>>>>> 797b7a432fbbd12c716fea2a185bc95b9ac2d17d
 import org.junit.jupiter.api.Test;
 
 public class WordSearchTest {
@@ -22,32 +19,16 @@ public class WordSearchTest {
     // WordSearch w = new WordSearch();
     // assertTrue(wordsearch.search(grid3, "yellow"));
   }
-<<<<<<< HEAD
-}
-// public class WordSearchTest {
-//   /*
-//     @Test
-//     public void testDefaultGrid() {
-//         String grid = "h    a    l    ifax      ";
-//         WordSearch wordsearch = new WordSearch();
-//         assertTrue(wordsearch.search({grid, "halifax"}));
-=======
->>>>>>> 797b7a432fbbd12c716fea2a185bc95b9ac2d17d
 
-//   @Test
-//   public void testOverwriteHeightNoRepeat() {
-//     String grid = "tarsdfgelhijkom"
-//     WordSearch wordsearch = new WordSearch();
-//     assertTrue(wordsearch.search(grid, "molerat"));
-//   }
+  //   @Test
+  //   public void testOverwriteHeightNoRepeat() {
+  //     String grid = "tarsdfgelhijkom"
+  //     WordSearch wordsearch = new WordSearch();
+  //     assertTrue(wordsearch.search(grid, "molerat"));
+  //   }
 
-//   @Test
-//   public void testOverwriteWidthNoRepeat() {
-//     String grid = ""
-//   }
-<<<<<<< HEAD
-//   */
-// }
-=======
+  //   @Test
+  //   public void testOverwriteWidthNoRepeat() {
+  //     String grid = ""
+  //   }
 }
->>>>>>> 797b7a432fbbd12c716fea2a185bc95b9ac2d17d

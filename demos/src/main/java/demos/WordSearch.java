@@ -6,7 +6,7 @@ import java.util.*;
 
 public class WordSearch {
 
-  public String wordsearch(String[] arguments) {
+  public static String wordsearch(String[] arguments) {
     ArgumentParser parser = new ArgumentParser();
     try {
       parser.addPositional("grid", "string", "the grid to search");
@@ -31,7 +31,7 @@ public class WordSearch {
       String[][] g = new String[height][width];
       int k = 0;
       for (int i = 0; i < height; i++) {
-        for (int j = 0; i < width; j++) {
+        for (int j = 0; j < width; j++) {
           g[i][j] = grid_split[k];
           k++;
         }
@@ -76,7 +76,7 @@ public class WordSearch {
     }
   }
 
-  public Deque<Point> findWord(
+  public static Deque<Point> findWord(
       String[] targetSplit, String[][] grid, Deque<Point> locations, int currentTargetIndex) {
     if (currentTargetIndex == (targetSplit.length - 1)) {
       return locations;
@@ -89,7 +89,9 @@ public class WordSearch {
       int nrow = row + neighbors[i];
       int ncol = col + neighbors[i + 1];
       Point npoint = new Point(nrow, ncol);
-      if (is_legal(nrow, ncol, grid) && grid[nrow][ncol] == targetSplit[currentTargetIndex + 1] && !locations.contains(npoint)) {
+      if (is_legal(nrow, ncol, grid)
+          && grid[nrow][ncol] == targetSplit[currentTargetIndex + 1]
+          && !locations.contains(npoint)) {
         locations.add(p);
         findWord(targetSplit, grid, locations, currentTargetIndex + 1);
       }
@@ -97,11 +99,11 @@ public class WordSearch {
     return locations;
   }
 
-  public boolean is_legal(int row, int column, String[][] grid) {
+  public static boolean is_legal(int row, int column, String[][] grid) {
     return (0 <= row) && (row < grid[0].length) && (0 <= column) && (column < grid.length);
   }
 
-  public String toString(String[] targetSplit, Deque<Point> locations) {
+  public static String toString(String[] targetSplit, Deque<Point> locations) {
     String string = "";
     for (int i = 0; i < targetSplit.length; i++) {
       Point p = locations.pop();
@@ -111,8 +113,7 @@ public class WordSearch {
   }
 
   public static void main(String... args) {
-    WordSearch w = new WordSearch();
-    String find = w.wordsearch(args);
+    String find = wordsearch(args);
     System.out.println(find);
   }
 }
