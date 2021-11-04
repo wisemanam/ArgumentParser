@@ -39,14 +39,14 @@ public class WordSearch {
       for (int i = 0; i < g.length; i++) {
         for (int j = 0; j < g[i].length; j++) {
           if (g[i][j] == target.charAt(0)) {
-            Point p = new Point(i, j);
+            Point p = new Point(i + 1, j + 1);
             potentialStart.addLast(p);
           }
         }
       }
       while (!potentialStart.isEmpty()) {
         Deque<Point> location = new ArrayDeque<Point>();
-        location.add(potentialStart.getFirst());
+        location.add(potentialStart.removeFirst());
         location = findWord(target.substring(1), g, location);
         if (location.size() == target.length()) {
           return asString(target, location);
@@ -55,6 +55,9 @@ public class WordSearch {
       return target + " not found";
     } catch (HelpException e) {
       return "help";
+    } catch (WrongTypeException e) {
+      String wrongValue = e.getWrongValue();
+      return "WordSearch error: the value " + wrongValue + " is not of type integer";
     } catch (TooManyException e) {
       String firstExtra = e.getFirstExtra();
       return "WordSearch error: the value " + firstExtra + " matches no argument";
@@ -64,9 +67,6 @@ public class WordSearch {
     } catch (NoValueException e) {
       String val_expected = e.getNameMissingValue();
       return "WordSearch error: no value for " + val_expected;
-    } catch (WrongTypeException e) {
-      String wrongValue = e.getWrongValue();
-      return "WordSearch error: the value " + wrongValue + " is not of type integer";
     }
   }
 
@@ -75,13 +75,13 @@ public class WordSearch {
       return new ArrayDeque<Point>(locations);
     }
     Point p = locations.getLast();
-    int row = (int) p.getX();
-    int col = (int) p.getY();
+    int row = (int) p.getX() - 1;
+    int col = (int) p.getY() - 1;
     int[] neighbors = {-1, 0, 1, 0, 0, -1, 0, 1};
     for (int i = 0; i < neighbors.length; i += 2) {
       int nrow = row + neighbors[i];
       int ncol = col + neighbors[i + 1];
-      Point npoint = new Point(nrow, ncol);
+      Point npoint = new Point(nrow + 1, ncol + 1);
       if (is_legal(nrow, ncol, grid)
           && grid[nrow][ncol] == target.charAt(0)
           && !locations.contains(npoint)) {
