@@ -112,7 +112,7 @@ public class WordSearch {
 
   public static void main(String... args) {
     WordSearch w = new WordSearch();
-    String find = w.wordsearch(args);
-    System.out.println(find);
+    String p = w.wordsearch(args);
+    System.out.println(p);
   }
 }
