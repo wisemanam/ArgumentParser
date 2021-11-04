@@ -65,13 +65,13 @@ public class ArgumentParser {
           arg.setValue(value);
           if (arg.getType().equals("integer")) {
             try {
-              int try_int = Integer.parseInt(value);
+              Integer.parseInt(value);
             } catch (NumberFormatException e) {
               throw new WrongTypeException(value);
             }
           } else if (arg.getType().equals("float")) {
             try {
-              float try_float = Float.parseFloat(value);
+              Float.parseFloat(value);
             } catch (NumberFormatException e) {
               throw new WrongTypeException(value);
             }
