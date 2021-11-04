@@ -77,7 +77,7 @@ public class ArgumentParser {
       }
     }
     if (expected_positional > current_positional_name_index) {
-      throw new TooFewException(current_positional_name_index, positional_names, args);
+      throw new TooFewException(current_positional_name_index, positional_names);
     }
   }
 
@@ -93,111 +93,117 @@ public class ArgumentParser {
     return arg.getValue();
   }
 
-  public int maxNameLength(String[] names) {
-    if (names.length == 1) {
-      return names[0].length();
-    } else {
-      int rec_call = maxNameLength(Arrays.copyOfRange(names, 1, names.length));
-      if (names[0].length() > rec_call) {
-        return names[0].length();
-      } else {
-        return rec_call;
-      }
-    }
+  public Argument getArgument(String name) {
+    return args.get(name);
   }
 
-  public String constructHelp(String prog_name, String prog_description) {
-
-    String[] all_names_list = new String[nonpositional_names.size() + positional_names.size()];
-
-    String help = "";
-    String usage = "usage: java " + prog_name + " [-h] ";
-    for (int i = 0; i < nonpositional_names.size(); i++) {
-      String name = nonpositional_names.get(i);
-      usage = usage + "[--" + name + " " + name.toUpperCase() + "] ";
-      all_names_list[i] = "--" + name + " " + name.toUpperCase();
+  /*
+    public int maxNameLength(String[] names) {
+      if (names.length == 1) {
+        return names[0].length();
+      } else {
+        int rec_call = maxNameLength(Arrays.copyOfRange(names, 1, names.length));
+        if (names[0].length() > rec_call) {
+          return names[0].length();
+        } else {
+          return rec_call;
+        }
+      }
     }
-    for (int i = 0; i < (positional_names.size() - 1); i++) {
-      String name = positional_names.get(i);
-      usage = usage + name + " ";
-      all_names_list[i + nonpositional_names.size() - 1] = name;
-    }
-    int maxWordLen = maxNameLength(all_names_list);
 
-    String _name = positional_names.get(positional_names.size() - 1);
-    usage = usage + _name + "\n\n";
-    String prog_des = prog_description + "\n\n";
-    String positional = "positional arguments:\n";
-    String positional_args = "";
+    public String constructHelp(String prog_name, String prog_description) {
 
-    for (int i = 0; i < positional_names.size(); i++) {
-      String name = positional_names.get(i);
-      Argument arg = args.get(name);
-      String type = arg.getType();
-      String description = arg.getDescription();
-      positional_args = positional_args + " " + name + "\t(" + type + ")\t" + description + "\n";
-    }
-    String extra_space = "\n";
-    String named = "named arguments:\n";
-    String help_desc = " -h, --help\tshow this help message and exit";
-    String named_args = "";
-    if (named_counter > 0) {
-      for (int i = 0; i < (nonpositional_names.size() - 1); i++) {
+      String[] all_names_list = new String[nonpositional_names.size() + positional_names.size()];
+
+      String help = "";
+      String usage = "usage: java " + prog_name + " [-h] ";
+      for (int i = 0; i < nonpositional_names.size(); i++) {
         String name = nonpositional_names.get(i);
+        usage = usage + "[--" + name + " " + name.toUpperCase() + "] ";
+        all_names_list[i] = "--" + name + " " + name.toUpperCase();
+      }
+      for (int i = 0; i < (positional_names.size() - 1); i++) {
+        String name = positional_names.get(i);
+        usage = usage + name + " ";
+        all_names_list[i + nonpositional_names.size() - 1] = name;
+      }
+      int maxWordLen = maxNameLength(all_names_list);
+
+      String _name = positional_names.get(positional_names.size() - 1);
+      usage = usage + _name + "\n\n";
+      String prog_des = prog_description + "\n\n";
+      String positional = "positional arguments:\n";
+      String positional_args = "";
+
+      for (int i = 0; i < positional_names.size(); i++) {
+        String name = positional_names.get(i);
         Argument arg = args.get(name);
         String type = arg.getType();
         String description = arg.getDescription();
+        positional_args = positional_args + " " + name + "\t(" + type + ")\t" + description + "\n";
+      }
+      String extra_space = "\n";
+      String named = "named arguments:\n";
+      String help_desc = " -h, --help\tshow this help message and exit";
+      String named_args = "";
+      if (named_counter > 0) {
+        for (int i = 0; i < (nonpositional_names.size() - 1); i++) {
+          String name = nonpositional_names.get(i);
+          Argument arg = args.get(name);
+          String type = arg.getType();
+          String description = arg.getDescription();
+          String value = arg.getValue();
+          String name_with_extra_stuff = name + " " + name.toUpperCase();
+          named_args =
+              named_args
+                  + " --"
+                  + name
+                  + " "
+                  + name.toUpperCase()
+                  + String.join(
+                      "", Collections.nCopies(maxWordLen - name_with_extra_stuff.length(), " "))
+                  + "  "
+                  + "("
+                  + type
+                  + ") \t"
+                  + description
+                  + "(default: "
+                  + value
+                  + ")\n";
+        }
+        String __name = nonpositional_names.get(nonpositional_names.size() - 1);
+        Argument arg = args.get(__name);
+        String type = arg.getType();
+        String description = arg.getDescription();
         String value = arg.getValue();
-        String name_with_extra_stuff = name + " " + name.toUpperCase();
         named_args =
             named_args
                 + " --"
-                + name
+                + __name
                 + " "
-                + name.toUpperCase()
-                + String.join(
-                    "", Collections.nCopies(maxWordLen - name_with_extra_stuff.length(), " "))
+                + __name.toUpperCase()
+                + String.join("", Collections.nCopies(maxWordLen - __name.length(), " "))
                 + "  "
                 + "("
                 + type
-                + ") \t"
+                + ")\t"
                 + description
                 + "(default: "
                 + value
-                + ")\n";
+                + ")";
       }
-      String __name = nonpositional_names.get(nonpositional_names.size() - 1);
-      Argument arg = args.get(__name);
-      String type = arg.getType();
-      String description = arg.getDescription();
-      String value = arg.getValue();
-      named_args =
-          named_args
-              + " --"
-              + __name
-              + " "
-              + __name.toUpperCase()
-              + String.join("", Collections.nCopies(maxWordLen - __name.length(), " "))
-              + "  "
-              + "("
-              + type
-              + ")\t"
-              + description
-              + "(default: "
-              + value
-              + ")";
+      help =
+          usage
+              + prog_des
+              + positional
+              + positional_args
+              + extra_space
+              + named
+              + help_desc
+              + named_args;
+      return help;
     }
-    help =
-        usage
-            + prog_des
-            + positional
-            + positional_args
-            + extra_space
-            + named
-            + help_desc
-            + named_args;
-    return help;
-  }
+  */
 
   /**
    * Returns the number of arguments passed to ArgumentParser.
