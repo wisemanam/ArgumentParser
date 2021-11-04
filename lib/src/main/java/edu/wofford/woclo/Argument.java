@@ -19,16 +19,16 @@ public class Argument {
 
   public <T> T getValue() {
     if (type == "string") {
-      return (T)value;
+      return (T) value;
     } else if (type == "integer") {
       try {
-        return (T)Integer.valueOf(value);
+        return (T) Integer.valueOf(value);
       } catch (NumberFormatException e) {
         throw new WrongTypeException(value);
       }
     } else {
       try {
-        return (T)Float.valueOf(value);
+        return (T) Float.valueOf(value);
       } catch (NumberFormatException e) {
         throw new WrongTypeException(value);
       }

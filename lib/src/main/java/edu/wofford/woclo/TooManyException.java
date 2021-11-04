@@ -21,18 +21,6 @@ public class TooManyException extends RuntimeException {
    */
   public TooManyException(String value) {
     this.value = value;
-    this.args_list = args_list.clone();
-    List<String> separated_args = new ArrayList<>();
-    int i = 0;
-    while (i < args_list.length) {
-      if (args_list[i].startsWith("--")) {
-        separated_args.add(args_list[i + 1]);
-        i = i + 2;
-      } else {
-        separated_args.add(args_list[i]);
-        i++;
-      }
-    }
   }
   /**
    * Gets the first argument after the initial expected arguments.
