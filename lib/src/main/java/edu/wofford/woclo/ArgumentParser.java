@@ -16,11 +16,9 @@ public class ArgumentParser {
   private int named_counter;
 
   /**
-   * ArgumentParser takes an integer and a string and parses the arguments for the user to retreive.
+   * ArgumentParser parses the arguments for the user to retreive.
    * If there are fewer or more arguments than expeted, the constructor throws an exception. It will
    * also throw an exception if arguments contains "--help" or "--h".
-   *
-   * @param arguments a list of the arguments the client would like to parse
    */
   public ArgumentParser() {
     args = new HashMap<String, Argument>();
@@ -31,6 +29,7 @@ public class ArgumentParser {
   /**
    * The addPositional method adds an expected argument to ArgumentParser that will not be named
    * when arguments are given on the command line.
+   *
    * @param name the name that will be used to retrieve this argument from ArgumentParser
    * @param type the type that the value will be when it is retreived from ArgumentParser
    * @param description the description of the argument used in the help message
@@ -42,12 +41,14 @@ public class ArgumentParser {
   }
 
   /**
-   * The addNonPositional method adds an expected argument to ArgumentParser that when given on the command
-   * line should be named.
+   * The addNonPositional method adds an expected argument to ArgumentParser that when given on the
+   * command line should be named.
+   *
    * @param name the name that will be used to retrieve this argument from ArgumentParser
    * @param type the type that the value will be when it is retreived from ArgumentParser
    * @param description the description of the argument used in the help message
-   * @param value the default value that the argument is given in the case that it is not one of the arguments passed into the command line
+   * @param value the default value that the argument is given in the case that it is not one of the
+   *     arguments passed into the command line
    */
   public void addNonPositional(String name, String type, String description, String value) {
     OptionalArgument arg = new OptionalArgument(name, type, description, value);
@@ -57,8 +58,9 @@ public class ArgumentParser {
   }
 
   /**
-   * The parse method takes the arguments given on the command line and sorts them into the expected arguments
-   * that are defined using addPositional and addNonPositional
+   * The parse method takes the arguments given on the command line and sorts them into the expected
+   * arguments that are defined using addPositional and addNonPositional
+   *
    * @param arguments the arguments entered into the command line
    */
   public void parse(String[] arguments) {
@@ -128,8 +130,9 @@ public class ArgumentParser {
 
   /**
    * Returns the Argument corresponding to the name given in addPositional or addNonPositional
-   * @param name
-   * @return Argument associated with the name 
+   *
+   * @param name the name of the value being received
+   * @return Argument associated with the name
    */
   public Argument getArgument(String name) {
     return args.get(name);
