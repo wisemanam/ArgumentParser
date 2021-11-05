@@ -25,7 +25,7 @@ public class Argument {
   /**
    * setValue takes a string and sets the value equal to that string
    *
-   * @param value
+   * @param value the value of the argument as a string
    */
   public void setValue(String value) {
     this.value = value;
@@ -33,8 +33,8 @@ public class Argument {
   /**
    * returns the value of the argument in the type specified in the constructor
    *
-   * @param <T>
-   * @return
+   * @param <T> the type of the returned value
+   * @return the value of the argument
    */
   public <T> T getValue() {
     if (type.equals("string")) {
