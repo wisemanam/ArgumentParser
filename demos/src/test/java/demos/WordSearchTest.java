@@ -95,11 +95,10 @@ public class WordSearchTest {
     assertEquals(w2.wordsearch(args2), "bug not found");
   }
 
-  // //insert when wrongType error is fixed in ArgumentParser
-  // @Test
-  // public void wrongType() {
-  //   String[] args = {"--height", "2", "ashutnrk", "--width", "hut"};
-  //   WordSearch w = new WordSearch();
-  //   assertEquals(w.wordsearch(args), "WordSearch error: the value hut is not of type integer");
-  // }
+  @Test
+  public void wrongType() {
+    String[] args = {"--height", "2", "ashutnrk", "--width", "hut"};
+    WordSearch w = new WordSearch();
+    assertEquals(w.wordsearch(args), "WordSearch error: the value hut is not of type integer");
+  }
 }
