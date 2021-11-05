@@ -14,8 +14,8 @@ public class TooFewException extends RuntimeException {
   /**
    * The constructor for the exception thrown when the number of arguments is less than expected.
    *
-   * @param expected the expected number of arguments given from the command line
-   * @param args_list the list of arguments from the command line
+   * @param actual the actual number of arguments given from the command line
+   * @param names the list of arguments from the command line
    */
   public TooFewException(int actual, List<String> names) {
     this.actual = actual;
