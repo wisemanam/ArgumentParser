@@ -225,4 +225,83 @@ public class ArgumentParserTest {
             });
     assertEquals(e.getWrongValue(), "3.5");
   }
+
+  @Test
+  public void testGetArgument() {
+    String[] arguments = {"hello"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("hello", "string", "first pos");
+    argParse.parse(arguments);
+    Argument test = argParse.getArgument("hello");
+    String value = test.getValue();
+    String type = test.getType();
+    String description = test.getDescription();
+    String name = test.getName();
+    assertEquals(name, "hello");
+    assertEquals(value, "hello");
+    assertEquals(type, "string");
+    assertEquals(description, "first pos");
+  }
+
+  @Test
+  public void testArgumentNameNotSpecifiedException() {
+    ArgumentNameNotSpecifiedException e =
+        assertThrows(
+            ArgumentNameNotSpecifiedException.class,
+            () -> {
+              String[] arguments = {"3", "--myarg1", "1"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("int1", "integer", "first pos");
+              argParse.addNonPositional("myargs1", "integer", "first nonpos", "5");
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getArgName(), "myarg1");
+  }
+
+  @Test
+  public void testNoValueException() {
+    NoValueException e =
+        assertThrows(
+            NoValueException.class,
+            () -> {
+              String[] arguments = {"--test"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addNonPositional("test", "string", "test", "test");
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getNameMissingValue(), "test");
+  }
+
+  @Test
+  public void testGivenOtherThanFloatNamed() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              String[] arguments = {"--test", "hello"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addNonPositional("test", "float", "test", "3.5");
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getWrongValue(), "hello");
+  }
+
+  @Test
+  public void testWrongTypeExceptionExpectInt() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              String[] arguments = {"--test", "test"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addNonPositional("test", "integer", "test", "5");
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getWrongValue(), "test");
+  }
+
+  @Test
+  public void testOptionalArgumentGetValue() {
+    
+  }
 }
