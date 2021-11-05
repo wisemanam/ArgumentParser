@@ -299,9 +299,4 @@ public class ArgumentParserTest {
             });
     assertEquals(e.getWrongValue(), "test");
   }
-
-  @Test
-  public void testOptionalArgumentGetValue() {
-    
-  }
 }
