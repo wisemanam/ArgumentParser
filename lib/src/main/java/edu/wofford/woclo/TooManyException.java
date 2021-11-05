@@ -16,8 +16,7 @@ public class TooManyException extends RuntimeException {
   /**
    * The constructor for the exception thrown when the number of arguments is greater than expected.
    *
-   * @param expected the expected number of arguments given from the command line
-   * @param args_list the list of arguments from the command line
+   * @param value the extra value of the first additional agrument that is given on the command line
    */
   public TooManyException(String value) {
     this.value = value;
