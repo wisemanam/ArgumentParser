@@ -83,6 +83,19 @@ public class ArgumentParser {
           throw new ArgumentNameNotSpecifiedException(name);
         } else {
           arg.setValue(value);
+          if (arg.getType().equals("integer")) {
+            try {
+              Integer.parseInt(value);
+            } catch (NumberFormatException e) {
+              throw new WrongTypeException(value);
+            }
+          } else if (arg.getType().equals("float")) {
+            try {
+              Float.parseFloat(value);
+            } catch (NumberFormatException e) {
+              throw new WrongTypeException(value);
+            }
+          }
         }
       } else {
         String value = box_of_garbage.poll();

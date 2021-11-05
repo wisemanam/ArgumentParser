@@ -201,16 +201,28 @@ public class ArgumentParserTest {
     argParse.addNonPositional("arg1", "integer", "first nonpos", "2");
     argParse.addNonPositional("arg2", "integer", "second nonpos", "10");
     argParse.parse(arguments);
-    // Argument test = argParse.getArgument("arg1");
-    // String type_arg1 = test.getType();
-    // int value_arg1 = test.getValue();
     int int1 = argParse.getValue("int1");
     int arg1 = argParse.getValue("arg1");
     int arg2 = argParse.getValue("arg2");
-    // assertEquals(type_arg1, "integer");
-    // assertEquals(value_arg1, 2);
     assertEquals(int1, 5);
     assertEquals(arg1, 2);
     assertEquals(arg2, 10);
+  }
+
+  @Test
+  public void testGetValueNamedInt() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              String[] arguments = {"--fstname", "3.5", "5"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("int1", "integer", "first pos");
+              argParse.addNonPositional("fstname", "integer", "first nonpos", "5");
+              argParse.parse(arguments);
+              int int1 = argParse.getValue("int1");
+              int fstname = argParse.getValue("fstname");
+            });
+    assertEquals(e.getWrongValue(), "3.5");
   }
 }

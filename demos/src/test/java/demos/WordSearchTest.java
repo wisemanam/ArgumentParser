@@ -70,19 +70,35 @@ public class WordSearchTest {
     assertEquals(w.wordsearch(args), "WordSearch error: no value for width");
   }
 
-  // update when help message is fixed
   @Test
   public void help() {
     String[] args = {"--height", "2", "ashutnrk", "--width", "--help", "4"};
     WordSearch w = new WordSearch();
-    assertEquals(w.wordsearch(args), "usage: java WordSearch [-h] [--width WIDTH] [--height HEIGHT] grid target\n\nFind a target word in a grid.\n\npositional arguments:\n grid             (string)      the grid to search\n target           (string)      the target word\n\nnamed arguments:\n -h, --help       show this help message and exit\n --width WIDTH    (integer)     the grid width (default: 5)\n --height HEIGHT  (integer)     the grid height (default: 5)");
+    assertEquals(
+        w.wordsearch(args),
+        "usage: java WordSearch [-h] [--width WIDTH] [--height HEIGHT] grid target\n\nFind a target word in a grid.\n\npositional arguments:\n grid             (string)      the grid to search\n target           (string)      the target word\n\nnamed arguments:\n -h, --help       show this help message and exit\n --width WIDTH    (integer)     the grid width (default: 5)\n --height HEIGHT  (integer)     the grid height (default: 5)");
   }
 
-  // //insert when wrongType error is fixed in ArgumentParser
-  // @Test
-  // public void wrongType() {
-  //   String[] args = {"--height", "2", "ashutnrk", "--width", "hut"};
-  //   WordSearch w = new WordSearch();
-  //   assertEquals(w.wordsearch(args), "WordSearch error: the value hut is not of type integer");
-  // }
+  @Test
+  public void gridDimensionMismatch() {
+    String[] args = {"--height", "3", "aaaaerduyaaaq", "audrey", "--width", "4"};
+    WordSearch w = new WordSearch();
+    assertEquals(
+        w.wordsearch(args),
+        "WordSearch error: grid dimensions (4 x 3) do not match grid length (13)");
+  }
+
+  @Test
+  public void targetNotFound() {
+    String[] args2 = {"softswoskaolzilklqmtreyoy", "bug"};
+    WordSearch w2 = new WordSearch();
+    assertEquals(w2.wordsearch(args2), "bug not found");
+  }
+
+  @Test
+  public void wrongType() {
+    String[] args = {"--height", "2", "ashutnrk", "--width", "hut"};
+    WordSearch w = new WordSearch();
+    assertEquals(w.wordsearch(args), "WordSearch error: the value hut is not of type integer");
+  }
 }
