@@ -16,9 +16,9 @@ public class ArgumentParser {
   private int named_counter;
 
   /**
-   * ArgumentParser parses the arguments for the user to retreive.
-   * If there are fewer or more arguments than expeted, the constructor throws an exception. It will
-   * also throw an exception if arguments contains "--help" or "--h".
+   * ArgumentParser parses the arguments for the user to retreive. If there are fewer or more
+   * arguments than expeted, the constructor throws an exception. It will also throw an exception if
+   * arguments contains "--help" or "--h".
    */
   public ArgumentParser() {
     args = new HashMap<String, Argument>();
@@ -121,6 +121,7 @@ public class ArgumentParser {
    * addPositional or addNonPositional
    *
    * @param arg_name name of the argument wanted
+   * @param <T> the type of the argument being returned
    * @return value corresponding to the name
    */
   public <T> T getValue(String arg_name) {
