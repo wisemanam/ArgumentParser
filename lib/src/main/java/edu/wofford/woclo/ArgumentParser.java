@@ -73,29 +73,38 @@ public class ArgumentParser {
       box_of_garbage.add(arguments[i]);
     }
     int current_positional_name_index = 0;
+
     while (!box_of_garbage.isEmpty()) {
       if (box_of_garbage.peek().startsWith("--")) {
         String name = box_of_garbage.poll().substring(2);
-        if (box_of_garbage.isEmpty()) {
-          throw new NoValueException(name);
-        }
-        String value = box_of_garbage.poll();
-        Argument arg = args.get(name);
-        if (arg == null) {
+        Argument a = args.get(name);
+        if (a == null) {
           throw new ArgumentNameNotSpecifiedException(name);
         } else {
-          arg.setValue(value);
-          if (arg.getType().equals("integer")) {
-            try {
-              Integer.parseInt(value);
-            } catch (NumberFormatException e) {
-              throw new WrongTypeException(value);
+          String type = a.getType();
+          if (box_of_garbage.isEmpty()) {
+            if (!type.equals("boolean")) {
+              throw new NoValueException(name);
+            } else {
+              a.setValue("true");
             }
-          } else if (arg.getType().equals("float")) {
-            try {
-              Float.parseFloat(value);
-            } catch (NumberFormatException e) {
-              throw new WrongTypeException(value);
+          } else {
+            if (!type.equals("boolean")) {
+              String value = box_of_garbage.poll();
+              a.setValue(value);
+              if (a.getType().equals("integer")) {
+                try {
+                  Integer.parseInt(value);
+                } catch (NumberFormatException e) {
+                  throw new WrongTypeException(value);
+                }
+              } else if (a.getType().equals("float")) {
+                try {
+                  Float.parseFloat(value);
+                } catch (NumberFormatException e) {
+                  throw new WrongTypeException(value);
+                }
+              }
             }
           }
         }
