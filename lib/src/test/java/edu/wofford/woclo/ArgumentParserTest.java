@@ -299,4 +299,18 @@ public class ArgumentParserTest {
             });
     assertEquals(e.getWrongValue(), "test");
   }
+
+  @Test
+  public void testBooleanFlags() {
+    String[] arguments = {"5", "6", "7", "--arg", "23", "--myflag"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("int1", "integer", "int1");
+    argParse.addPositional("int2", "integer", "int2");
+    argParse.addPositional("int3", "integer", "int3");
+    argParse.addNonPositional("arg", "integer", "named argument", "0");
+    argParse.addNonPositional("myflag", "boolean", "flag", "false");
+
+    argParse.parse(arguments);
+    assertTrue(argParse.getValue("myflag"));
+  }
 }
