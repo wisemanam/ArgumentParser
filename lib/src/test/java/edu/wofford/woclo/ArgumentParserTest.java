@@ -311,6 +311,7 @@ public class ArgumentParserTest {
     argParse.addNonPositional("myflag", "boolean", "flag", "false");
 
     argParse.parse(arguments);
-    assertTrue(argParse.getValue("myflag"));
+    boolean b = argParse.getValue("myflag");
+    assertTrue(b);
   }
 }
