@@ -11,8 +11,10 @@ import java.util.*;
  */
 public class ArgumentParser {
   private Map<String, Argument> args;
+  private Map<String, String> short_args;
   private List<String> positional_names;
   private List<String> nonpositional_names;
+  private List<String> short_name_names;
   private int named_counter;
 
   /**
@@ -22,6 +24,7 @@ public class ArgumentParser {
    */
   public ArgumentParser() {
     args = new HashMap<String, Argument>();
+    short_args = new HashMap<String, String>();
     positional_names = new ArrayList<String>();
     nonpositional_names = new ArrayList<String>();
   }
@@ -50,10 +53,12 @@ public class ArgumentParser {
    * @param value the default value that the argument is given in the case that it is not one of the
    *     arguments passed into the command line
    */
-  public void addNonPositional(String name, String type, String description, String value) {
-    OptionalArgument arg = new OptionalArgument(name, type, description, value);
+  public void addNonPositional(String name, String short_name, String type, String description, String value) {
+    OptionalArgument arg = new OptionalArgument(name, short_name, type, description, value);
     nonpositional_names.add(name);
+    short_name_names.add(short_name);
     args.put(name, arg);
+    short_args.put(short_name, name);
     named_counter++;
   }
 
@@ -108,6 +113,26 @@ public class ArgumentParser {
             }
           }
         }
+      } else if (box_of_garbage.peek().startsWith("-") {
+        String short_name_argument = box_of_garbage.poll();
+        if (short_name_argument.length() > 2) {
+          for (int i = 1; i < short_name_argument.length(); i++) {
+            String name = Character.toString(short_name_argument.charAt(i));
+            Argument a = short_args.get(name);
+            if (a == null) {
+              throw new ArgumentNameNotSpecifiedException(name);
+            } else {
+              String type = a.getType();
+              if (box_of_garbage.isEmpty()) {
+                if (!type.equals("boolean")) {
+                  throw new NoValueException(name);
+                }
+              if (type.equals("boolean")) {
+                a.setValue("true");
+              } else if (type.e)
+            }
+          }
+        }
       } else {
         String value = box_of_garbage.poll();
         try {
@@ -134,8 +159,13 @@ public class ArgumentParser {
    * @return value corresponding to the name
    */
   public <T> T getValue(String arg_name) {
-    Argument arg = args.get(arg_name);
-    return arg.getValue();
+    if (arg_name.length() > 1) {
+      Argument arg = args.get(arg_name);
+      return arg.getValue();
+    } else {
+      Argument arg = short_args.get(arg_name);
+      return arg.getValue();
+    }
   }
 
   /**
