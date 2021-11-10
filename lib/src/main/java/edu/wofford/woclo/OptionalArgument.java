@@ -44,11 +44,7 @@ public class OptionalArgument extends Argument {
         throw new WrongTypeException(value);
       }
     } else {
-      if (value.equals("true") || value.equals("false")) {
-        return (T) Boolean.valueOf(value);
-      } else {
-        throw new WrongTypeException(value);
-      }
+      return (T) Boolean.valueOf(value);
     }
   }
 }
