@@ -53,6 +53,13 @@ public class ArgumentParser {
    * @param value the default value that the argument is given in the case that it is not one of the
    *     arguments passed into the command line
    */
+  public void addNonPositional(String name, String type, String description, String value) {
+    OptionalArgument arg = new OptionalArgument(name, short_name, type, description, value);
+    nonpositional_names.add(name);
+    args.put(name, arg);
+    named_counter++;
+  }
+
   public void addNonPositional(String name, String short_name, String type, String description, String value) {
     OptionalArgument arg = new OptionalArgument(name, short_name, type, description, value);
     nonpositional_names.add(name);
