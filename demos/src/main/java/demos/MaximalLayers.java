@@ -5,19 +5,20 @@ import java.util.*;
 import java.awt.*;
 
 public class MaximalLayers {
-  public String maximialLayers(String[] arguments) {
+  public String maximalLayers(String[] arguments) {
     ArgumentParser parser = new ArgumentParser();
     try {
       parser.addPositional("points", "string", "the data points");
-      parser.addNonPositional("sortedX", "boolean", "sort layers by x coordinate", "false");
-      parser.addNonPositional("sortedY", "boolean", "sort layers by y coordinate", "false");
+      parser.addNonPositional("sortedX", "boolean", "sort layers by x coordinate", "false", "x");
+      parser.addNonPositional("sortedY", "boolean", "sort layers by y coordinate", "false", "y");
       parser.parse(arguments);
       String points = parser.getValue("points");
-      Boolean sortedX = parser.getValue("sortedX");
-      Boolean sortedY = parser.getValue("sortedY");
+      boolean sortedX = parser.getValue("sortedX");
+      boolean sortedY = parser.getValue("sortedY");
       String[] pointSplit = points.split(",", 0);
       if (pointSplit.length % 2 == 1) return "MaximalLayers error: " + points.substring(points.length() - 1) + " is an unpaired x coordinate";
       int[] point = new int[pointSplit.length];
+      //catch the wrong type in points
       for (int i = 0; i < pointSplit.length; i++) {
         point[i] = Integer.parseInt(pointSplit[i]);
       }
@@ -26,6 +27,25 @@ public class MaximalLayers {
         Point p = new Point(point[i], point[i + 1]);
         pointList.add(p);
       }
+      ArrayList<Point> highestX = new ArrayList<>();
+      highestX.add(pointList.get(0));
+      ArrayList<Point> highestY = new ArrayList<>();
+      highestY.add(pointList.get(0));
+      for (int i = 1; i < pointList.size(); i++) {
+        int k = 0;
+        while (pointList.get(i).getX() < highestX.get(k).getX() && k < highestX.size()) {
+          k++;
+        }
+        highestX.add(k, pointList.get(i));
+        int j = 0;
+        while (pointList.get(i).getY() < highestY.get(j).getY() && j < highestY.size()) {
+          j++;
+        }
+        highestY.add(j, pointList.get(i));
+      }
+      String layers = buildLayers(highestX, highestY);
+      String sorted = sort(layers, sortedX, sortedY);
+      return toString(sorted);
     } catch (HelpException e){
       return "help";
     } catch (WrongTypeException e) {
@@ -38,6 +58,18 @@ public class MaximalLayers {
       String next = e.getNextExpectedName();
       return "MaximalLayers error: the argument" + next + "is required";
     }
+  }
+  
+  private String sort(String layers, boolean sortedX, boolean sortedY) {
+    return "";
+  }
+
+  private String buildLayers(ArrayList<Point> highestX, ArrayList<Point> highestY) {
+    return "";
+  }
+
+  private String toString(String layers) {
+    return "";
   }
 
   public static void main(String... args) {}
