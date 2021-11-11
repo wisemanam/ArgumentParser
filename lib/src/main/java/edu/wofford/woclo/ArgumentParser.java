@@ -113,12 +113,13 @@ public class ArgumentParser {
             }
           }
         }
-      } else if (box_of_garbage.peek().startsWith("-") {
+      } else if (box_of_garbage.peek().startsWith("-")) {
         String short_name_argument = box_of_garbage.poll();
         if (short_name_argument.length() > 2) {
           for (int i = 1; i < short_name_argument.length(); i++) {
             String name = Character.toString(short_name_argument.charAt(i));
-            Argument a = short_args.get(name);
+            String long_name = short_args.get(name);
+            Argument a = args.get(long_name);
             if (a == null) {
               throw new ArgumentNameNotSpecifiedException(name);
             } else {
@@ -126,10 +127,29 @@ public class ArgumentParser {
               if (box_of_garbage.isEmpty()) {
                 if (!type.equals("boolean")) {
                   throw new NoValueException(name);
+                } else {
+                  a.setValue("true");
                 }
-              if (type.equals("boolean")) {
-                a.setValue("true");
-              } else if (type.e)
+              } 
+            }
+          }
+        } else {
+          // if short args are not stacked (same as line 97:)
+          if (!type.equals("boolean")) {
+            String value = box_of_garbage.poll();
+            a.setValue(value);
+            if (a.getType().equals("integer")) {
+              try {
+                Integer.parseInt(value);
+              } catch (NumberFormatException e) {
+                throw new WrongTypeException(value);
+              }
+            } else if (a.getType().equals("float")) {
+              try {
+                Float.parseFloat(value);
+              } catch (NumberFormatException e) {
+                throw new WrongTypeException(value);
+              }
             }
           }
         }
