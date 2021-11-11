@@ -124,13 +124,11 @@ public class ArgumentParser {
               throw new ArgumentNameNotSpecifiedException(name);
             } else {
               String type = a.getType();
-              if (box_of_garbage.isEmpty()) {
-                if (!type.equals("boolean")) {
-                  throw new NoValueException(name);
-                } else {
-                  a.setValue("true");
-                }
-              } 
+              if (!type.equals("boolean")){
+                throw new WrongTypeException();
+              } else {
+                a.setValue("true");
+              }
             }
           }
         } else {
