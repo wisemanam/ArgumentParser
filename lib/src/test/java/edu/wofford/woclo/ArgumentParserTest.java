@@ -329,4 +329,32 @@ public class ArgumentParserTest {
     int i = argParse.getValue("a");
     assertEquals(i, 23);
   }
+
+  @Test
+  public void testAcceptedValues() {
+    String[] arguments = {"5", "6", "--shape", "square"};
+    String[] accepted_shapes = {"square", "circle"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("width", "integer", "width");
+    argParse.addPositional("height", "integer", "height");
+    argParse.addNonPositional("shape", "s", "string", "shape", "circle", accepted_shapes);
+    argParse.parse(arguments);
+    String value = argParse.getValue("shape");
+    assertEquals(value, "square");
+  }
+
+  @Test
+  public void testUnacceptedValues() {
+    ValueNotAcceptedException e =
+        assertThrows(
+            ValueNotAcceptedException.class,
+            () -> {
+              String[] arguments = {"--shape", "triangle"};
+              String[] accepted = {"square", "circle"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addNonPositional("shape", "s", "string", "shape", "circle", accepted);
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getUnacceptedValue(), "triangle");
+  }
 }

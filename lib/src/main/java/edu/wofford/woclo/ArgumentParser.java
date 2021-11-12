@@ -15,7 +15,6 @@ public class ArgumentParser {
   private List<String> positional_names;
   private List<String> nonpositional_names;
   private List<String> short_name_names;
-  private List<String> accepted_values;
   private int named_counter;
 
   /**
@@ -29,7 +28,6 @@ public class ArgumentParser {
     positional_names = new ArrayList<String>();
     nonpositional_names = new ArrayList<String>();
     short_name_names = new ArrayList<String>();
-    accepted_values = new ArrayList<String>();
   }
 
   /**
@@ -57,15 +55,15 @@ public class ArgumentParser {
    *     arguments passed into the command line
    */
   public void addNonPositional(String name, String type, String description, String value) {
-    OptionalArgument arg = new OptionalArgument(name, type, description, value);
+    Argument arg = new OptionalArgument(name, type, description, value);
     nonpositional_names.add(name);
     args.put(name, arg);
     named_counter++;
   }
 
   public void addNonPositional(
-    String name, String short_name, String type, String description, String value) {
-    OptionalArgument arg = new OptionalArgument(name, short_name, type, description, value);
+      String name, String short_name, String type, String description, String value) {
+    Argument arg = new OptionalArgument(name, short_name, type, description, value);
     nonpositional_names.add(name);
     short_name_names.add(short_name);
     args.put(name, arg);
@@ -73,22 +71,29 @@ public class ArgumentParser {
     named_counter++;
   }
 
-  public void addNonPositional(String name, String type, String description, String value, String[] accepted_values) {
-    OptionalArgument arg = new OptionalArgument(name, type, description, value);
+  public void addNonPositional(
+      String name, String type, String description, String value, String[] accepted_values) {
+    Argument arg = new OptionalArgument(name, type, description, value, accepted_values);
     nonpositional_names.add(name);
     args.put(name, arg);
     named_counter++;
   }
 
   public void addNonPositional(
-    String name, String short_name, String type, String description, String value, String[] accepted_values) {
-    OptionalArgument arg = new OptionalArgument(name, short_name, type, description, value);
+      String name,
+      String short_name,
+      String type,
+      String description,
+      String value,
+      String[] accepted_values) {
+    Argument arg =
+        new OptionalArgument(name, short_name, type, description, value, accepted_values);
     nonpositional_names.add(name);
     short_name_names.add(short_name);
     args.put(name, arg);
     short_args.put(short_name, name);
     named_counter++;
-}
+  }
 
   /**
    * The parse method takes the arguments given on the command line and sorts them into the expected
@@ -122,20 +127,46 @@ public class ArgumentParser {
               a.setValue("true");
             }
           } else {
+            String value = box_of_garbage.poll();
+            OptionalArgument arg = (OptionalArgument) a;
             if (!type.equals("boolean")) {
-              String value = box_of_garbage.poll();
-              a.setValue(value);
-              if (a.getType().equals("integer")) {
-                try {
-                  Integer.parseInt(value);
-                } catch (NumberFormatException e) {
-                  throw new WrongTypeException(value);
+              if (!arg.hasAcceptedValues()) {
+                if (a.getType().equals("integer")) {
+                  try {
+                    Integer.parseInt(value);
+                    a.setValue(value);
+                  } catch (NumberFormatException e) {
+                    throw new WrongTypeException(value);
+                  }
+                } else if (a.getType().equals("float")) {
+                  try {
+                    Float.parseFloat(value);
+                    a.setValue(value);
+                  } catch (NumberFormatException e) {
+                    throw new WrongTypeException(value);
+                  }
+                } else {
+                  a.setValue(value);
                 }
-              } else if (a.getType().equals("float")) {
-                try {
-                  Float.parseFloat(value);
-                } catch (NumberFormatException e) {
-                  throw new WrongTypeException(value);
+              } else {
+                if (a.getType().equals("integer") && arg.isAcceptedValue(value)) {
+                  try {
+                    Integer.parseInt(value);
+                    a.setValue(value);
+                  } catch (NumberFormatException e) {
+                    throw new WrongTypeException(value);
+                  }
+                } else if (a.getType().equals("float") && arg.isAcceptedValue(value)) {
+                  try {
+                    Float.parseFloat(value);
+                    a.setValue(value);
+                  } catch (NumberFormatException e) {
+                    throw new WrongTypeException(value);
+                  }
+                } else if (!arg.isAcceptedValue(value)) {
+                  throw new ValueNotAcceptedException(value);
+                } else {
+                  a.setValue(value);
                 }
               }
             }

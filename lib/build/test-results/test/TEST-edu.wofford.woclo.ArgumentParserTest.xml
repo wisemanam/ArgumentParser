@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="edu.wofford.woclo.ArgumentParserTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2021-11-04T01:22:49" hostname="Emilys-MacBook-Air-4.local" time="0.083">
+<testsuite name="edu.wofford.woclo.ArgumentParserTest" tests="22" skipped="0" failures="0" errors="0" timestamp="2021-11-12T22:23:41" hostname="Emilys-Air-4.wofford.int" time="0.12">
   <properties/>
-  <testcase name="testWrongTypeExceptionInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.056"/>
+  <testcase name="testWrongTypeExceptionInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.059"/>
+  <testcase name="testArgumentNameNotSpecifiedException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.006"/>
+  <testcase name="testAcceptedValues()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testShortNamedArguments()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
   <testcase name="testWrongTypeExceptionFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
-  <testcase name="testNamedArgumentsNotGiven()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
-  <testcase name="testNamedArgsAllGiven()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testNamedArgumentsNotGiven()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
+  <testcase name="testNamedArgsAllGiven()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
+  <testcase name="testGivenOtherThanFloatNamed()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
   <testcase name="testHelp()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
-  <testcase name="testNamedArgsAllGivenUnordered()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testGetValueWantingInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testGetValueNamedInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testNamedArgsAllGivenUnordered()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
+  <testcase name="testGetValueWantingInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
   <testcase name="testArgumentParserTwoArg()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testNumWordsNotExpected()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
+  <testcase name="testGetArgument()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testBooleanFlags()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
+  <testcase name="testNumWordsNotExpected()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
   <testcase name="testGetValueWantingFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testArgumentParserNoArg()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
+  <testcase name="testWrongTypeExceptionExpectInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testUnacceptedValues()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
+  <testcase name="testNoValueException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testArgumentParserNoArg()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
   <testcase name="testNumArgs()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
