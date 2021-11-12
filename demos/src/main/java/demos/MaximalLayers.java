@@ -60,11 +60,40 @@ public class MaximalLayers {
     }
   }
   
-  private String sort(String layers, boolean sortedX, boolean sortedY) {
-    return "";
+  private String buildLayers(ArrayList<Point> highestX, ArrayList<Point> highestY) {
+    Map layers = new HashMap<Integer,ArrayList<Point>>();
+    int counter = 1;
+    while (!highestY.isEmpty()) {
+      Point highestYValuePoint = highestY.get(0);
+      ArrayList<Point> layer = new ArrayList<>();
+      layer.add(highestYValuePoint);
+      while (highestY.get(0).getY() == highestY.get(1).getY()) {
+        layer.add(highestY.get(1));
+        highestX.remove(highestY.get(0));
+        highestY.remove(0);
+      }
+      highestX.remove(highestY.get(0));
+      highestY.remove(0);
+      Point highestXofHighestY = layer.get(0);
+      for (int i = 0; i < layer.size(); i++) {
+        if ((int)layer.get(i).getX() > (int)highestXofHighestY.getX()) {
+          highestXofHighestY = layer.get(i);
+        }
+      }
+      if ((int)highestX.get(0).getX() > (int)highestXofHighestY.getX()) {
+        layer.add(highestX.get(0));
+        highestY.remove(highestX.get(0));
+        highestX.remove(0);
+      }
+      while ((int)highestX.get(0).getX() == (int)highestXofHighestY.getX()) {
+        layer.add(highestX.get(0));
+        highestY.remove(highestX.get(0));
+        highestX.remove(0);
+      }
+    } 
   }
 
-  private String buildLayers(ArrayList<Point> highestX, ArrayList<Point> highestY) {
+  private String sort(String layers, boolean sortedX, boolean sortedY) {
     return "";
   }
 
