@@ -7,6 +7,7 @@ package edu.wofford.woclo;
  */
 public class OptionalArgument extends Argument {
   private String value;
+  private String short_name;
   /**
    * The OptionalArgument constructor takes the name of the variable, its type, the description used
    * in the help message, and the value that will be used as its default value. The client can call
@@ -18,6 +19,13 @@ public class OptionalArgument extends Argument {
    * @param description a description of the argument used for the help message
    * @param value the value associated with the argument
    */
+  public OptionalArgument(
+      String name, String short_name, String type, String description, String value) {
+    super(name, type, description);
+    this.value = value;
+    this.short_name = short_name;
+  }
+
   public OptionalArgument(String name, String type, String description, String value) {
     super(name, type, description);
     this.value = value;
@@ -46,5 +54,9 @@ public class OptionalArgument extends Argument {
     } else {
       return (T) Boolean.valueOf(value);
     }
+  }
+
+  public String getShortName() {
+    return short_name;
   }
 }

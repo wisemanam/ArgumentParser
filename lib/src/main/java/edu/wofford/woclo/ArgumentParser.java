@@ -15,6 +15,7 @@ public class ArgumentParser {
   private List<String> positional_names;
   private List<String> nonpositional_names;
   private List<String> short_name_names;
+  private List<String> accepted_values;
   private int named_counter;
 
   /**
@@ -27,6 +28,8 @@ public class ArgumentParser {
     short_args = new HashMap<String, String>();
     positional_names = new ArrayList<String>();
     nonpositional_names = new ArrayList<String>();
+    short_name_names = new ArrayList<String>();
+    accepted_values = new ArrayList<String>();
   }
 
   /**
@@ -54,13 +57,14 @@ public class ArgumentParser {
    *     arguments passed into the command line
    */
   public void addNonPositional(String name, String type, String description, String value) {
-    OptionalArgument arg = new OptionalArgument(name, short_name, type, description, value);
+    OptionalArgument arg = new OptionalArgument(name, type, description, value);
     nonpositional_names.add(name);
     args.put(name, arg);
     named_counter++;
   }
 
-  public void addNonPositional(String name, String short_name, String type, String description, String value) {
+  public void addNonPositional(
+    String name, String short_name, String type, String description, String value) {
     OptionalArgument arg = new OptionalArgument(name, short_name, type, description, value);
     nonpositional_names.add(name);
     short_name_names.add(short_name);
@@ -68,6 +72,23 @@ public class ArgumentParser {
     short_args.put(short_name, name);
     named_counter++;
   }
+
+  public void addNonPositional(String name, String type, String description, String value, String[] accepted_values) {
+    OptionalArgument arg = new OptionalArgument(name, type, description, value);
+    nonpositional_names.add(name);
+    args.put(name, arg);
+    named_counter++;
+  }
+
+  public void addNonPositional(
+    String name, String short_name, String type, String description, String value, String[] accepted_values) {
+    OptionalArgument arg = new OptionalArgument(name, short_name, type, description, value);
+    nonpositional_names.add(name);
+    short_name_names.add(short_name);
+    args.put(name, arg);
+    short_args.put(short_name, name);
+    named_counter++;
+}
 
   /**
    * The parse method takes the arguments given on the command line and sorts them into the expected
@@ -131,8 +152,8 @@ public class ArgumentParser {
               throw new ArgumentNameNotSpecifiedException(name);
             } else {
               String type = a.getType();
-              if (!type.equals("boolean")){
-                throw new WrongTypeException();
+              if (!type.equals("boolean")) {
+                throw new WrongTypeException(long_name);
               } else {
                 a.setValue("true");
               }
@@ -140,6 +161,10 @@ public class ArgumentParser {
           }
         } else {
           // if short args are not stacked (same as line 97:)
+          String name = Character.toString(short_name_argument.charAt(1));
+          String long_name = short_args.get(name);
+          Argument a = args.get(long_name);
+          String type = a.getType();
           if (!type.equals("boolean")) {
             String value = box_of_garbage.poll();
             a.setValue(value);
@@ -188,7 +213,8 @@ public class ArgumentParser {
       Argument arg = args.get(arg_name);
       return arg.getValue();
     } else {
-      Argument arg = short_args.get(arg_name);
+      String long_name = short_args.get(arg_name);
+      Argument arg = args.get(long_name);
       return arg.getValue();
     }
   }

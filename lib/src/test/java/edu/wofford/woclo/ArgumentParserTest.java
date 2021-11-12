@@ -159,8 +159,8 @@ public class ArgumentParserTest {
     argParse.addPositional("int1", "integer", "first pos");
     argParse.addPositional("int2", "integer", "second pos");
     argParse.addPositional("int3", "integer", "third pos");
-    argParse.addNonPositional("myargs1", "integer", "first nonpos", "20");
-    argParse.addNonPositional("myargs2", "string", "second nonpos", "audrey");
+    argParse.addNonPositional("myargs1", "a", "integer", "first nonpos", "20");
+    argParse.addNonPositional("myargs2", "b", "string", "second nonpos", "audrey");
     argParse.parse(arguments);
     int int1 = argParse.getValue("int1");
     int int2 = argParse.getValue("int2");
@@ -180,8 +180,8 @@ public class ArgumentParserTest {
     ArgumentParser argParse = new ArgumentParser();
     argParse.addPositional("int1", "integer", "first pos");
     argParse.addPositional("int2", "integer", "second pos");
-    argParse.addNonPositional("string1", "string", "first nonpos", "awesome");
-    argParse.addNonPositional("string2", "string", "second nonpos", "cat");
+    argParse.addNonPositional("string1", "s", "string", "first nonpos", "awesome");
+    argParse.addNonPositional("string2", "t", "string", "second nonpos", "cat");
     argParse.parse(arguments);
     int int1 = argParse.getValue("int1");
     int int2 = argParse.getValue("int2");
@@ -198,8 +198,8 @@ public class ArgumentParserTest {
     String[] arguments = {"5"};
     ArgumentParser argParse = new ArgumentParser();
     argParse.addPositional("int1", "integer", "first pos");
-    argParse.addNonPositional("arg1", "integer", "first nonpos", "2");
-    argParse.addNonPositional("arg2", "integer", "second nonpos", "10");
+    argParse.addNonPositional("arg1", "a", "integer", "first nonpos", "2");
+    argParse.addNonPositional("arg2", "b", "integer", "second nonpos", "10");
     argParse.parse(arguments);
     int int1 = argParse.getValue("int1");
     int arg1 = argParse.getValue("arg1");
@@ -218,7 +218,7 @@ public class ArgumentParserTest {
               String[] arguments = {"--fstname", "3.5", "5"};
               ArgumentParser argParse = new ArgumentParser();
               argParse.addPositional("int1", "integer", "first pos");
-              argParse.addNonPositional("fstname", "integer", "first nonpos", "5");
+              argParse.addNonPositional("fstname", "f", "integer", "first nonpos", "5");
               argParse.parse(arguments);
               int int1 = argParse.getValue("int1");
               int fstname = argParse.getValue("fstname");
@@ -252,7 +252,7 @@ public class ArgumentParserTest {
               String[] arguments = {"3", "--myarg1", "1"};
               ArgumentParser argParse = new ArgumentParser();
               argParse.addPositional("int1", "integer", "first pos");
-              argParse.addNonPositional("myargs1", "integer", "first nonpos", "5");
+              argParse.addNonPositional("myargs1", "a", "integer", "first nonpos", "5");
               argParse.parse(arguments);
             });
     assertEquals(e.getArgName(), "myarg1");
@@ -266,7 +266,7 @@ public class ArgumentParserTest {
             () -> {
               String[] arguments = {"--test"};
               ArgumentParser argParse = new ArgumentParser();
-              argParse.addNonPositional("test", "string", "test", "test");
+              argParse.addNonPositional("test", "t", "string", "test", "test");
               argParse.parse(arguments);
             });
     assertEquals(e.getNameMissingValue(), "test");
@@ -280,7 +280,7 @@ public class ArgumentParserTest {
             () -> {
               String[] arguments = {"--test", "hello"};
               ArgumentParser argParse = new ArgumentParser();
-              argParse.addNonPositional("test", "float", "test", "3.5");
+              argParse.addNonPositional("test", "t", "float", "test", "3.5");
               argParse.parse(arguments);
             });
     assertEquals(e.getWrongValue(), "hello");
@@ -294,7 +294,7 @@ public class ArgumentParserTest {
             () -> {
               String[] arguments = {"--test", "test"};
               ArgumentParser argParse = new ArgumentParser();
-              argParse.addNonPositional("test", "integer", "test", "5");
+              argParse.addNonPositional("test", "t", "integer", "test", "5");
               argParse.parse(arguments);
             });
     assertEquals(e.getWrongValue(), "test");
@@ -307,11 +307,26 @@ public class ArgumentParserTest {
     argParse.addPositional("int1", "integer", "int1");
     argParse.addPositional("int2", "integer", "int2");
     argParse.addPositional("int3", "integer", "int3");
-    argParse.addNonPositional("arg", "integer", "named argument", "0");
-    argParse.addNonPositional("myflag", "boolean", "flag", "false");
+    argParse.addNonPositional("arg", "a", "integer", "named argument", "0");
+    argParse.addNonPositional("myflag", "f", "boolean", "flag", "false");
 
     argParse.parse(arguments);
     boolean b = argParse.getValue("myflag");
     assertTrue(b);
+  }
+
+  @Test
+  public void testShortNamedArguments() {
+    String[] arguments = {"5", "6", "7", "--arg", "23", "--myflag"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("int1", "integer", "int1");
+    argParse.addPositional("int2", "integer", "int2");
+    argParse.addPositional("int3", "integer", "int3");
+    argParse.addNonPositional("arg", "a", "integer", "named argument", "0");
+    argParse.addNonPositional("myflag", "f", "boolean", "flag", "false");
+
+    argParse.parse(arguments);
+    int i = argParse.getValue("a");
+    assertEquals(i, 23);
   }
 }
