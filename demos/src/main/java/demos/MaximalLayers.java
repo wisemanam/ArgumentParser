@@ -96,16 +96,19 @@ public class MaximalLayers {
   private ArrayList<Points> sort(ArrayList<Point> points, boolean sortedX, boolean sortedY) {
     points.sort(Comparator.comparing(Point::getX));
     ArrayList<Point> sortedPointsX = new ArrayList<Point>(points);
+    Collections.reverse(sortedPointsX);
     if (sortedX) {
       return sortedPointsX;
     }
     points.sort(Comparator.comparing(Point::getY));
     ArrayList<Point> sortedPointsY = new ArrayList<Point>(points);
+    Collections.reverse(sortedPointsY);
     if (sortedY) {
       return sortedPointsY;
     }
     points.sort(Comparator.comparing(Point::getX));
     ArrayList<Point> sortedPointsXY = new ArrayList<Point>(points);
+    Collections.reverse(sortedPointsXY);
     if (sortedX && sortedY) {
       return sortedPointsXY;
     }
