@@ -93,7 +93,7 @@ public class MaximalLayers {
     } 
   }
 
-  private ArrayList<Points> sort(ArrayList<Point> points, boolean sortedX, boolean sortedY) {
+  private ArrayList<Point> sort(ArrayList<Point> points, boolean sortedX, boolean sortedY) {
     points.sort(Comparator.comparing(Point::getX));
     ArrayList<Point> sortedPointsX = new ArrayList<Point>(points);
     Collections.reverse(sortedPointsX);
