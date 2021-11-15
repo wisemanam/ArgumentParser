@@ -27,96 +27,84 @@ public class MaximalLayers {
         Point p = new Point(point[i], point[i + 1]);
         pointList.add(p);
       }
-      ArrayList<Point> highestX = new ArrayList<>();
-      highestX.add(pointList.get(0));
-      ArrayList<Point> highestY = new ArrayList<>();
-      highestY.add(pointList.get(0));
-      for (int i = 1; i < pointList.size(); i++) {
-        int k = 0;
-        while (pointList.get(i).getX() < highestX.get(k).getX() && k < highestX.size()) {
-          k++;
-        }
-        highestX.add(k, pointList.get(i));
-        int j = 0;
-        while (pointList.get(i).getY() < highestY.get(j).getY() && j < highestY.size()) {
-          j++;
-        }
-        highestY.add(j, pointList.get(i));
-      }
-      String layers = buildLayers(highestX, highestY);
-      String sorted = sort(layers, sortedX, sortedY);
-      return toString(sorted);
-    } catch (HelpException e){
-      return "help";
-    } catch (WrongTypeException e) {
-      String wrongValue = e.getWrongValue();
-      return "MaximalLayers error: the value" + wrongValue + "is not of type integer";
-    } catch (TooManyException e) {
-      String firstExtra = e.getFirstExtra();
-      return "MaximalLayers error: the value" + firstExtra + "matches no argument";
-    } catch (TooFewException e) {
-      String next = e.getNextExpectedName();
-      return "MaximalLayers error: the argument" + next + "is required";
-    }
-  }
-  
-  private String buildLayers(ArrayList<Point> highestX, ArrayList<Point> highestY) {
-    Map layers = new HashMap<Integer,ArrayList<Point>>();
-    int counter = 1;
-    while (!highestY.isEmpty()) {
-      Point highestYValuePoint = highestY.get(0);
-      ArrayList<Point> layer = new ArrayList<>();
-      layer.add(highestYValuePoint);
-      while (highestY.get(0).getY() == highestY.get(1).getY()) {
-        layer.add(highestY.get(1));
-        highestX.remove(highestY.get(0));
-        highestY.remove(0);
-      }
-      highestX.remove(highestY.get(0));
-      highestY.remove(0);
-      Point highestXofHighestY = layer.get(0);
-      for (int i = 0; i < layer.size(); i++) {
-        if ((int)layer.get(i).getX() > (int)highestXofHighestY.getX()) {
-          highestXofHighestY = layer.get(i);
-        }
-      }
-      if ((int)highestX.get(0).getX() > (int)highestXofHighestY.getX()) {
-        layer.add(highestX.get(0));
-        highestY.remove(highestX.get(0));
-        highestX.remove(0);
-      }
-      while ((int)highestX.get(0).getX() == (int)highestXofHighestY.getX()) {
-        layer.add(highestX.get(0));
-        highestY.remove(highestX.get(0));
-        highestX.remove(0);
-      }
-    } 
+      
   }
 
-  private ArrayList<Point> sort(ArrayList<Point> points, boolean sortedX, boolean sortedY) {
-    points.sort(Comparator.comparing(Point::getX));
-    ArrayList<Point> sortedPointsX = new ArrayList<Point>(points);
+  private ArrayList<Point> sortPoints(ArrayList<Point> points,  ArrayList<Point> original_order, boolean sortedX, boolean sortedY) {
+    
+    ArrayList<Point> points_copy = new ArrayList<Point>(points);
+    
+    points_copy.sort(Comparator.comparing(Point::getX));
+    ArrayList<Point> sortedPointsX = new ArrayList<Point>(points_copy);
     Collections.reverse(sortedPointsX);
-    if (sortedX) {
+    if (sortedX && !sortedY) {
       return sortedPointsX;
     }
-    points.sort(Comparator.comparing(Point::getY));
-    ArrayList<Point> sortedPointsY = new ArrayList<Point>(points);
+    points_copy.sort(Comparator.comparing(Point::getY));
+    ArrayList<Point> sortedPointsY = new ArrayList<Point>(points_copy);
     Collections.reverse(sortedPointsY);
-    if (sortedY) {
+    if (sortedY && !sortedX) {
       return sortedPointsY;
     }
-    points.sort(Comparator.comparing(Point::getX));
-    ArrayList<Point> sortedPointsXY = new ArrayList<Point>(points);
+    points_copy.sort(Comparator.comparing(Point::getX));
+    ArrayList<Point> sortedPointsXY = new ArrayList<Point>(points_copy);
     Collections.reverse(sortedPointsXY);
-    if (sortedX && sortedY) {
-      return sortedPointsXY;
-    }
-    return points;
+    return sortedPointsXY;
   }
 
-  private String toString(String layers) {
-    return "";
+
+  public Map<Integer, ArrayList<Point>> findMaximalLayers(ArrayList<Point> points) {
+    Map layers = new HashMap<Integer, ArrayList<Point>>();
+    ArrayList<Point> sortedPoints = sortPoints(points, points, true, true); // sort by X and Y
+    int layer_count = 1;
+    while (!sortedPoints.isEmpty()) {
+      ArrayList<Point> layer_list = new ArrayList<Point>();
+      // add first point to layer
+      Point firstPoint = sortedPoints.get(0);
+      layer_list.add(firstPoint);
+      sortedPoints.remove(0);
+      // add any other points with that same x value to layer
+      Point comparePoint = firstPoint;
+      while(!sortedPoints.isEmpty() && sortedPoints.get(0).getX() == comparePoint.getX()){
+        comparePoint = sortedPoints.get(0);
+        layer_list.add(comparePoint);
+        sortedPoints.remove(0);
+      }
+      // add any point with higher y value
+      comparePoint = firstPoint;
+      for(int i = 0; i < sortedPoints.size(); i++) {
+        if (sortedPoints.get(i).getY() >= comparePoint.getY()) {
+          comparePoint = sortedPoints.get(i);
+          layer_list.add(comparePoint);
+          sortedPoints.remove(i);
+          for (int j = i; j < sortedPoints.size(); j++) {
+            if (sortedPoints.get(j).getX() == comparePoint.getX() && sortedPoints.get(j).getY() > firstPoint.getY())  {
+              comparePoint = sortedPoints.get(j);
+              layer_list.add(comparePoint);
+              sortedPoints.remove(j);
+            }
+          }
+        }
+      }
+      // add any points with coords between first and comparePoint?
+      layers.put(layer_count, layer_list);
+      layer_count++;
+    }
+    return layers;
+  }
+
+  public String toString(Map<Integer, ArrayList<Point>> layers, ArrayList<Point> original_points, boolean sortX, boolean sortY) {
+    String str = "";
+    for (int i = 1; i < layers.size() + 1; i++) {
+      str += i + ":";
+      ArrayList<Point> sortedLayerList = sortPoints(layers.get(i), original_points, sortX, sortY);
+      for (int j = 0; j < sortedLayerList.size(); j++) {
+        str += "(" + (int)sortedLayerList.get(j).getX() + ",";
+        str += (int)sortedLayerList.get(j).getY() + ")";
+      }
+      str += " ";
+    }
+    return str;
   }
 
   public static void main(String... args) {}
