@@ -9,8 +9,8 @@ public class MaximalLayers {
     ArgumentParser parser = new ArgumentParser();
     try {
       parser.addPositional("points", "string", "the data points");
-      parser.addNonPositional("sortedX", "boolean", "sort layers by x coordinate", "false", "x");
-      parser.addNonPositional("sortedY", "boolean", "sort layers by y coordinate", "false", "y");
+      parser.addNonPositional("sortedX", "boolean", "sort layers by x coordinate", "false");
+      parser.addNonPositional("sortedY", "boolean", "sort layers by y coordinate", "false");
       parser.parse(arguments);
       String points = parser.getValue("points");
       boolean sortedX = parser.getValue("sortedX");
@@ -18,7 +18,7 @@ public class MaximalLayers {
       String[] pointSplit = points.split(",", 0);
       if (pointSplit.length % 2 == 1)
         return "MaximalLayers error: "
-            + points.substring(points.length() - 1)
+            + pointSplit[pointSplit.length - 1]
             + " is an unpaired x coordinate";
       int[] point = new int[pointSplit.length];
       // catch the wrong type in points
@@ -60,16 +60,16 @@ public class MaximalLayers {
 
     points_copy.sort(Comparator.comparing(Point::getX));
     ArrayList<Point> sortedPointsX = new ArrayList<Point>(points_copy);
-    Collections.reverse(sortedPointsX);
     if (sortedX && !sortedY) {
       return sortedPointsX;
     }
+    Collections.reverse(sortedPointsX);
     points_copy.sort(Comparator.comparing(Point::getY));
     ArrayList<Point> sortedPointsY = new ArrayList<Point>(points_copy);
-    Collections.reverse(sortedPointsY);
     if (sortedY && !sortedX) {
       return sortedPointsY;
     }
+    Collections.reverse(sortedPointsY);
     points_copy.sort(Comparator.comparing(Point::getX));
     ArrayList<Point> sortedPointsXY = new ArrayList<Point>(points_copy);
     Collections.reverse(sortedPointsXY);
@@ -140,5 +140,9 @@ public class MaximalLayers {
     return str.trim();
   }
 
-  public static void main(String... args) {}
+  public static void main(String... args) {
+    MaximalLayers m = new MaximalLayers();
+    String s = m.maximalLayers(args);
+    System.out.println(s);
+  }
 }
