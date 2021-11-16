@@ -19,8 +19,25 @@ public class TilingAssistant {
       float groutGap = parser.getValue("groutgap");
       boolean metric = parser.getValue("metric");
       boolean fullOnly = parser.getValue("fullonly");
+    } catch (HelpException e) {
+      return "help";
     }
   }
+
+  public int calculateNumFullTiles(float roomLength, float roomWidth, float tileSize, float grout) {
+    int numFullTilesDown = 1;
+    while(roomLength - (tileSize + grout)> 0) {
+      numFullTilesDown += 1;
+      roomLength -= (tileSize + grout);
+    }
+    int numFullTilesAcross = 1;
+    while(roomWidth - (tileSize + grout) > 0) {
+      numFullTilesAcross += 1;
+      roomWidth -= (tileSize + grout);
+    }
+    return numFullTilesAcross*numFullTilesDown;
+  }
+
   public static void main(String... args) {
     
   }
