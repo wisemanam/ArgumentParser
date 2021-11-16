@@ -21,9 +21,13 @@ public class MaximalLayers {
             + pointSplit[pointSplit.length - 1]
             + " is an unpaired x coordinate";
       int[] point = new int[pointSplit.length];
-      // catch the wrong type in points
+
       for (int i = 0; i < pointSplit.length; i++) {
-        point[i] = Integer.parseInt(pointSplit[i]);
+        try {
+          point[i] = Integer.parseInt(pointSplit[i]);
+        } catch (NumberFormatException e) {
+          return "MaximalLayers error: the value " + pointSplit[i] + " is not of type integer";
+        }
       }
       ArrayList<Point> pointList = new ArrayList<>();
       for (int i = 0; i < point.length; i += 2) {
@@ -34,6 +38,10 @@ public class MaximalLayers {
       return toString(layers, pointList, sortedX, sortedY);
     } catch (HelpException e) {
       return "help";
+    } catch (TooFewException e) {
+      return "MaximalLayers error: the argument " + e.getNextExpectedName() + " is required";
+    } catch (TooManyException e) {
+      return "MaximalLayers error: the value " + e.getFirstExtra() + " matches no argument";
     }
   }
 
