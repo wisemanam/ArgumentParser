@@ -130,7 +130,7 @@ public class ArgumentParserTest {
             () -> {
               String[] arguments = {"hello"};
               ArgumentParser argParse = new ArgumentParser();
-              argParse.addPositional("x1", "int", "the first int argument");
+              argParse.addPositional("x1", "integer", "the first int argument");
               argParse.parse(arguments);
               int int1 = argParse.getValue("x1");
             });
@@ -294,7 +294,7 @@ public class ArgumentParserTest {
             () -> {
               String[] arguments = {"--test", "test"};
               ArgumentParser argParse = new ArgumentParser();
-              argParse.addNonPositional("test", "t", "integer", "test", "5");
+              argParse.addNonPositional("test", "integer", "test", "5");
               argParse.parse(arguments);
             });
     assertEquals(e.getWrongValue(), "test");
@@ -588,6 +588,171 @@ public class ArgumentParserTest {
     argParse.parse(arguments);
     float f = argParse.getValue("b");
     assertEquals(f, 3.5);
+  }
+
+  @Test
+  public void testNotStackedWrongTypeExceptionAcceptedFloat() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              String[] arguments = {"-a", "-b", "hello"};
+              String[] accepted = {"hello", "goodbye"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addNonPositional("arg1", "a", "boolean", "arg", "false");
+              argParse.addNonPositional("arg2", "b", "float", "arg", "goodbye", accepted);
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getWrongValue(), "hello");
+  }
+
+  @Test
+  public void testNotStackedWrongTypeExceptionAcceptedInt() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              String[] arguments = {"-a", "-b", "hello"};
+              String[] accepted = {"hello", "goodbye"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addNonPositional("arg1", "a", "boolean", "arg", "false");
+              argParse.addNonPositional("arg2", "b", "integer", "arg", "goodbye", accepted);
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getWrongValue(), "hello");
+  }
+
+  @Test
+  public void testNotStackedNotAcceptedException() {
+    ValueNotAcceptedException e =
+        assertThrows(
+            ValueNotAcceptedException.class,
+            () -> {
+              String[] arguments = {"-a", "-b", "emily"};
+              String[] accepted = {"hello", "goodbye"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addNonPositional("arg1", "a", "boolean", "arg", "false");
+              argParse.addNonPositional("arg2", "b", "string", "arg", "goodbye", accepted);
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getUnacceptedValue(), "emily");
+  }
+
+  @Test
+  public void testNotStackedString() {
+    String[] arguments = {"-a", "-b", "hello"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addNonPositional("arg1", "a", "boolean", "arg", "false");
+    argParse.addNonPositional("arg2", "b", "string", "arg", "goodbye");
+    argParse.parse(arguments);
+    String f = argParse.getValue("b");
+    assertEquals(f, "hello");
+  }
+
+  @Test
+  public void testNotStackedAcceptedString() {
+    String[] arguments = {"-a", "-b", "hello"};
+    String[] accepted = {"hello", "goodbye"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addNonPositional("arg1", "a", "boolean", "arg", "false");
+    argParse.addNonPositional("arg2", "b", "string", "arg", "goodbye", accepted);
+    argParse.parse(arguments);
+    String f = argParse.getValue("b");
+    assertEquals(f, "hello");
+  }
+
+  @Test
+  public void testNotStackedAcceptedInt() {
+    String[] arguments = {"-a", "-b", "3"};
+    String[] accepted = {"3", "6"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addNonPositional("arg1", "a", "boolean", "arg", "false");
+    argParse.addNonPositional("arg2", "b", "integer", "arg", "6", accepted);
+    argParse.parse(arguments);
+    int f = argParse.getValue("b");
+    assertEquals(f, 3);
+  }
+
+  @Test
+  public void testWrongTypeExceptionAcceptedFloat() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              String[] arguments = {"awesome"};
+              String[] accepted = {"awesome", "great"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("x1", "float", "the first float argument", accepted);
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getWrongValue(), "awesome");
+  }
+
+  @Test
+  public void testWrongTypeExceptionAcceptedInt() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              String[] arguments = {"awesome"};
+              String[] accepted = {"awesome", "great"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("x1", "integer", "the first integer argument", accepted);
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getWrongValue(), "awesome");
+  }
+
+  @Test
+  public void testGetValueWantingAcceptedInt() {
+    String[] arguments = {"1", "2", "3"};
+    String[] accepted = {"1", "5", "7"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("x1", "integer", "the first int argument", accepted);
+    argParse.addPositional("x2", "integer", "the second int argument");
+    argParse.addPositional("x3", "integer", "the third int argument");
+    argParse.parse(arguments);
+    int int1 = argParse.getValue("x1");
+    assertEquals(int1, 1);
+  }
+
+  @Test
+  public void testGetValueWantingAcceptedFloat() {
+    String[] arguments = {"7.2", "2", "3"};
+    String[] accepted = {"1.5", "5.5", "7.2"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("x1", "float", "the first float argument", accepted);
+    argParse.addPositional("x2", "integer", "the second int argument");
+    argParse.addPositional("x3", "integer", "the third int argument");
+    argParse.parse(arguments);
+    float float1 = argParse.getValue("x1");
+    assertEquals(float1, 7.2, 0.1);
+  }
+
+  @Test
+  public void testPositionalNotAcceptedException() {
+    ValueNotAcceptedException e =
+        assertThrows(
+            ValueNotAcceptedException.class,
+            () -> {
+              String[] arguments = {"emily"};
+              String[] accepted = {"hello", "goodbye"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("arg1", "string", "arg", accepted);
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getUnacceptedValue(), "emily");
+  }
+
+  @Test
+  public void testPositionalAcceptedStrings() {
+    String[] arguments = {"hello"};
+    String[] accepted = {"hello", "goodbye"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("arg1", "string", "arg", accepted);
+    argParse.parse(arguments);
+    String arg1 = argParse.getValue("arg1");
+    assertEquals(arg1, "hello");
   }
 
   @Test
