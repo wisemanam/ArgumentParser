@@ -103,6 +103,7 @@ public class ArgumentParser {
    */
   public void parse(String[] arguments) {
     int expected_positional = positional_names.size();
+    String[] check_digits = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "9"};
     if (Arrays.asList(arguments).contains("--help") || Arrays.asList(arguments).contains("-h")) {
       throw new HelpException("Help needed.");
     }
@@ -175,7 +176,9 @@ public class ArgumentParser {
             }
           }
         }
-      } else if (box_of_garbage.peek().startsWith("-")) {
+      } else if (box_of_garbage.peek().startsWith("-")
+          && !Arrays.asList(check_digits)
+              .contains(Character.toString(box_of_garbage.peek().charAt(1)))) {
         String short_name_argument = box_of_garbage.poll();
         if (short_name_argument.length() > 2) {
           for (int i = 1; i < short_name_argument.length(); i++) {
@@ -198,21 +201,25 @@ public class ArgumentParser {
           String name = Character.toString(short_name_argument.charAt(1));
           String long_name = short_args.get(name);
           Argument a = args.get(long_name);
-          String type = a.getType();
-          if (!type.equals("boolean")) {
-            String value = box_of_garbage.poll();
-            a.setValue(value);
-            if (a.getType().equals("integer")) {
-              try {
-                Integer.parseInt(value);
-              } catch (NumberFormatException e) {
-                throw new WrongTypeException(value);
-              }
-            } else if (a.getType().equals("float")) {
-              try {
-                Float.parseFloat(value);
-              } catch (NumberFormatException e) {
-                throw new WrongTypeException(value);
+          if (a == null) {
+            throw new ArgumentNameNotSpecifiedException(long_name);
+          } else {
+            String type = a.getType();
+            if (!type.equals("boolean")) {
+              String value = box_of_garbage.poll();
+              a.setValue(value);
+              if (a.getType().equals("integer")) {
+                try {
+                  Integer.parseInt(value);
+                } catch (NumberFormatException e) {
+                  throw new WrongTypeException(value);
+                }
+              } else if (a.getType().equals("float")) {
+                try {
+                  Float.parseFloat(value);
+                } catch (NumberFormatException e) {
+                  throw new WrongTypeException(value);
+                }
               }
             }
           }
