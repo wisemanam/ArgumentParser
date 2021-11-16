@@ -122,20 +122,21 @@ public class MaximalLayers {
       ArrayList<Point> points,
       boolean sortX,
       boolean sortY) {
-    String str = "";
+    StringBuffer buff = new StringBuffer();
     for (int i = 1; i < layers.size() + 1; i++) {
-      str += i + ":";
+      buff.append(i + ":");
       ArrayList<Point> sortedLayerList = sortToOriginal(layers.get(i), points);
       if (sortX || sortY) {
         sortedLayerList = sortPoints(sortedLayerList, sortX, sortY);
       }
       for (int j = 0; j < sortedLayerList.size(); j++) {
-        str += "(" + (int) sortedLayerList.get(j).getX() + ",";
-        str += (int) sortedLayerList.get(j).getY() + ")";
+        buff.append("(" + (int) sortedLayerList.get(j).getX() + ",");
+        buff.append((int) sortedLayerList.get(j).getY() + ")");
       }
-      str += " ";
+      buff.append(" ");
     }
-    return str.trim();
+    String string = buff.toString();
+    return string.trim();
   }
 
   public static void main(String... args) {
