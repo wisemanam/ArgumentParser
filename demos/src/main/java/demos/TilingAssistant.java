@@ -25,15 +25,21 @@ public class TilingAssistant {
   }
 
   public int calculateNumFullTiles(float roomLength, float roomWidth, float tileSize, float grout) {
-    int numFullTilesDown = 1;
-    while(roomLength - (tileSize + grout)> 0) {
+    int numFullTilesDown = 0;
+    while(roomLength - (tileSize + grout) >= tileSize) {
       numFullTilesDown += 1;
       roomLength -= (tileSize + grout);
     }
-    int numFullTilesAcross = 1;
-    while(roomWidth - (tileSize + grout) > 0) {
+    if (roomLength == tileSize) {
+      numFullTilesDown += 1;
+    }
+    int numFullTilesAcross = 0;
+    while(roomWidth - (tileSize + grout) >= tileSize) {
       numFullTilesAcross += 1;
       roomWidth -= (tileSize + grout);
+    }
+    if (roomWidth == tileSize) {
+      numFullTilesAcross += 1;
     }
     return numFullTilesAcross*numFullTilesDown;
   }
