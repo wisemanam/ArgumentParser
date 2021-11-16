@@ -240,6 +240,8 @@ public class ArgumentParser {
                     } catch (NumberFormatException e) {
                       throw new WrongTypeException(value);
                     }
+                  } else {
+                    a.setValue(value);
                   }
                 } else {
                   if (a.getType().equals("integer") && a.isAcceptedValue(value)) {

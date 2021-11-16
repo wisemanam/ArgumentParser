@@ -360,6 +360,84 @@ public class ArgumentParserTest {
   }
 
   @Test
+  public void testBooleanFlagsNotLast() {
+    String[] arguments = {"5", "6", "7", "--arg", "23", "--myflag", "17"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("int1", "integer", "int1");
+    argParse.addPositional("int2", "integer", "int2");
+    argParse.addPositional("int3", "integer", "int3");
+    argParse.addPositional("int4", "integer", "int4");
+    argParse.addNonPositional("arg", "a", "integer", "named argument", "0");
+    argParse.addNonPositional("myflag", "f", "boolean", "flag", "false");
+
+    argParse.parse(arguments);
+    boolean b = argParse.getValue("myflag");
+    assertTrue(b);
+  }
+
+  @Test
+  public void testNonPositionalFloat() {
+    String[] arguments = {"--arg", "3.5"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addNonPositional("arg", "float", "arg", "5.5");
+    argParse.parse(arguments);
+    float f = argParse.getValue("arg");
+    assertEquals(f, 3.5);
+  }
+
+  @Test
+  public void testLongNameAcceptedValuesInts() {
+    String[] arguments = {"--arg", "5"};
+    String[] accepted = {"5", "6"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addNonPositional("arg", "integer", "arg", "6", accepted);
+    argParse.parse(arguments);
+    int i = argParse.getValue("arg");
+    assertEquals(i, 5);
+  }
+
+  @Test
+  public void testLongNameAcceptedValuesIntsException() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              String[] arguments = {"--arg", "hello"};
+              String[] accepted = {"hello", "goodbye"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addNonPositional("arg", "integer", "arg", "goodbye", accepted);
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getWrongValue(), "hello");
+  }
+
+  @Test
+  public void testLongNameAcceptedValuesFloats() {
+    String[] arguments = {"--arg", "5.5"};
+    String[] accepted = {"5.5", "6.6"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addNonPositional("arg", "float", "arg", "6.6", accepted);
+    argParse.parse(arguments);
+    float i = argParse.getValue("arg");
+    assertEquals(i, 5.5);
+  }
+
+  @Test
+  public void testLongNameAcceptedValuesFloatsException() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              String[] arguments = {"--arg", "hello"};
+              String[] accepted = {"hello", "goodbye"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addNonPositional("arg", "float", "arg", "goodbye", accepted);
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getWrongValue(), "hello");
+  }
+
+  @Test
   public void testShortNamedArguments() {
     String[] arguments = {"5", "6", "7", "--arg", "23", "--myflag"};
     ArgumentParser argParse = new ArgumentParser();
@@ -384,6 +462,132 @@ public class ArgumentParserTest {
     OptionalArgument oa = (OptionalArgument) a;
     String name = oa.getShortName();
     assertEquals(name, "a");
+  }
+
+  @Test
+  public void testShortNameStacked() {
+    String[] arguments = {"-abc", "4"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("int1", "integer", "int1");
+    argParse.addNonPositional("arg1", "a", "boolean", "arg1", "false");
+    argParse.addNonPositional("arg2", "b", "boolean", "arg2", "false");
+    argParse.addNonPositional("arg3", "c", "boolean", "arg3", "false");
+    argParse.parse(arguments);
+    boolean a = argParse.getValue("arg1");
+    assertEquals(a, true);
+  }
+
+  @Test
+  public void testStackedNotSpecifiedException() {
+    ArgumentNameNotSpecifiedException e =
+        assertThrows(
+            ArgumentNameNotSpecifiedException.class,
+            () -> {
+              String[] arguments = {"-adb", "hello"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addNonPositional("arg1", "a", "boolean", "arg", "false");
+              argParse.addNonPositional("arg2", "b", "boolean", "arg", "false");
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getArgName(), "d");
+  }
+
+  @Test
+  public void testStackedNoValueException() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              String[] arguments = {"-ab", "hello"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addNonPositional("arg1", "a", "integer", "arg", "6");
+              argParse.addNonPositional("arg2", "b", "boolean", "arg", "false");
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getWrongValue(), "a");
+  }
+
+  @Test
+  public void testNotStackedNotSpecifiedException() {
+    ArgumentNameNotSpecifiedException e =
+        assertThrows(
+            ArgumentNameNotSpecifiedException.class,
+            () -> {
+              String[] arguments = {"-a", "-b", "hello"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("string1", "string", "string1");
+              argParse.addNonPositional("arg1", "a", "boolean", "arg", "false");
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getArgName(), "b");
+  }
+
+  @Test
+  public void testNotStackedNoValueException() {
+    NoValueException e =
+        assertThrows(
+            NoValueException.class,
+            () -> {
+              String[] arguments = {"-a", "-b"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addNonPositional("arg1", "a", "boolean", "arg", "false");
+              argParse.addNonPositional("arg2", "b", "integer", "arg", "6");
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getNameMissingValue(), "b");
+  }
+
+  @Test
+  public void testNotStackedWrongTypeExceptionInt() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              String[] arguments = {"-a", "-b", "hello"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addNonPositional("arg1", "a", "boolean", "arg", "false");
+              argParse.addNonPositional("arg2", "b", "integer", "arg", "6");
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getWrongValue(), "hello");
+  }
+
+  @Test
+  public void testNotStackedWrongTypeExceptionFloat() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              String[] arguments = {"-a", "-b", "hello"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addNonPositional("arg1", "a", "boolean", "arg", "false");
+              argParse.addNonPositional("arg2", "b", "float", "arg", "6.5");
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getWrongValue(), "hello");
+  }
+
+  @Test
+  public void testNotStackedFloat() {
+    String[] arguments = {"-a", "-b", "3.5"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addNonPositional("arg1", "a", "boolean", "arg", "false");
+    argParse.addNonPositional("arg2", "b", "float", "arg", "6.5");
+    argParse.parse(arguments);
+    float f = argParse.getValue("b");
+    assertEquals(f, 3.5);
+  }
+
+  @Test
+  public void testNotStackedAcceptedFloat() {
+    String[] arguments = {"-a", "-b", "3.5"};
+    String[] accepted = {"3.5", "6.5"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addNonPositional("arg1", "a", "boolean", "arg", "false");
+    argParse.addNonPositional("arg2", "b", "float", "arg", "6.5", accepted);
+    argParse.parse(arguments);
+    float f = argParse.getValue("b");
+    assertEquals(f, 3.5);
   }
 
   @Test
