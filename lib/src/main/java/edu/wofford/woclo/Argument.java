@@ -1,5 +1,8 @@
 package edu.wofford.woclo;
+
+import java.util.*;
 // import java.lang.ProcessBuilder.Redirect.Type;
+
 /**
  * Argument collects information about what is expected to come in on the command line. Each
  * argument has a corresponding name, type, value, and description.
@@ -9,6 +12,7 @@ public class Argument {
   protected String type;
   protected String description;
   protected String value;
+  protected String[] accepted_values;
   /**
    * When an instance of Argument is created, it requires the arguments associated name, the type of
    * the value, and the description used in the help message.
@@ -21,6 +25,14 @@ public class Argument {
     this.name = name;
     this.type = type;
     this.description = description;
+    accepted_values = null;
+  }
+
+  public Argument(String name, String type, String description, String[] accepted_values) {
+    this.name = name;
+    this.type = type;
+    this.description = description;
+    this.accepted_values = accepted_values.clone();
   }
   /**
    * setValue takes a string and sets the value equal to that string
@@ -76,5 +88,21 @@ public class Argument {
    */
   public String getDescription() {
     return description;
+  }
+
+  public boolean hasAcceptedValues() {
+    if (accepted_values == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  public boolean isAcceptedValue(String arg_val) {
+    if (Arrays.asList(accepted_values).contains(arg_val)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

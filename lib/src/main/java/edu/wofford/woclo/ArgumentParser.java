@@ -15,7 +15,6 @@ public class ArgumentParser {
   private List<String> positional_names;
   private List<String> nonpositional_names;
   private List<String> short_name_names;
-  private int named_counter;
 
   /**
    * ArgumentParser parses the arguments for the user to retreive. If there are fewer or more
@@ -44,6 +43,13 @@ public class ArgumentParser {
     args.put(name, arg);
   }
 
+  public void addPositional(
+      String name, String type, String description, String[] accepted_values) {
+    Argument arg = new Argument(name, type, description, accepted_values);
+    positional_names.add(name);
+    args.put(name, arg);
+  }
+
   /**
    * The addNonPositional method adds an expected argument to ArgumentParser that when given on the
    * command line should be named.
@@ -58,7 +64,6 @@ public class ArgumentParser {
     Argument arg = new OptionalArgument(name, type, description, value);
     nonpositional_names.add(name);
     args.put(name, arg);
-    named_counter++;
   }
 
   public void addNonPositional(
@@ -68,7 +73,6 @@ public class ArgumentParser {
     short_name_names.add(short_name);
     args.put(name, arg);
     short_args.put(short_name, name);
-    named_counter++;
   }
 
   public void addNonPositional(
@@ -76,7 +80,6 @@ public class ArgumentParser {
     Argument arg = new OptionalArgument(name, type, description, value, accepted_values);
     nonpositional_names.add(name);
     args.put(name, arg);
-    named_counter++;
   }
 
   public void addNonPositional(
@@ -92,7 +95,6 @@ public class ArgumentParser {
     short_name_names.add(short_name);
     args.put(name, arg);
     short_args.put(short_name, name);
-    named_counter++;
   }
 
   /**
@@ -103,38 +105,50 @@ public class ArgumentParser {
    */
   public void parse(String[] arguments) {
     int expected_positional = positional_names.size();
+    // check_digits is used to double check and make sure we don't have
+    // a negative number that is meant to be a value rather than an argument name
     String[] check_digits = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "9"};
+    // check and see if we need to throw the help exception
     if (Arrays.asList(arguments).contains("--help") || Arrays.asList(arguments).contains("-h")) {
       throw new HelpException("Help needed.");
     }
+    // put all of the arguments into a queue
     Queue<String> box_of_garbage = new LinkedList<String>();
     for (int i = 0; i < arguments.length; i++) {
       box_of_garbage.add(arguments[i]);
     }
+    // start the current positional at index 0
     int current_positional_name_index = 0;
-
+    // while there is still stuff in the queue
+    // meaning we have not gotten through everything given on the command line
     while (!box_of_garbage.isEmpty()) {
+      // LONG NAME ARGUMENTS
       if (box_of_garbage.peek().startsWith("--")) {
         String name = box_of_garbage.poll().substring(2);
         Argument a = args.get(name);
+        // if we don't know what that name is, throw name not specified exception
         if (a == null) {
           throw new ArgumentNameNotSpecifiedException(name);
         } else {
+          // the argument exists, so get the type
           String type = a.getType();
+          // if the queue is empty after this, then the argument has to be a boolean value
           if (box_of_garbage.isEmpty()) {
+            // if it isnt, throw that there isn't a value
             if (!type.equals("boolean")) {
               throw new NoValueException(name);
+              // if there is, the set the value to true
             } else {
               a.setValue("true");
             }
+
+            // the queue isn't empty
           } else {
             if (type.equals("boolean")) {
               a.setValue("true");
             } else {
               String value = box_of_garbage.poll();
-              OptionalArgument arg = (OptionalArgument) a;
-
-              if (!arg.hasAcceptedValues()) {
+              if (!a.hasAcceptedValues()) {
                 if (a.getType().equals("integer")) {
                   try {
                     Integer.parseInt(value);
@@ -153,29 +167,30 @@ public class ArgumentParser {
                   a.setValue(value);
                 }
               } else {
-                if (a.getType().equals("integer") && arg.isAcceptedValue(value)) {
+                if (a.getType().equals("integer") && a.isAcceptedValue(value)) {
                   try {
                     Integer.parseInt(value);
                     a.setValue(value);
                   } catch (NumberFormatException e) {
                     throw new WrongTypeException(value);
                   }
-                } else if (a.getType().equals("float") && arg.isAcceptedValue(value)) {
+                } else if (a.getType().equals("float") && a.isAcceptedValue(value)) {
                   try {
                     Float.parseFloat(value);
                     a.setValue(value);
                   } catch (NumberFormatException e) {
                     throw new WrongTypeException(value);
                   }
-                } else if (!arg.isAcceptedValue(value)) {
-                  throw new ValueNotAcceptedException(value);
-                } else {
+                } else if (a.getType().equals("string") && a.isAcceptedValue(value)) {
                   a.setValue(value);
+                } else {
+                  throw new ValueNotAcceptedException(value);
                 }
               }
             }
           }
         }
+        // SHORT NAME ARGUMENTS
       } else if (box_of_garbage.peek().startsWith("-")
           && !Arrays.asList(check_digits)
               .contains(Character.toString(box_of_garbage.peek().charAt(1)))) {
@@ -190,7 +205,7 @@ public class ArgumentParser {
             } else {
               String type = a.getType();
               if (!type.equals("boolean")) {
-                throw new WrongTypeException(long_name);
+                throw new WrongTypeException(name);
               } else {
                 a.setValue("true");
               }
@@ -202,34 +217,100 @@ public class ArgumentParser {
           String long_name = short_args.get(name);
           Argument a = args.get(long_name);
           if (a == null) {
-            throw new ArgumentNameNotSpecifiedException(long_name);
+            throw new ArgumentNameNotSpecifiedException(name);
           } else {
             String type = a.getType();
             if (!type.equals("boolean")) {
-              String value = box_of_garbage.poll();
-              a.setValue(value);
-              if (a.getType().equals("integer")) {
-                try {
-                  Integer.parseInt(value);
-                } catch (NumberFormatException e) {
-                  throw new WrongTypeException(value);
-                }
-              } else if (a.getType().equals("float")) {
-                try {
-                  Float.parseFloat(value);
-                } catch (NumberFormatException e) {
-                  throw new WrongTypeException(value);
+              if (box_of_garbage.isEmpty()) {
+                throw new NoValueException(name);
+              } else {
+                String value = box_of_garbage.poll();
+                if (!a.hasAcceptedValues()) {
+                  if (a.getType().equals("integer")) {
+                    try {
+                      Integer.parseInt(value);
+                      a.setValue(value);
+                    } catch (NumberFormatException e) {
+                      throw new WrongTypeException(value);
+                    }
+                  } else if (a.getType().equals("float")) {
+                    try {
+                      Float.parseFloat(value);
+                      a.setValue(value);
+                    } catch (NumberFormatException e) {
+                      throw new WrongTypeException(value);
+                    }
+                  }
+                } else {
+                  if (a.getType().equals("integer") && a.isAcceptedValue(value)) {
+                    try {
+                      Integer.parseInt(value);
+                      a.setValue(value);
+                    } catch (NumberFormatException e) {
+                      throw new WrongTypeException(value);
+                    }
+                  } else if (a.getType().equals("float") && a.isAcceptedValue(value)) {
+                    try {
+                      Float.parseFloat(value);
+                      a.setValue(value);
+                    } catch (NumberFormatException e) {
+                      throw new WrongTypeException(value);
+                    }
+                  } else if (!a.isAcceptedValue(value)) {
+                    throw new ValueNotAcceptedException(value);
+                  } else {
+                    a.setValue(value);
+                  }
                 }
               }
             }
           }
         }
+        // POSITIONAL ARGUMENTS
       } else {
         String value = box_of_garbage.poll();
         try {
           String name = positional_names.get(current_positional_name_index);
-          Argument arg = args.get(name);
-          arg.setValue(value);
+          Argument a = args.get(name);
+          if (!a.hasAcceptedValues()) {
+            if (a.getType().equals("integer")) {
+              try {
+                Integer.parseInt(value);
+                a.setValue(value);
+              } catch (NumberFormatException e) {
+                throw new WrongTypeException(value);
+              }
+            } else if (a.getType().equals("float")) {
+              try {
+                Float.parseFloat(value);
+                a.setValue(value);
+              } catch (NumberFormatException e) {
+                throw new WrongTypeException(value);
+              }
+            } else {
+              a.setValue(value);
+            }
+          } else {
+            if (a.getType().equals("integer") && a.isAcceptedValue(value)) {
+              try {
+                Integer.parseInt(value);
+                a.setValue(value);
+              } catch (NumberFormatException e) {
+                throw new WrongTypeException(value);
+              }
+            } else if (a.getType().equals("float") && a.isAcceptedValue(value)) {
+              try {
+                Float.parseFloat(value);
+                a.setValue(value);
+              } catch (NumberFormatException e) {
+                throw new WrongTypeException(value);
+              }
+            } else if (!a.isAcceptedValue(value)) {
+              throw new ValueNotAcceptedException(value);
+            } else {
+              a.setValue(value);
+            }
+          }
           current_positional_name_index++;
         } catch (IndexOutOfBoundsException e) {
           throw new TooManyException(value);

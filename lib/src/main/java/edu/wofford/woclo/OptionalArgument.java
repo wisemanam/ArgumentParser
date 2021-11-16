@@ -10,7 +10,6 @@ import java.util.*;
 public class OptionalArgument extends Argument {
   private String value;
   private String short_name;
-  private String[] accepted_values;
 
   /**
    * The OptionalArgument constructor takes the name of the variable, its type, the description used
@@ -86,21 +85,5 @@ public class OptionalArgument extends Argument {
 
   public String getShortName() {
     return short_name;
-  }
-
-  public boolean hasAcceptedValues() {
-    if (accepted_values == null) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  public boolean isAcceptedValue(String arg_val) {
-    if (Arrays.asList(accepted_values).contains(arg_val)) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }

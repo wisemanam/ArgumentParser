@@ -218,7 +218,7 @@ public class ArgumentParserTest {
               String[] arguments = {"--fstname", "3.5", "5"};
               ArgumentParser argParse = new ArgumentParser();
               argParse.addPositional("int1", "integer", "first pos");
-              argParse.addNonPositional("fstname", "f", "integer", "first nonpos", "5");
+              argParse.addNonPositional("fstname", "integer", "first nonpos", "5");
               argParse.parse(arguments);
               int int1 = argParse.getValue("int1");
               int fstname = argParse.getValue("fstname");
@@ -301,6 +301,50 @@ public class ArgumentParserTest {
   }
 
   @Test
+  public void testGetValueArgumentWrongValueInt() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              Argument a = new Argument("test", "integer", "test");
+              a.setValue("hello");
+              int test = a.getValue();
+            });
+    assertEquals(e.getWrongValue(), "hello");
+  }
+
+  @Test
+  public void testGetValueOptionalArgumentWrongValueInt() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              OptionalArgument a = new OptionalArgument("test", "integer", "test", "hello");
+              int test = a.getValue();
+            });
+    assertEquals(e.getWrongValue(), "hello");
+  }
+
+  @Test
+  public void testGetValueOptionalArgumentFloat() {
+    OptionalArgument a = new OptionalArgument("test", "float", "test", "3.5");
+    float test = a.getValue();
+    assertEquals(test, 3.5);
+  }
+
+  @Test
+  public void testGetValueOptionalArgumentWrongValueFloat() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              OptionalArgument a = new OptionalArgument("test", "float", "test", "hello");
+              float test = a.getValue();
+            });
+    assertEquals(e.getWrongValue(), "hello");
+  }
+
+  @Test
   public void testBooleanFlags() {
     String[] arguments = {"5", "6", "7", "--arg", "23", "--myflag"};
     ArgumentParser argParse = new ArgumentParser();
@@ -331,20 +375,32 @@ public class ArgumentParserTest {
   }
 
   @Test
+  public void testGetShortName() {
+    String[] arguments = {"-a", "4"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addNonPositional("arg", "a", "integer", "arg", "4");
+    argParse.parse(arguments);
+    Argument a = argParse.getArgument("arg");
+    OptionalArgument oa = (OptionalArgument) a;
+    String name = oa.getShortName();
+    assertEquals(name, "a");
+  }
+
+  @Test
   public void testAcceptedValues() {
     String[] arguments = {"5", "6", "--shape", "square"};
     String[] accepted_shapes = {"square", "circle"};
     ArgumentParser argParse = new ArgumentParser();
     argParse.addPositional("width", "integer", "width");
     argParse.addPositional("height", "integer", "height");
-    argParse.addNonPositional("shape", "s", "string", "shape", "circle", accepted_shapes);
+    argParse.addNonPositional("shape", "string", "shape", "circle", accepted_shapes);
     argParse.parse(arguments);
     String value = argParse.getValue("shape");
     assertEquals(value, "square");
   }
 
   @Test
-  public void testUnacceptedValues() {
+  public void testUnacceptedValuesNonPositional() {
     ValueNotAcceptedException e =
         assertThrows(
             ValueNotAcceptedException.class,
@@ -353,6 +409,21 @@ public class ArgumentParserTest {
               String[] accepted = {"square", "circle"};
               ArgumentParser argParse = new ArgumentParser();
               argParse.addNonPositional("shape", "s", "string", "shape", "circle", accepted);
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getUnacceptedValue(), "triangle");
+  }
+
+  @Test
+  public void testUnacceptedValuesPositional() {
+    ValueNotAcceptedException e =
+        assertThrows(
+            ValueNotAcceptedException.class,
+            () -> {
+              String[] arguments = {"--shape", "triangle"};
+              String[] accepted = {"square", "circle"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("shape", "string", "shape", accepted);
               argParse.parse(arguments);
             });
     assertEquals(e.getUnacceptedValue(), "triangle");
