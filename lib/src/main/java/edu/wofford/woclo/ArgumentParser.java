@@ -127,9 +127,12 @@ public class ArgumentParser {
               a.setValue("true");
             }
           } else {
-            String value = box_of_garbage.poll();
-            OptionalArgument arg = (OptionalArgument) a;
-            if (!type.equals("boolean")) {
+            if (type.equals("boolean")) {
+              a.setValue("true");
+            } else {
+              String value = box_of_garbage.poll();
+              OptionalArgument arg = (OptionalArgument) a;
+
               if (!arg.hasAcceptedValues()) {
                 if (a.getType().equals("integer")) {
                   try {

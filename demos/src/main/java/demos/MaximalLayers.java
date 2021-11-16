@@ -58,19 +58,12 @@ public class MaximalLayers {
 
     ArrayList<Point> points_copy = new ArrayList<Point>(points);
 
-    if (sortedX && !sortedY) {
-      points_copy.sort(Comparator.comparing(Point::getX));
-
-      return points_copy;
-    }
-    if (sortedY && !sortedX) {
+    if (sortedY) {
       points_copy.sort(Comparator.comparing(Point::getY));
-
-      return points_copy;
     }
-
-    points_copy.sort(Comparator.comparing(Point::getY));
-    points_copy.sort(Comparator.comparing(Point::getX));
+    if (sortedX) {
+      points_copy.sort(Comparator.comparing(Point::getX));
+    }
     return points_copy;
   }
 
@@ -110,7 +103,6 @@ public class MaximalLayers {
           }
         }
       }
-      // add any points with coords between first and comparePoint?
       layers.put(layer_count, layer_list);
       layer_count++;
     }
@@ -125,12 +117,9 @@ public class MaximalLayers {
     String str = "";
     for (int i = 1; i < layers.size() + 1; i++) {
       str += i + ":";
-      ArrayList<Point> sortedLayerList = new ArrayList<>();
-      if (!sortX && !sortY) {
-        sortedLayerList = sortToOriginal(layers.get(i), points);
-      } else {
-        ArrayList<Point> sortLayerToOriginal = sortToOriginal(layers.get(i), points);
-        sortedLayerList = sortPoints(sortLayerToOriginal, sortX, sortY);
+      ArrayList<Point> sortedLayerList = sortToOriginal(layers.get(i), points);
+      if (sortX || sortY) {
+        sortedLayerList = sortPoints(sortedLayerList, sortX, sortY);
       }
       for (int j = 0; j < sortedLayerList.size(); j++) {
         str += "(" + (int) sortedLayerList.get(j).getX() + ",";
