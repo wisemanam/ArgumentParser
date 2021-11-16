@@ -37,7 +37,7 @@ public class MaximalLayers {
       Map<Integer, ArrayList<Point>> layers = findMaximalLayers(pointList);
       return toString(layers, pointList, sortedX, sortedY);
     } catch (HelpException e) {
-      return "help";
+      return "usage: java MaximalLayers [-h] [--sortedX] [--sortedY] points\n\nSort the points into layers.\n\npositional arguments:\n points      (string)      the data points\n\nnamed arguments:\n -h, --help  show this help message and exit\n --sortedX   sort layers by x coordinate\n --sortedY   sort layers by y coordinate";
     } catch (TooFewException e) {
       return "MaximalLayers error: the argument " + e.getNextExpectedName() + " is required";
     } catch (TooManyException e) {
