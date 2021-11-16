@@ -16,7 +16,7 @@ public class TilingAssistantTest {
         String[] args = {"4.5", "4", "--tilesize", "1"}
         TilingAssistant t = new TilingAssistant();
         String result = tileassistant.tileAssistant(args);
-        assertEquals(result, "6:(1.0 x 1.0 in) 6:(0.5 x 1.0)")
+        assertEquals(result, "6:(1.0 x 1.0 in) 6:(0.5 x 1.0)");
     }
 
     @Test
@@ -24,6 +24,6 @@ public class TilingAssistantTest {
         String[] args = {"4", "4.5", "--tilesize", "1"}
         TilingAssistant t = new TilingAssistant();
         String result = tileassistant.tileAssistant(args);
-        assertEquals(result, "6:(1.0 x 1.0 in) 6:(1.0 x 0.5)")
+        assertEquals(result, "6:(1.0 x 1.0 in) 6:(1.0 x 0.5)");
     }
 }
