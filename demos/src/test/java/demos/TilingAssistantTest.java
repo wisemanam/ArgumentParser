@@ -8,7 +8,7 @@ public class TilingAssistantTest {
         String[] args = {"4", "4", "--tilesize", "1"};
         TilingAssistant tileassistant = new TilingAssistant();
         String result = tileassistant.tileAssistant(args);
-        assertEquals(result, "9:(1.0 x 1.0 in)");
+        assertEquals("9:(1.0 x 1.0 in)", result);
     }
 
     @Test
@@ -16,7 +16,7 @@ public class TilingAssistantTest {
         String[] args = {"4.5", "4", "--tilesize", "1"};
         TilingAssistant t = new TilingAssistant();
         String result = t.tileAssistant(args);
-        assertEquals(result, "6:(1.0 x 1.0 in) 6:(0.5 x 1.0 in)");
+        assertEquals("6:(1.0 x 1.0 in) 6:(0.5 x 1.0 in)", result);
     }
 
     @Test
@@ -24,7 +24,7 @@ public class TilingAssistantTest {
         String[] args = {"4", "4.5", "--tilesize", "1"};
         TilingAssistant t = new TilingAssistant();
         String result = t.tileAssistant(args);
-        assertEquals(result, "6:(1.0 x 1.0 in) 6:(1.0 x 0.5 in)");
+        assertEquals("6:(1.0 x 1.0 in) 6:(1.0 x 0.5 in)", result);
     }
 
     @Test
@@ -32,7 +32,7 @@ public class TilingAssistantTest {
         String[] args = {"4.5", "4.5", "--tilesize", "1"};
         TilingAssistant t = new TilingAssistant();
         String result = t.tileAssistant(args);
-        assertEquals(result, "6:(1.0 x 1.0 in) 6:(1.0 x 0.5 in), 6:(0.5 x 1.0 in), 4:(0.5 x 0.5 in)");
+        assertEquals("6:(1.0 x 1.0 in) 6:(1.0 x 0.5 in), 6:(0.5 x 1.0 in), 4:(0.5 x 0.5 in)", result);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class TilingAssistantTest {
         String[] args = {"4.5", "4.5", "--tilesize", "1", "--fullonly"};
         TilingAssistant t = new TilingAssistant();
         String result = t.tileAssistant(args);
-        assertEquals(result, "6:(1.0 x 1.0 in)");
+        assertEquals("6:(1.0 x 1.0 in)", result);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class TilingAssistantTest {
         String[] args = {"28.5", "-fm", "-g", "0.25", "-s", "4.75", "22"};
         TilingAssistant t = new TilingAssistant();
         String result = t.tileAssistant(args);
-        assertEquals(result, "20:(4.75 x 4.75 cm)");
+        assertEquals("20:(4.75 x 4.75 cm)", result);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class TilingAssistantTest {
         String[] args = {};
         TilingAssistant t = new TilingAssistant();
         String result = t.tileAssistant(args);
-        assertEquals(result, "TilingAssistant error: the argument length is required");
+        assertEquals("TilingAssistant error: the argument length is required", result);
     }
 
     @Test
@@ -64,41 +64,41 @@ public class TilingAssistantTest {
         String[] args = {"12"};
         TilingAssistant t = new TilingAssistant();
         String result = t.tileAssistant(args);
-        assertEquals(result, "TilingAssistant error: the argument width is required");
+        assertEquals("TilingAssistant error: the argument width is required", result);
     }
 
     @Test public void testTooManyPositionalArguments() {
         String[] args = {"12", "15", "21.0"};
         TilingAssistant t = new TilingAssistant();
         String result = t.tileAssistant(args);
-        assertEquals(result, "TilingAssistant error: the value 21.0 matches no argument");
+        assertEquals("TilingAssistant error: the value 21.0 matches no argument", result);
     }
 
     @Test public void testNegativeLength() {
         String[] args = {"-12.0", "15"};
         TilingAssistant t = new TilingAssistant();
         String result = t.tileAssistant(args);
-        assertEquals(result, "TilingAssistant error: length must be positive");
+        assertEquals("TilingAssistant error: length must be positive", result);
     }
 
     @Test public void testNegativeWidth() {
         String[] args = {"12.0", "-1.0"};
         TilingAssistant t = new TilingAssistant();
         String result = t.tileAssistant(args);
-        assertEquals(result, "TilingAssistant error: width must be positive");
+        assertEquals("TilingAssistant error: width must be positive", result);
     }
 
     @Test public void testNegativeTileSize() {
         String[] args = {"12.0", "15.0", "--tilesize", "-2.0"};
         TilingAssistant t = new TilingAssistant();
         String result = t.tileAssistant(args);
-        assertEquals(result, "TilingAssistant error: tilesize must be positive");
+        assertEquals("TilingAssistant error: tilesize must be positive", result);
     }
 
     @Test public void testNegativeGroutGap() {
         String[] args = {"12.0", "15.0", "-g", "-2.0"};
         TilingAssistant t = new TilingAssistant();
         String result = t.tileAssistant(args);
-        assertEquals(result, "TilingAssistant error: groutgap must be positive");
+        assertEquals("TilingAssistant error: groutgap must be positive", result);
     }
 }
