@@ -333,11 +333,11 @@ public class ArgumentParser {
    * @return value corresponding to the name
    */
   public <T> T getValue(String arg_name) {
-    if (arg_name.length() > 1) {
+    String long_name = short_args.get(arg_name);
+    if (long_name == null) {
       Argument arg = args.get(arg_name);
       return arg.getValue();
     } else {
-      String long_name = short_args.get(arg_name);
       Argument arg = args.get(long_name);
       return arg.getValue();
     }
