@@ -10,8 +10,10 @@ public class TilingAssistant {
       parser.addPositional("width", "float", "the width of the room");
       parser.addNonPositional("tilesize", "s", "float", "the size of the square tile", "6.0");
       parser.addNonPositional("groutgap", "g", "float", "the width of the grout gap", "0.5");
-      parser.addNonPositional("metric", "m", "boolean", "use centimeters instead of inches", "false");
-      parser.addNonPositional("fullonly", "f", "boolean", "show only the full tiles required", "false");
+      parser.addNonPositional(
+          "metric", "m", "boolean", "use centimeters instead of inches", "false");
+      parser.addNonPositional(
+          "fullonly", "f", "boolean", "show only the full tiles required", "false");
       parser.parse(arguments);
       float length = parser.getValue("length");
       float width = parser.getValue("width");
@@ -19,17 +21,23 @@ public class TilingAssistant {
       float groutGap = parser.getValue("groutgap");
       boolean metric = parser.getValue("metric");
       boolean fullOnly = parser.getValue("fullonly");
-       return calculateTiles(length, width, tileSize, groutGap, metric, fullOnly);
+      return calculateTiles(length, width, tileSize, groutGap, metric, fullOnly);
     } catch (HelpException e) {
       return "help";
     }
   }
 
-  public String calculateTiles(float roomLength, float roomWidth, float tileSize, float grout, boolean metric, boolean fullOnly) {
+  public String calculateTiles(
+      float roomLength,
+      float roomWidth,
+      float tileSize,
+      float grout,
+      boolean metric,
+      boolean fullOnly) {
     int numFullTilesLength = 0;
     int numPartialTilesLength = 0;
     float lengthofPartialTiles = 0;
-    while(roomLength - (tileSize + grout) >= tileSize) {
+    while (roomLength - (tileSize + grout) >= tileSize) {
       numFullTilesLength++;
       roomLength -= (tileSize + grout);
     }
@@ -52,7 +60,7 @@ public class TilingAssistant {
     int numFullTilesWidth = 0;
     int numPartialTilesWidth = 0;
     float widthofPartialTiles = 0;
-    while(roomWidth - (tileSize + grout) >= tileSize) {
+    while (roomWidth - (tileSize + grout) >= tileSize) {
       numFullTilesWidth++;
       roomWidth -= (tileSize + grout);
     }
@@ -74,6 +82,10 @@ public class TilingAssistant {
     }
     numPartialTilesLength = numPartialTilesLength * numFullTilesLength;
     numPartialTilesWidth = numPartialTilesWidth * numPartialTilesWidth;
+    if (numPartialTilesLength > 0 && numPartialTilesWidth > 0) {
+      numPartialTilesLength += 2;
+      numPartialTilesWidth += 2;
+    }
     String units = " in";
     if (metric) {
       units = " cm";
@@ -83,10 +95,12 @@ public class TilingAssistant {
     string += numFullTiles + ":(" + tileSize + " x " + tileSize + units + ") ";
     if (!fullOnly) {
       if (numPartialTilesLength > 0) {
-        string += numPartialTilesLength + ":(" + lengthofPartialTiles + " x " + tileSize + units + ") ";
+        string +=
+            numPartialTilesLength + ":(" + lengthofPartialTiles + " x " + tileSize + units + ") ";
       }
       if (numPartialTilesWidth > 0) {
-        string += numPartialTilesWidth + ":(" + tileSize + " x " + widthofPartialTiles + units + ") ";
+        string +=
+            numPartialTilesWidth + ":(" + tileSize + " x " + widthofPartialTiles + units + ") ";
       }
       if (numPartialTilesLength > 0 && numPartialTilesWidth > 0) {
         string += "4:(" + lengthofPartialTiles + " x " + widthofPartialTiles + units + ")";
@@ -95,7 +109,5 @@ public class TilingAssistant {
     return string.trim();
   }
 
-  public static void main(String... args) {
-    
-  }
+  public static void main(String... args) {}
 }
