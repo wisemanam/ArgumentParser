@@ -33,7 +33,7 @@ public class HeatedField {
       int y = argParse.getValue("y");
       float temperature = argParse.getValue("temperature");
       int minutes = argParse.getValue("minutes");
-      if (minutes < 0) {
+      if (minutes < 1) {
         return "HeatedField error: minutes must be positive";
       }
       float[][] field = new float[10][10];
@@ -99,12 +99,19 @@ public class HeatedField {
       String tooMany = e.getFirstExtra();
       return "HeatedField error: the value " + tooMany + " matches no argument";
     } catch (ValueNotAcceptedException e) {
+      String varName = e.getVarName();
       String wrongValue = e.getUnacceptedValue();
-      return "HeatedField error: x value "
+      return "HeatedField error: "
+          + varName
+          + " value "
           + wrongValue
           + " is not a member of [1, 2, 3, 4, 5, 6, 7, 8]";
     } catch (WrongTypeException e) {
-      return "HeatedField error: the value bob is not of type float";
+      String value = e.getWrongValue();
+      String type = e.getExpectedType();
+      return "HeatedField error: the value " + value + " is not of type " + type;
+    } catch (HelpException e) {
+      return "usage: java HeatedField [-h] [-t TEMPERATURE] [-m MINUTES] north south east west x y\n\nCalculate the internal cell temperature.\n\npositional arguments:\n north                                      (float)       the temperature of the north edge\n south                                      (float)       the temperature of the south edge\n east                                       (float)       the temperature of the east edge\n west                                       (float)       the temperature of the west edge\n x                                          (integer)     the x coordinate of the internal cell {1, 2, 3, 4, 5, 6, 7, 8}\n y                                          (integer)     the y coordinate of the internal cell {1, 2, 3, 4, 5, 6, 7, 8}\n\nnamed arguments:\n -h, --help                                 show this help message and exit\n -t TEMPERATURE, --temperature TEMPERATURE  (float)       the initial temperature of internal cells (default: 32.0)\n -m MINUTES, --minutes MINUTES              (integer)     the number of minutes to apply heating (default: 10)";
     }
   }
 
