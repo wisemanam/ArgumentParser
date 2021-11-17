@@ -52,7 +52,7 @@ public class TilingAssistant {
       boolean fullOnly) {
     int numFullTilesLength = 1;
     roomLength -= tileSize;
-    int numPartialTilesLength = 0;
+    boolean partialTilesLength = false;
     float lengthofPartialTiles = 0;
     if (roomLength % (tileSize + grout) < 0.01) {
       numFullTilesLength += (int) (roomLength / (tileSize + grout));
@@ -61,22 +61,22 @@ public class TilingAssistant {
       numFullTilesLength = (int) (roomLength / (tileSize + grout));
       roomLength += tileSize;
       roomLength -= (roomLength / (tileSize + grout));
-      numPartialTilesLength += 2;
       roomLength -= grout;
       lengthofPartialTiles = tileSize / 2;
       roomLength -= tileSize;
+      partialTilesLength = true;
     } else if (roomLength % (tileSize + grout) > grout) {
       numFullTilesLength = (int) (roomLength / (tileSize + grout));
       roomLength += tileSize;
       roomLength -= (roomLength / (tileSize + grout));
       roomLength -= grout;
-      numPartialTilesLength += 2;
       lengthofPartialTiles = roomLength / 2;
       roomLength -= 2 * lengthofPartialTiles;
+      partialTilesLength = true;
     }
     int numFullTilesWidth = 1;
     roomWidth -= tileSize;
-    int numPartialTilesWidth = 0;
+    boolean partialTilesWidth = false;
     float widthofPartialTiles = 0;
     if (roomWidth % (tileSize + grout) < 0.01) {
       numFullTilesWidth += (int) (roomWidth / (tileSize + grout));
@@ -85,25 +85,20 @@ public class TilingAssistant {
       numFullTilesWidth = (int) (roomWidth / (tileSize + grout));
       roomWidth += tileSize;
       roomWidth -= (roomWidth / (tileSize + grout));
-      numPartialTilesWidth += 2;
       roomWidth -= grout;
       widthofPartialTiles = tileSize / 2;
       roomWidth -= tileSize;
+      partialTilesWidth = true;
     } else if (roomWidth % (tileSize + grout) > grout) {
       numFullTilesWidth = (int) (roomWidth / (tileSize + grout));
       roomWidth += tileSize;
       roomWidth -= (roomWidth / (tileSize + grout));
       roomWidth -= grout;
-      numPartialTilesWidth += 2;
       widthofPartialTiles = roomWidth / 2;
       roomWidth -= 2 * widthofPartialTiles;
+      partialTilesWidth = true;
     }
-    numPartialTilesLength = numPartialTilesLength * numFullTilesLength;
-    numPartialTilesWidth = numPartialTilesWidth * numFullTilesWidth;
-    // if (numPartialTilesLength > 0 && numPartialTilesWidth > 0) {
-    //   numPartialTilesLength += 2;
-    //   numPartialTilesWidth += 2;
-    // }
+    
     String units = " in";
     if (metric) {
       units = " cm";
@@ -112,15 +107,21 @@ public class TilingAssistant {
     String string = "";
     string += numFullTiles + ":(" + tileSize + " x " + tileSize + units + ") ";
     if (!fullOnly) {
-      if (numPartialTilesLength > 0) {
+      if (partialTilesLength) {
         string +=
-            2 * numFullTilesLength + ":(" + lengthofPartialTiles + " x " + tileSize + units + ") ";
+            (2 * numFullTilesLength)
+                + ":("
+                + lengthofPartialTiles
+                + " x "
+                + tileSize
+                + units
+                + ") ";
       }
-      if (numPartialTilesWidth > 0) {
+      if (partialTilesWidth) {
         string +=
-            2 * numFullTilesWidth + ":(" + tileSize + " x " + widthofPartialTiles + units + ") ";
+            (2 * numFullTilesWidth) + ":(" + tileSize + " x " + widthofPartialTiles + units + ") ";
       }
-      if (numPartialTilesLength > 0 && numPartialTilesWidth > 0) {
+      if (partialTilesLength && partialTilesWidth) {
         string += "4:(" + lengthofPartialTiles + " x " + widthofPartialTiles + units + ")";
       }
     }
