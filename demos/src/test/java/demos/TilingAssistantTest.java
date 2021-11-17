@@ -30,7 +30,7 @@ public class TilingAssistantTest {
   }
 
   @Test
-  public void testPartialOnALlSides() {
+  public void testPartialOnAllSides() {
     String[] args = {"4.5", "4.5", "--tilesize", "1"};
     TilingAssistant t = new TilingAssistant();
     String result = t.tileAssistant(args);
