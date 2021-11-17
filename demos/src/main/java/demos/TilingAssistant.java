@@ -34,17 +34,19 @@ public class TilingAssistant {
       float grout,
       boolean metric,
       boolean fullOnly) {
-    int numFullTilesLength = 0;
+    int numFullTilesLength = 1;
     int numPartialTilesLength = 0;
     float lengthofPartialTiles = 0;
-    while (roomLength - (tileSize + grout) >= tileSize) {
+    roomLength -= tileSize;
+    while (roomLength - (tileSize + grout) >= 0) {
       numFullTilesLength++;
       roomLength -= (tileSize + grout);
     }
-    if (roomLength == tileSize) {
-      numFullTilesLength++;
-      roomLength -= tileSize;
-    } else if (roomLength == grout) {
+    // if (roomLength == tileSize) {
+    //   numFullTilesLength++;
+    //   roomLength -= tileSize;
+    // } else
+    if (roomLength == grout) {
       numFullTilesLength--;
       roomLength += tileSize;
       numPartialTilesLength += 2;
@@ -57,17 +59,19 @@ public class TilingAssistant {
       lengthofPartialTiles = roomLength / 2;
       roomLength -= 2 * lengthofPartialTiles;
     }
-    int numFullTilesWidth = 0;
+    int numFullTilesWidth = 1;
     int numPartialTilesWidth = 0;
     float widthofPartialTiles = 0;
-    while (roomWidth - (tileSize + grout) >= tileSize) {
+    roomWidth -= tileSize;
+    while (roomWidth - (tileSize + grout) >= 0) {
       numFullTilesWidth++;
       roomWidth -= (tileSize + grout);
     }
-    if (roomWidth == tileSize) {
-      numFullTilesWidth++;
-      roomWidth -= tileSize;
-    } else if (roomWidth == grout) {
+    // if (roomWidth == tileSize) {
+    //   numFullTilesWidth++;
+    //   roomWidth -= tileSize;
+    // } else
+    if (roomWidth == grout) {
       numFullTilesWidth--;
       roomWidth += tileSize;
       numPartialTilesWidth += 2;
@@ -77,7 +81,7 @@ public class TilingAssistant {
     } else if (roomWidth > grout) {
       roomWidth -= grout;
       numPartialTilesWidth += 2;
-      widthofPartialTiles = roomLength / 2;
+      widthofPartialTiles = roomWidth / 2;
       roomWidth -= 2 * widthofPartialTiles;
     }
     numPartialTilesLength = numPartialTilesLength * numFullTilesLength;
@@ -109,5 +113,9 @@ public class TilingAssistant {
     return string.trim();
   }
 
-  public static void main(String... args) {}
+  public static void main(String... args) {
+    TilingAssistant t = new TilingAssistant();
+    String s = t.tileAssistant(args);
+    System.out.println(s);
+  }
 }
