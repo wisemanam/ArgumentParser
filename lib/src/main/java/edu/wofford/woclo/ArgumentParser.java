@@ -107,7 +107,7 @@ public class ArgumentParser {
     int expected_positional = positional_names.size();
     // check_digits is used to double check and make sure we don't have
     // a negative number that is meant to be a value rather than an argument name
-    String[] check_digits = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "9"};
+    String[] check_digits = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."};
     // check and see if we need to throw the help exception
     if (Arrays.asList(arguments).contains("--help") || Arrays.asList(arguments).contains("-h")) {
       throw new HelpException("Help needed.");
