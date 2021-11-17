@@ -114,11 +114,11 @@ public class TilingAssistant {
     if (!fullOnly) {
       if (numPartialTilesLength > 0) {
         string +=
-            numPartialTilesLength + ":(" + lengthofPartialTiles + " x " + tileSize + units + ") ";
+            2 * numFullTilesLength + ":(" + lengthofPartialTiles + " x " + tileSize + units + ") ";
       }
       if (numPartialTilesWidth > 0) {
         string +=
-            numPartialTilesWidth + ":(" + tileSize + " x " + widthofPartialTiles + units + ") ";
+            2 * numFullTilesWidth + ":(" + tileSize + " x " + widthofPartialTiles + units + ") ";
       }
       if (numPartialTilesLength > 0 && numPartialTilesWidth > 0) {
         string += "4:(" + lengthofPartialTiles + " x " + widthofPartialTiles + units + ")";
