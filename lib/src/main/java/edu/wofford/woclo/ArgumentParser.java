@@ -184,7 +184,7 @@ public class ArgumentParser {
                 } else if (a.getType().equals("string") && a.isAcceptedValue(value)) {
                   a.setValue(value);
                 } else {
-                  throw new ValueNotAcceptedException(value);
+                  throw new ValueNotAcceptedException(value, name);
                 }
               }
             }
@@ -259,7 +259,7 @@ public class ArgumentParser {
                       throw new WrongTypeException(value, a.getType());
                     }
                   } else if (!a.isAcceptedValue(value)) {
-                    throw new ValueNotAcceptedException(value);
+                    throw new ValueNotAcceptedException(value, long_name);
                   } else {
                     a.setValue(value);
                   }
@@ -308,7 +308,7 @@ public class ArgumentParser {
                 throw new WrongTypeException(value, a.getType());
               }
             } else if (!a.isAcceptedValue(value)) {
-              throw new ValueNotAcceptedException(value);
+              throw new ValueNotAcceptedException(value, name);
             } else {
               a.setValue(value);
             }
