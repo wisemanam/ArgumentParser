@@ -21,9 +21,25 @@ public class TilingAssistant {
       float groutGap = parser.getValue("groutgap");
       boolean metric = parser.getValue("metric");
       boolean fullOnly = parser.getValue("fullonly");
+      if (length <= 0) {
+        return "TilingAssistant error: length must be positive";
+      }
+      if (width <= 0) {
+        return "TilingAssistant error: width must be positive";
+      }
+      if (tileSize <= 0) {
+        return "TilingAssistant error: tilesize must be positive";
+      }
+      if (groutGap <= 0) {
+        return "TilingAssistant error: groutgap must be positive";
+      }
       return calculateTiles(length, width, tileSize, groutGap, metric, fullOnly);
     } catch (HelpException e) {
       return "help";
+    } catch (TooFewException e) {
+      return "TilingAssistant error: the argument " + e.getNextExpectedName() + " is required";
+    } catch (TooManyException e) {
+      return "TilingAssistant error: the value " + e.getFirstExtra() + " matches no argument";
     }
   }
 
@@ -83,11 +99,11 @@ public class TilingAssistant {
       roomWidth -= 2 * widthofPartialTiles;
     }
     numPartialTilesLength = numPartialTilesLength * numFullTilesLength;
-    numPartialTilesWidth = numPartialTilesWidth * numPartialTilesWidth;
-    if (numPartialTilesLength > 0 && numPartialTilesWidth > 0) {
-      numPartialTilesLength += 2;
-      numPartialTilesWidth += 2;
-    }
+    numPartialTilesWidth = numPartialTilesWidth * numFullTilesWidth;
+    // if (numPartialTilesLength > 0 && numPartialTilesWidth > 0) {
+    //   numPartialTilesLength += 2;
+    //   numPartialTilesWidth += 2;
+    // }
     String units = " in";
     if (metric) {
       units = " cm";
