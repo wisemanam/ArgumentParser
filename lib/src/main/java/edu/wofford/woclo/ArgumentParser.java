@@ -265,6 +265,8 @@ public class ArgumentParser {
                   }
                 }
               }
+            } else {
+              a.setValue("true");
             }
           }
         }
