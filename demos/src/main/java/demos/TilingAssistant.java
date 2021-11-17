@@ -3,7 +3,7 @@ package demos;
 import edu.wofford.woclo.*;
 
 public class TilingAssistant {
-  public String tilingAssistant(String[] arguments) {
+  public String tileAssistant(String[] arguments) {
     ArgumentParser parser = new ArgumentParser();
     try {
       parser.addPositional("length", "float", "the length of the room");
