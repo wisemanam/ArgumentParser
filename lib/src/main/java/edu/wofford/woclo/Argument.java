@@ -55,13 +55,13 @@ public class Argument {
       try {
         return (T) Integer.valueOf(value);
       } catch (NumberFormatException e) {
-        throw new WrongTypeException(value);
+        throw new WrongTypeException(value, type);
       }
     } else {
       try {
         return (T) Float.valueOf(value);
       } catch (NumberFormatException e) {
-        throw new WrongTypeException(value);
+        throw new WrongTypeException(value, type);
       }
     }
   }

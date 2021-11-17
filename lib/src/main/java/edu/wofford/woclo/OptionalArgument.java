@@ -70,13 +70,13 @@ public class OptionalArgument extends Argument {
       try {
         return (T) Integer.valueOf(value);
       } catch (NumberFormatException e) {
-        throw new WrongTypeException(value);
+        throw new WrongTypeException(value, type);
       }
     } else if (type.equals("float")) {
       try {
         return (T) Float.valueOf(value);
       } catch (NumberFormatException e) {
-        throw new WrongTypeException(value);
+        throw new WrongTypeException(value, type);
       }
     } else {
       return (T) Boolean.valueOf(value);

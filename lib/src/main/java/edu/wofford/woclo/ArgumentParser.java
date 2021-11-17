@@ -154,14 +154,14 @@ public class ArgumentParser {
                     Integer.parseInt(value);
                     a.setValue(value);
                   } catch (NumberFormatException e) {
-                    throw new WrongTypeException(value);
+                    throw new WrongTypeException(value, a.getType());
                   }
                 } else if (a.getType().equals("float")) {
                   try {
                     Float.parseFloat(value);
                     a.setValue(value);
                   } catch (NumberFormatException e) {
-                    throw new WrongTypeException(value);
+                    throw new WrongTypeException(value, a.getType());
                   }
                 } else {
                   a.setValue(value);
@@ -172,14 +172,14 @@ public class ArgumentParser {
                     Integer.parseInt(value);
                     a.setValue(value);
                   } catch (NumberFormatException e) {
-                    throw new WrongTypeException(value);
+                    throw new WrongTypeException(value, a.getType());
                   }
                 } else if (a.getType().equals("float") && a.isAcceptedValue(value)) {
                   try {
                     Float.parseFloat(value);
                     a.setValue(value);
                   } catch (NumberFormatException e) {
-                    throw new WrongTypeException(value);
+                    throw new WrongTypeException(value, a.getType());
                   }
                 } else if (a.getType().equals("string") && a.isAcceptedValue(value)) {
                   a.setValue(value);
@@ -205,7 +205,7 @@ public class ArgumentParser {
             } else {
               String type = a.getType();
               if (!type.equals("boolean")) {
-                throw new WrongTypeException(name);
+                throw new WrongTypeException(name, a.getType());
               } else {
                 a.setValue("true");
               }
@@ -231,14 +231,14 @@ public class ArgumentParser {
                       Integer.parseInt(value);
                       a.setValue(value);
                     } catch (NumberFormatException e) {
-                      throw new WrongTypeException(value);
+                      throw new WrongTypeException(value, a.getType());
                     }
                   } else if (a.getType().equals("float")) {
                     try {
                       Float.parseFloat(value);
                       a.setValue(value);
                     } catch (NumberFormatException e) {
-                      throw new WrongTypeException(value);
+                      throw new WrongTypeException(value, a.getType());
                     }
                   } else {
                     a.setValue(value);
@@ -249,14 +249,14 @@ public class ArgumentParser {
                       Integer.parseInt(value);
                       a.setValue(value);
                     } catch (NumberFormatException e) {
-                      throw new WrongTypeException(value);
+                      throw new WrongTypeException(value, a.getType());
                     }
                   } else if (a.getType().equals("float") && a.isAcceptedValue(value)) {
                     try {
                       Float.parseFloat(value);
                       a.setValue(value);
                     } catch (NumberFormatException e) {
-                      throw new WrongTypeException(value);
+                      throw new WrongTypeException(value, a.getType());
                     }
                   } else if (!a.isAcceptedValue(value)) {
                     throw new ValueNotAcceptedException(value);
@@ -280,14 +280,14 @@ public class ArgumentParser {
                 Integer.parseInt(value);
                 a.setValue(value);
               } catch (NumberFormatException e) {
-                throw new WrongTypeException(value);
+                throw new WrongTypeException(value, a.getType());
               }
             } else if (a.getType().equals("float")) {
               try {
                 Float.parseFloat(value);
                 a.setValue(value);
               } catch (NumberFormatException e) {
-                throw new WrongTypeException(value);
+                throw new WrongTypeException(value, a.getType());
               }
             } else {
               a.setValue(value);
@@ -298,14 +298,14 @@ public class ArgumentParser {
                 Integer.parseInt(value);
                 a.setValue(value);
               } catch (NumberFormatException e) {
-                throw new WrongTypeException(value);
+                throw new WrongTypeException(value, a.getType());
               }
             } else if (a.getType().equals("float") && a.isAcceptedValue(value)) {
               try {
                 Float.parseFloat(value);
                 a.setValue(value);
               } catch (NumberFormatException e) {
-                throw new WrongTypeException(value);
+                throw new WrongTypeException(value, a.getType());
               }
             } else if (!a.isAcceptedValue(value)) {
               throw new ValueNotAcceptedException(value);
