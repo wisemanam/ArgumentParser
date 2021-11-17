@@ -50,79 +50,50 @@ public class TilingAssistant {
       float grout,
       boolean metric,
       boolean fullOnly) {
-    int numFullTilesLength = 1;
-    roomLength -= tileSize;
-    boolean partialTilesLength = false;
-    float lengthofPartialTiles = 0;
-    if (roomLength % (tileSize + grout) < 0.01) {
-      numFullTilesLength += (int) (roomLength / (tileSize + grout));
-      roomLength = 0;
-    } else if (roomLength % (tileSize + grout) == grout) {
-      numFullTilesLength = (int) (roomLength / (tileSize + grout));
-      roomLength += tileSize;
-      roomLength -= (roomLength / (tileSize + grout));
-      roomLength -= grout;
-      lengthofPartialTiles = tileSize / 2;
-      roomLength -= tileSize;
-      partialTilesLength = true;
-    } else if (roomLength % (tileSize + grout) > grout) {
-      numFullTilesLength = (int) (roomLength / (tileSize + grout));
-      roomLength += tileSize;
-      roomLength -= (roomLength / (tileSize + grout));
-      roomLength -= grout;
-      lengthofPartialTiles = roomLength / 2;
-      roomLength -= 2 * lengthofPartialTiles;
-      partialTilesLength = true;
+    boolean hasPartialLength = false;
+    boolean hasPartialWidth = false;
+    double lengthPartialTiles = 0;
+    double widthPartialTiles = 0;
+    int numFullLength = (int) (Math.floor((roomLength - tileSize) / (tileSize + grout)) + 1);
+    int numFullWidth = (int) (Math.floor((roomWidth - tileSize) / (tileSize + grout)) + 1);
+    double extraLength = roomLength - (tileSize * numFullLength + grout * (numFullLength - 1));
+    double extraWidth = roomWidth - (tileSize * numFullWidth + grout * (numFullWidth - 1));
+    if (Math.abs(extraLength - 2 * grout) < 0.000001 || extraLength < 2 * grout) {
+      hasPartialLength = true;
+      numFullLength--;
+      extraLength += tileSize;
+      extraLength -= grout;
+      lengthPartialTiles = extraLength / 2;
+    } else if (extraLength > (2 * grout)) {
+      hasPartialLength = true;
+      lengthPartialTiles = (extraLength - (2 * grout)) / 2;
     }
-    int numFullTilesWidth = 1;
-    roomWidth -= tileSize;
-    boolean partialTilesWidth = false;
-    float widthofPartialTiles = 0;
-    if (roomWidth % (tileSize + grout) < 0.01) {
-      numFullTilesWidth += (int) (roomWidth / (tileSize + grout));
-      roomWidth = 0;
-    } else if (roomWidth % (tileSize + grout) == grout) {
-      numFullTilesWidth = (int) (roomWidth / (tileSize + grout));
-      roomWidth += tileSize;
-      roomWidth -= (roomWidth / (tileSize + grout));
-      roomWidth -= grout;
-      widthofPartialTiles = tileSize / 2;
-      roomWidth -= tileSize;
-      partialTilesWidth = true;
-    } else if (roomWidth % (tileSize + grout) > grout) {
-      numFullTilesWidth = (int) (roomWidth / (tileSize + grout));
-      roomWidth += tileSize;
-      roomWidth -= (roomWidth / (tileSize + grout));
-      roomWidth -= grout;
-      widthofPartialTiles = roomWidth / 2;
-      roomWidth -= 2 * widthofPartialTiles;
-      partialTilesWidth = true;
+    if (Math.abs(extraWidth - (2 * grout)) < 0.0000001 || extraWidth < 2 * grout) {
+      hasPartialWidth = true;
+      numFullWidth--;
+      extraWidth += tileSize;
+      extraWidth -= grout;
+      widthPartialTiles = extraWidth / 2;
+    } else if (extraWidth > (2 * grout)) {
+      hasPartialWidth = true;
+      widthPartialTiles = (extraWidth - (2 * grout)) / 2;
     }
-    
     String units = " in";
     if (metric) {
       units = " cm";
     }
-    int numFullTiles = numFullTilesLength * numFullTilesWidth;
+    int numFullTiles = numFullLength * numFullWidth;
     String string = "";
     string += numFullTiles + ":(" + tileSize + " x " + tileSize + units + ") ";
     if (!fullOnly) {
-      if (partialTilesLength) {
-        string +=
-            (2 * numFullTilesLength)
-                + ":("
-                + lengthofPartialTiles
-                + " x "
-                + tileSize
-                + units
-                + ") ";
+      if (hasPartialLength) {
+        string += (2 * numFullWidth) + ":(" + lengthPartialTiles + " x " + tileSize + units + ") ";
       }
-      if (partialTilesWidth) {
-        string +=
-            (2 * numFullTilesWidth) + ":(" + tileSize + " x " + widthofPartialTiles + units + ") ";
+      if (hasPartialWidth) {
+        string += (2 * numFullLength) + ":(" + tileSize + " x " + widthPartialTiles + units + ") ";
       }
-      if (partialTilesLength && partialTilesWidth) {
-        string += "4:(" + lengthofPartialTiles + " x " + widthofPartialTiles + units + ")";
+      if (hasPartialLength && hasPartialWidth) {
+        string += "4:(" + lengthPartialTiles + " x " + widthPartialTiles + units + ")";
       }
     }
     return string.trim();
