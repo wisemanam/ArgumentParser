@@ -99,11 +99,11 @@ public class TilingAssistant {
       roomWidth -= 2 * widthofPartialTiles;
     }
     numPartialTilesLength = numPartialTilesLength * numFullTilesLength;
-    numPartialTilesWidth = numPartialTilesWidth * numPartialTilesWidth;
-    if (numPartialTilesLength > 0 && numPartialTilesWidth > 0) {
-      numPartialTilesLength += 2;
-      numPartialTilesWidth += 2;
-    }
+    numPartialTilesWidth = numPartialTilesWidth * numFullTilesWidth;
+    // if (numPartialTilesLength > 0 && numPartialTilesWidth > 0) {
+    //   numPartialTilesLength += 2;
+    //   numPartialTilesWidth += 2;
+    // }
     String units = " in";
     if (metric) {
       units = " cm";
