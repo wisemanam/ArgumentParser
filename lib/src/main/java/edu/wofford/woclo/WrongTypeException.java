@@ -15,11 +15,17 @@ public class WrongTypeException extends RuntimeException {
     this.value = value;
     this.type = type;
   }
-
+  /**
+   * Returns the value that is not the correct type
+   * @return the value with an incorrect type.
+   */
   public String getWrongValue() {
     return value;
   }
-
+  /**
+   * Returns the expected type of the argument.
+   * @return the expected type of the argument
+   */
   public String getExpectedType() {
     return type;
   }
