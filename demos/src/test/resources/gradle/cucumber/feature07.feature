@@ -72,10 +72,10 @@ Feature: Allow short-form names for named arguments, in addition to long-form na
     Examples:
     | progname        | args                              | output                                                   |
     | TilingAssistant | 15 21 -s 4.0                      | 12:(4.0 x 4.0 in) 8:(0.5 x 4.0 in) 6:(4.0 x 1.25 in) 4:(0.5 x 1.25 in) |
-    | TilingAssistant | 128.8 171.8 -g 0.2 -s 4.1         | 1200:(4.1 x 4.1 in)                                      |
-    | TilingAssistant | 324.5 200                         | 1500:(6.0 x 6.0 in) 100:(6.0 x 2.25 in)                  |
+    | TilingAssistant | 71 53 -g 1 -s 5                   | 108:(5.0 x 5.0 in)                                      |
     | TilingAssistant | 28.5 --groutgap 0.25 22 --tilesize 4.75  | 20:(4.75 x 4.75 in) 8:(1.625 x 4.75 in) 10:(4.75 x 0.875 in) 4:(1.625 x 0.875 in) |
-    | TilingAssistant | 65 39                             | 60:(6.0 x 6.0 in)                                        |
+    | TilingAssistant | 65 39                             | 45:(6.0 x 6.0 in) 10:(3.0 x 6.0 in) 18:(6.0 x 3.0 in) 4:(3.0 x 3.0 in)                   |
+    | TilingAssistant | -g 0.25 28.5 --fullonly -s 4.75 22   | 20:(4.75 x 4.75 in)                          |
     | TilingAssistant | -g 0.25 --metric 28.5 --fullonly -s 4.75 22   | 20:(4.75 x 4.75 cm)                          |
     | TilingAssistant | -g 0.25 -m 28.5 --fullonly -s 4.75 22   | 20:(4.75 x 4.75 cm)                                |
     | TilingAssistant | 28.5 -fm -g 0.25 -s 4.75 22       | 20:(4.75 x 4.75 cm)                                      |
