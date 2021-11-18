@@ -108,4 +108,14 @@ public class TilingAssistantTest {
     String result = t.tileAssistant(args);
     assertEquals("TilingAssistant error: groutgap must be positive", result);
   }
+
+  @Test
+  public void testHelp() {
+    String[] args = {"12.0", "14.0", "-m", "-h"};
+    TilingAssistant t = new TilingAssistant();
+    String result = t.tileAssistant(args);
+    assertEquals(
+        "usage: java TilingAssistant [-h] [-s TILESIZE] [-g GROUTGAP] [-m] [-f] length width\n\nCalculate the tiles required to tile a room. All units are inches.\n\npositional arguments:\n length                            (float)       the length of the room\n width                             (float)       the width of the room\n\nnamed arguments:\n -h, --help                        show this help message and exit\n -s TILESIZE, --tilesize TILESIZE  (float)       the size of the square tile (default: 6.0)\n -g GROUTGAP, --groutgap GROUTGAP  (float)       the width of the grout gap (default: 0.5)\n -m, --metric                      use centimeters instead of inches\n -f, --fullonly                    show only the full tiles required",
+        result);
+  }
 }

@@ -76,4 +76,14 @@ public class MaximalLayersTest {
     String answer = maxLay.maximalLayers(arguments);
     assertEquals("MaximalLayers error: the value x is not of type integer", answer);
   }
+
+  @Test
+  public void testHelp() {
+    String[] arguments = {"5,5,4,9,10,x,2,3,15,7", "--help"};
+    MaximalLayers maxLay = new MaximalLayers();
+    String answer = maxLay.maximalLayers(arguments);
+    assertEquals(
+        "usage: java MaximalLayers [-h] [--sortedX] [--sortedY] points\n\nSort the points into layers.\n\npositional arguments:\n points      (string)      the data points\n\nnamed arguments:\n -h, --help  show this help message and exit\n --sortedX   sort layers by x coordinate\n --sortedY   sort layers by y coordinate",
+        answer);
+  }
 }
