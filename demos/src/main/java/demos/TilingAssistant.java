@@ -58,7 +58,7 @@ public class TilingAssistant {
     int numFullWidth = (int) (Math.floor((roomWidth - tileSize) / (tileSize + grout)) + 1);
     double extraLength = roomLength - (tileSize * numFullLength + grout * (numFullLength - 1));
     double extraWidth = roomWidth - (tileSize * numFullWidth + grout * (numFullWidth - 1));
-    if (extraLength > 0.0000001 || extraWidth > 0.0000001) {
+    if (extraLength > 0.0000001) {
       if ((Math.abs(extraLength - 2 * grout) < 0.000001) || extraLength < 2 * grout) {
         hasPartialLength = true;
         numFullLength--;
@@ -69,6 +69,8 @@ public class TilingAssistant {
         hasPartialLength = true;
         lengthPartialTiles = (extraLength - (2 * grout)) / 2;
       }
+    }
+    if (extraWidth > 0.0000001) {
       if (Math.abs(extraWidth - (2 * grout)) < 0.0000001 || extraWidth < 2 * grout) {
         hasPartialWidth = true;
         numFullWidth--;

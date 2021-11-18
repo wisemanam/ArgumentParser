@@ -42,7 +42,7 @@ public class TilingAssistantTest {
     String[] args = {"4.5", "4.5", "--tilesize", "1", "--fullonly"};
     TilingAssistant t = new TilingAssistant();
     String result = t.tileAssistant(args);
-    assertEquals("6:(1.0 x 1.0 in)", result);
+    assertEquals("4:(1.0 x 1.0 in)", result);
   }
 
   @Test
