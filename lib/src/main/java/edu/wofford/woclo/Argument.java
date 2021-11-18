@@ -2,8 +2,6 @@ package edu.wofford.woclo;
 
 import java.util.*;
 
-// import java.lang.ProcessBuilder.Redirect.Type;
-
 /**
  * Argument collects information about what is expected to come in on the command line. Each
  * argument has a corresponding name, type, value, and description.
@@ -28,7 +26,13 @@ public class Argument {
     this.description = description;
     accepted_values = null;
   }
-
+  /**
+   * Creates an argument with the given name, value, description, accepted values.
+   * @param name the name associated with the incoming value
+   * @param type the type of the value
+   * @param description the description used in the help message
+   * @param accepted_values the list of acceptable values for the argument
+   */
   public Argument(String name, String type, String description, String[] accepted_values) {
     this.name = name;
     this.type = type;
@@ -91,6 +95,10 @@ public class Argument {
     return description;
   }
 
+  /**
+   * Returns true if there are restricted values for this argument.
+   * @return boolean stating whether or not the argument has specific accepted values
+   */
   public boolean hasAcceptedValues() {
     if (accepted_values == null) {
       return false;
@@ -99,6 +107,11 @@ public class Argument {
     }
   }
 
+  /**
+   * Returns whether or not the given argument is an acceptable value for this argument.
+   * @param arg_val value to be determined whether or not it is an acceptable value
+   * @return true if the value is acceptable, false otherwise
+   */
   public boolean isAcceptedValue(String arg_val) {
     if (Arrays.asList(accepted_values).contains(arg_val)) {
       return true;
