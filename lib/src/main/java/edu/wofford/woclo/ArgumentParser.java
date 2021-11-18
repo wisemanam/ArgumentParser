@@ -43,6 +43,15 @@ public class ArgumentParser {
     args.put(name, arg);
   }
 
+  /**
+   * This performs the same actions as the first addPositional method but takes an additional
+   * paremeter that allows the client to add a set of accepted values.
+   *
+   * @param name the name that will be used to retrieve this argument from ArgumentParser
+   * @param type the type that the value will be when it is retreived from ArgumentParser
+   * @param description the description of the argument used in the help message
+   * @param accepted_values String list of accepted values for this argument
+   */
   public void addPositional(
       String name, String type, String description, String[] accepted_values) {
     Argument arg = new Argument(name, type, description, accepted_values);
@@ -66,6 +75,18 @@ public class ArgumentParser {
     args.put(name, arg);
   }
 
+  /**
+   * This performs the same actions as the first addNonPositional method but takes an additional
+   * paremeter that allows the client to add a short version of the name.
+   *
+   * @param name the name that will be used to retrieve this argument from ArgumentParser
+   * @param short_name the short name that can be used on the command line or used to access this
+   *     argument
+   * @param type the type that the value will be when it is retreived from ArgumentParser
+   * @param description the description of the argument used in the help message
+   * @param value the default value that the argument is given in the case that it is not one of the
+   *     arguments passed into the command line
+   */
   public void addNonPositional(
       String name, String short_name, String type, String description, String value) {
     Argument arg = new OptionalArgument(name, short_name, type, description, value);
@@ -75,13 +96,36 @@ public class ArgumentParser {
     short_args.put(short_name, name);
   }
 
+  /**
+   * This method adds a non-positional argument using the name, type, description, default value,
+   * and list of accepted values.
+   *
+   * @param name the name that will be used to retrieve this argument from ArgumentParser
+   * @param type the type that the value will be when it is retreived from ArgumentParser
+   * @param description the description of the argument used in the help message
+   * @param value the default value that the argument is given in the case that it is not one of the
+   *     arguments passed into the command line
+   * @param accepted_values list of values accepted for this argument
+   */
   public void addNonPositional(
       String name, String type, String description, String value, String[] accepted_values) {
     Argument arg = new OptionalArgument(name, type, description, value, accepted_values);
     nonpositional_names.add(name);
     args.put(name, arg);
   }
-
+  /**
+   * This method adds a non-positional argument using the name, type, description, default value,
+   * and list of accepted values.
+   *
+   * @param name the name that will be used to retrieve this argument from ArgumentParser
+   * @param short_name the short name that can be used on the command line or used to access this
+   *     argument
+   * @param type the type that the value will be when it is retreived from ArgumentParser
+   * @param description the description of the argument used in the help message
+   * @param value the default value that the argument is given in the case that it is not one of the
+   *     arguments passed into the command line
+   * @param accepted_values list of values accepted for this argument
+   */
   public void addNonPositional(
       String name,
       String short_name,
