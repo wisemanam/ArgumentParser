@@ -86,4 +86,16 @@ public class MaximalLayersTest {
         "usage: java MaximalLayers [-h] [--sortedX] [--sortedY] points\n\nSort the points into layers.\n\npositional arguments:\n points      (string)      the data points\n\nnamed arguments:\n -h, --help  show this help message and exit\n --sortedX   sort layers by x coordinate\n --sortedY   sort layers by y coordinate",
         answer);
   }
+
+  @Test
+  public void testNextPointSameX() {
+    String[] arguments = {
+      "6,2,13,18,9,9,20,10,19,19,12,12,3,3,2,15,13,13,5,12,2,14,1,20", "--sortedY"
+    };
+    MaximalLayers maxLay = new MaximalLayers();
+    String answer = maxLay.maximalLayers(arguments);
+    assertEquals(
+        "1:(20,10)(19,19)(1,20) 2:(13,13)(13,18) 3:(12,12)(5,12)(2,14)(2,15) 4:(9,9) 5:(6,2)(3,3)",
+        answer);
+  }
 }
