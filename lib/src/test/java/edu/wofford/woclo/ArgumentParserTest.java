@@ -150,6 +150,7 @@ public class ArgumentParserTest {
               float float1 = argParse.getValue("x1");
             });
     assertEquals(e.getWrongValue(), "awesome");
+    assertEquals(e.getExpectedType(), "float");
   }
 
   @Test
@@ -339,6 +340,19 @@ public class ArgumentParserTest {
             WrongTypeException.class,
             () -> {
               OptionalArgument a = new OptionalArgument("test", "float", "test", "hello");
+              float test = a.getValue();
+            });
+    assertEquals(e.getWrongValue(), "hello");
+  }
+
+  @Test
+  public void testGetValueArgumentWrongValueFloat() {
+    WrongTypeException e =
+        assertThrows(
+            WrongTypeException.class,
+            () -> {
+              Argument a = new Argument("test", "float", "test");
+              a.setValue("hello");
               float test = a.getValue();
             });
     assertEquals(e.getWrongValue(), "hello");
@@ -742,6 +756,7 @@ public class ArgumentParserTest {
               argParse.parse(arguments);
             });
     assertEquals(e.getUnacceptedValue(), "emily");
+    assertEquals(e.getVarName(), "arg1");
   }
 
   @Test
