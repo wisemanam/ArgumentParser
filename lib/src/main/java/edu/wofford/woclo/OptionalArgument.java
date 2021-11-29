@@ -33,6 +33,7 @@ public class OptionalArgument extends Argument {
 
   /**
    * Takes the arguments name, type, description, and value, and creates an OptionalArgument.
+   *
    * @param name the name associated with the value
    * @param type the type of the value
    * @param description a description of the argument used for the help message
@@ -46,8 +47,9 @@ public class OptionalArgument extends Argument {
   }
 
   /**
-   * Takes the arguments name, shorthand name, type, description, value, and list of accepted values and 
-   * creates an OptionalArgument.
+   * Takes the arguments name, shorthand name, type, description, value, and list of accepted values
+   * and creates an OptionalArgument.
+   *
    * @param name the name associated with the value
    * @param short_name the designated shorthand name of the argument
    * @param type the type of the value
@@ -68,8 +70,9 @@ public class OptionalArgument extends Argument {
     this.accepted_values = accepted_values.clone();
   }
   /**
-   * Takes the arguments name, type, description, value, and list of accepted values and creates 
-   * an OptionalArgument.
+   * Takes the arguments name, type, description, value, and list of accepted values and creates an
+   * OptionalArgument.
+   *
    * @param name the name associated with the value
    * @param type the type of the value
    * @param description a description of the argument used for the help message
@@ -83,13 +86,15 @@ public class OptionalArgument extends Argument {
     short_name = "";
     this.accepted_values = accepted_values.clone();
   }
-  /** setValue sets the value of the Argument to be the value given as a parameter*/
+  /** setValue sets the value of the Argument to be the value given as a parameter */
   public void setValue(String value) {
     this.value = value;
   }
-  /** getValue returns the value of the argument in the type specified in the constructor 
+  /**
+   * getValue returns the value of the argument in the type specified in the constructor
+   *
    * @return the value of the argument in the specified type
-  */
+   */
   @Override
   public <T> T getValue() {
     if (type.equals("string")) {
@@ -112,6 +117,7 @@ public class OptionalArgument extends Argument {
   }
   /**
    * Returns the short name of the argument
+   *
    * @return the designated short name of the argument
    */
   public String getShortName() {

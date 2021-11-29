@@ -28,6 +28,7 @@ public class Argument {
   }
   /**
    * Creates an argument with the given name, value, description, accepted values.
+   *
    * @param name the name associated with the incoming value
    * @param type the type of the value
    * @param description the description used in the help message
@@ -97,6 +98,7 @@ public class Argument {
 
   /**
    * Returns true if there are restricted values for this argument.
+   *
    * @return boolean stating whether or not the argument has specific accepted values
    */
   public boolean hasAcceptedValues() {
@@ -109,6 +111,7 @@ public class Argument {
 
   /**
    * Returns whether or not the given argument is an acceptable value for this argument.
+   *
    * @param arg_val value to be determined whether or not it is an acceptable value
    * @return true if the value is acceptable, false otherwise
    */

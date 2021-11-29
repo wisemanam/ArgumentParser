@@ -167,6 +167,8 @@ public class ArgumentParser {
     // meaning we have not gotten through everything given on the command line
     while (!box_of_garbage.isEmpty()) {
       // LONG NAME ARGUMENTS
+      // create a long_name_arg_parser
+      //add check mutally exclusive and required specification
       if (box_of_garbage.peek().startsWith("--")) {
         String name = box_of_garbage.poll().substring(2);
         Argument a = args.get(name);
@@ -235,10 +237,13 @@ public class ArgumentParser {
           }
         }
         // SHORT NAME ARGUMENTS
+        //create a stack_name_arg_parser
+        //add check mutally exclusive and required specification
       } else if (box_of_garbage.peek().startsWith("-")
           && !Arrays.asList(check_digits)
               .contains(Character.toString(box_of_garbage.peek().charAt(1)))) {
         String short_name_argument = box_of_garbage.poll();
+        //if the short name is stacked
         if (short_name_argument.length() > 2) {
           for (int i = 1; i < short_name_argument.length(); i++) {
             String name = Character.toString(short_name_argument.charAt(i));
@@ -256,9 +261,10 @@ public class ArgumentParser {
             }
           }
         } else {
-          // if short args are not stacked (same as line 97:)
+          // if short args are not stacked
           String name = Character.toString(short_name_argument.charAt(1));
           String long_name = short_args.get(name);
+          //create a short_name_arg_parser
           Argument a = args.get(long_name);
           if (a == null) {
             throw new ArgumentNameNotSpecifiedException(name);
@@ -315,6 +321,7 @@ public class ArgumentParser {
           }
         }
         // POSITIONAL ARGUMENTS
+        //create a positional_argument_parser
       } else {
         String value = box_of_garbage.poll();
         try {
