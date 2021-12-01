@@ -1,6 +1,10 @@
 package edu.wofford.woclo;
 
 import java.util.*;
+import java.io.*;
+import javax.xml.parsers.*;
+import org.w3c.dom.*;
+import org.xml.sax.*;
 
 /**
  * The ArgumentParser class takes the arguments entered into the command line and parses each
@@ -27,6 +31,155 @@ public class ArgumentParser {
     positional_names = new ArrayList<String>();
     nonpositional_names = new ArrayList<String>();
     short_name_names = new ArrayList<String>();
+  }
+
+  public ArgumentParser(String xmlfile) {
+    args = new HashMap<String, Argument>();
+    short_args = new HashMap<String, String>();
+    positional_names = new ArrayList<String>();
+    nonpositional_names = new ArrayList<String>();
+    short_name_names = new ArrayList<String>();
+    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    try {
+      DocumentBuilder db = dbf.newDocumentBuilder();
+      Document doc = db.parse(new File(xmlfile));
+      // looking for positional arguments (<positional> ... </positional>)
+      NodeList pos_list = doc.getElementsByTagName("positional");
+      for (int i = 0; i < pos_list.getLength(); i++) {
+        Node node = pos_list.item(i);
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+          Element element = (Element) node;
+          NodeList name_list = element.getElementsByTagName("name"); // name
+          NodeList type_list = element.getElementsByTagName("type"); // type
+          NodeList description_list = element.getElementsByTagName("description"); // description
+          NodeList accepted_value_list = element.getElementsByTagName("restrictions"); // restrictions
+          String name = "";
+          String type = "";
+          String description = "";
+          ArrayList<String> accepted_values = new ArrayList<String>();
+          // was name there?
+          if (name_list != null) {
+            name = name_list.item(0).getTextContent();
+          } else {
+            throw new MissingFromXMLException("name");
+          }
+          // was type there?
+          if (type_list != null) {
+            type = type_list.item(0).getTextContent();
+          } else {
+            throw new MissingFromXMLException("type");
+          }
+
+          // was description there?
+          if (description_list != null) {
+            description = description_list.item(0).getTextContent();
+          } else {
+            throw new MissingFromXMLException("description");
+          }
+
+          // does this positional contain accepted values?
+          if (accepted_value_list != null) {
+            for (int j = 0; j < accepted_value_list.getLength(); j++) {
+              Node restrict_val = accepted_value_list.item(j);
+              if (restrict_val.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) node;
+                String val = e.getElementsByTagName("restriction").item(0).getTextContent();
+                accepted_values.add(val);
+              }
+            }
+          }
+
+          if (accepted_values.isEmpty()) {
+            addPositional(name, type, description);
+          } else {
+            String[] accepted = new String[accepted_values.size()];
+            accepted = accepted_values.toArray(accepted);
+            addPositional(name, type, description, accepted);
+          }
+        }
+      }
+      NodeList named_list = doc.getElementsByTagName("named");
+      for (int i = 0; i < pos_list.getLength(); i++) {
+        Node node = named_list.item(i);
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+          Element element = (Element) node;
+          NodeList name_list = element.getElementsByTagName("name"); // name
+          NodeList type_list = element.getElementsByTagName("type"); // type
+          NodeList description_list = element.getElementsByTagName("description"); // description
+          NodeList accepted_value_list = element.getElementsByTagName("restrictions"); // restrictions
+          NodeList short_name_list = element.getElementsByTagName("shortname");
+          NodeList value_list = element.getElementsByTagName("default");
+          String name = "";
+          String type = "";
+          String description = "";
+          String value = "";
+          String short_name = "";
+          ArrayList<String> accepted_values = new ArrayList<String>();
+          // was name there?
+          if (name_list != null) {
+            name = name_list.item(0).getTextContent();
+          } else {
+            throw new MissingFromXMLException("name");
+          }
+          // was type there?
+          if (type_list != null) {
+            type = type_list.item(0).getTextContent();
+          } else {
+            throw new MissingFromXMLException("type");
+          }
+
+          // was description there?
+          if (description_list != null) {
+            description = description_list.item(0).getTextContent();
+          } else {
+            throw new MissingFromXMLException("description");
+          }
+
+          if (short_name_list != null) {
+            short_name = short_name_list.item(0).getTextContent();
+          }
+
+          // was default value there?
+          if (value_list != null) {
+            Node restrict_val = accepted_value_list.item(0);
+            if (restrict_val.getNodeType() == Node.ELEMENT_NODE) {
+              Element e = (Element) node;
+              String val = e.getElementsByTagName("value").item(0).getTextContent();
+              value = val;
+            }
+          } else {
+            throw new MissingFromXMLException("default");
+          }
+
+          // does this named contain accepted values?
+          if (accepted_value_list != null) {
+            for (int j = 0; j < accepted_value_list.getLength(); j++) {
+              Node restrict_val = accepted_value_list.item(j);
+              if (restrict_val.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) node;
+                String val = e.getElementsByTagName("restriction").item(0).getTextContent();
+                accepted_values.add(val);
+              }
+            }
+          }
+
+          // start putting in addnonpositional
+          String[] accepted = new String[accepted_values.size()];
+          accepted = accepted_values.toArray(accepted);
+          if (accepted_values.isEmpty() && short_name.equals("")) {
+            addNonPositional(name, type, description, value);
+          } else if (accepted_values.isEmpty() && !short_name.equals("")) {
+            addNonPositional(name, short_name, type, description, value);
+          } else if (!accepted_values.isEmpty() && short_name.equals("")) {
+            addNonPositional(name, type, description, value, accepted);
+          } else {
+            addNonPositional(name, short_name, type, description, value, accepted);
+          }
+        }
+      }
+    } catch (ParserConfigurationException | SAXException | IOException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
