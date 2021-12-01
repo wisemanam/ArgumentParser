@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<arguments>
+    <positionalArgs>
+    <positional>
+        <type>float</type>
+        <description>the length of the volume</description>
+        <name>length</name>
+    </positional>
+    <positional>
+        <name>width</type>
+        <type>float</type>
+        <description>the width of the volume</description>
+    </positional>
+    <positional>
+        <description>the height of the volume</description>
+        <name>height</name>
+        <type>float</type>
+    </positional>
+    </positionalArgs>
+</arguments>
