@@ -812,4 +812,17 @@ public class ArgumentParserTest {
             });
     assertEquals(e.getUnacceptedValue(), "triangle");
   }
+
+  @Test
+  public void testXmlJustPositionals() {
+    String[] arguments = {"4.56", "6.0", "3.12"};
+    ArgumentParser a = new ArgumentParser("Test1.xml");
+    a.parse(arguments);
+    float length = a.getValue("length");
+    float width = a.getValue("width");
+    float height = a.getValue("height");
+    assertEquals(length, 4.56, 0.1);
+    assertEquals(width, 6.0, 0.1);
+    assertEquals(height, 3.12, 0.1);
+  }
 }
