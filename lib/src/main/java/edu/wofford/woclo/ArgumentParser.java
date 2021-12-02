@@ -1,7 +1,7 @@
 package edu.wofford.woclo;
 
-import java.util.*;
 import java.io.*;
+import java.util.*;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
@@ -44,7 +44,11 @@ public class ArgumentParser {
       DocumentBuilder db = dbf.newDocumentBuilder();
       Document doc = db.parse(new File(xmlfile));
       // looking for positional arguments (<positional> ... </positional>)
-      NodeList pos_list = doc.getElementsByTagName("positional");
+      try {
+        NodeList pos_list = doc.getElementsByTagName("positional");
+      } catch (NullPointerException e) {
+        e.printStackTrace();
+      }
       for (int i = 0; i < pos_list.getLength(); i++) {
         Node node = pos_list.item(i);
         if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -52,7 +56,8 @@ public class ArgumentParser {
           NodeList name_list = element.getElementsByTagName("name"); // name
           NodeList type_list = element.getElementsByTagName("type"); // type
           NodeList description_list = element.getElementsByTagName("description"); // description
-          NodeList accepted_value_list = element.getElementsByTagName("restrictions"); // restrictions
+          NodeList accepted_value_list =
+              element.getElementsByTagName("restrictions"); // restrictions
           String name = "";
           String type = "";
           String description = "";
@@ -106,7 +111,8 @@ public class ArgumentParser {
           NodeList name_list = element.getElementsByTagName("name"); // name
           NodeList type_list = element.getElementsByTagName("type"); // type
           NodeList description_list = element.getElementsByTagName("description"); // description
-          NodeList accepted_value_list = element.getElementsByTagName("restrictions"); // restrictions
+          NodeList accepted_value_list =
+              element.getElementsByTagName("restrictions"); // restrictions
           NodeList short_name_list = element.getElementsByTagName("shortname");
           NodeList value_list = element.getElementsByTagName("default");
           String name = "";
@@ -321,7 +327,7 @@ public class ArgumentParser {
     while (!box_of_garbage.isEmpty()) {
       // LONG NAME ARGUMENTS
       // create a long_name_arg_parser
-      //add check mutally exclusive and required specification
+      // add check mutally exclusive and required specification
       if (box_of_garbage.peek().startsWith("--")) {
         String name = box_of_garbage.poll().substring(2);
         Argument a = args.get(name);
@@ -390,13 +396,13 @@ public class ArgumentParser {
           }
         }
         // SHORT NAME ARGUMENTS
-        //create a stack_name_arg_parser
-        //add check mutally exclusive and required specification
+        // create a stack_name_arg_parser
+        // add check mutally exclusive and required specification
       } else if (box_of_garbage.peek().startsWith("-")
           && !Arrays.asList(check_digits)
               .contains(Character.toString(box_of_garbage.peek().charAt(1)))) {
         String short_name_argument = box_of_garbage.poll();
-        //if the short name is stacked
+        // if the short name is stacked
         if (short_name_argument.length() > 2) {
           for (int i = 1; i < short_name_argument.length(); i++) {
             String name = Character.toString(short_name_argument.charAt(i));
@@ -417,7 +423,7 @@ public class ArgumentParser {
           // if short args are not stacked
           String name = Character.toString(short_name_argument.charAt(1));
           String long_name = short_args.get(name);
-          //create a short_name_arg_parser
+          // create a short_name_arg_parser
           Argument a = args.get(long_name);
           if (a == null) {
             throw new ArgumentNameNotSpecifiedException(name);
@@ -474,7 +480,7 @@ public class ArgumentParser {
           }
         }
         // POSITIONAL ARGUMENTS
-        //create a positional_argument_parser
+        // create a positional_argument_parser
       } else {
         String value = box_of_garbage.poll();
         try {
