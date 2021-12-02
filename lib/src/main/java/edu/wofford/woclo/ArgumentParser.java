@@ -33,8 +33,8 @@ public class ArgumentParser {
     short_name_names = new ArrayList<String>();
   }
 
-  public ArgumentParser(string longXmlString) {
-    XML.parseXML(longXmlString);
+  public ArgumentParser(String longXmlString) {
+    XMLparser.parseXML(longXmlString);
   }
   /**
    * The addPositional method adds an expected argument to ArgumentParser that will not be named
