@@ -33,6 +33,9 @@ public class ArgumentParser {
     short_name_names = new ArrayList<String>();
   }
 
+  public ArgumentParser(string longXmlString) {
+    XML.parseXML(longXmlString);
+  }
   /**
    * The addPositional method adds an expected argument to ArgumentParser that will not be named
    * when arguments are given on the command line.

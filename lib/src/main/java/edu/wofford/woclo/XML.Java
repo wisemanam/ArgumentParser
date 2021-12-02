@@ -1,16 +1,16 @@
 public class XML {
-    public static parseXML(String giantXmlString) {
-        args = new HashMap<String, Argument>();
-        short_args = new HashMap<String, String>();
-        positional_names = new ArrayList<String>();
-        nonpositional_names = new ArrayList<String>();
-        short_name_names = new ArrayList<String>();
+    // will return argumentParser with all the arguments added to it
+    public ArgumentParser parseXML(String giantXmlString) {
+        ArgumentParser argParse = new ArgumentParser();
+        // has args, short_args, positional, nonpositional_names, and short_name_names
+
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
           DocumentBuilder db = dbf.newDocumentBuilder();
+
           // we need to convert giantXmlString to InputStream and pass it into parse 
           InputStream stream = new ByteArrayInputStream(giantXmlString.getBytes("UTF-8"));
-          
+
           Document doc = db.parse(stream);
           // looking for positional arguments (<positional> ... </positional>)
           try {
@@ -64,11 +64,11 @@ public class XML {
               }
     
               if (accepted_values.isEmpty()) {
-                addPositional(name, type, description);
+                argParse.addPositional(name, type, description);
               } else {
                 String[] accepted = new String[accepted_values.size()];
                 accepted = accepted_values.toArray(accepted);
-                addPositional(name, type, description, accepted);
+                argParse.addPositional(name, type, description, accepted);
               }
             }
           }
@@ -142,16 +142,17 @@ public class XML {
               String[] accepted = new String[accepted_values.size()];
               accepted = accepted_values.toArray(accepted);
               if (accepted_values.isEmpty() && short_name.equals("")) {
-                addNonPositional(name, type, description, value);
+                argParse.addNonPositional(name, type, description, value);
               } else if (accepted_values.isEmpty() && !short_name.equals("")) {
-                addNonPositional(name, short_name, type, description, value);
+                argParse.addNonPositional(name, short_name, type, description, value);
               } else if (!accepted_values.isEmpty() && short_name.equals("")) {
-                addNonPositional(name, type, description, value, accepted);
+                argParse.addNonPositional(name, type, description, value, accepted);
               } else {
-                addNonPositional(name, short_name, type, description, value, accepted);
+                argParse.addNonPositional(name, short_name, type, description, value, accepted);
               }
             }
           }
+          return argParse;
         } catch (ParserConfigurationException | SAXException | IOException e) {
           e.printStackTrace();
         }
