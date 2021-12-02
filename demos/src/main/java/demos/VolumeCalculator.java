@@ -1,10 +1,6 @@
 package demos;
 
-import java.io.FileReader;
-
 import edu.wofford.woclo.*;
-import java.text.DecimalFormat;
-import java.math.RoundingMode;
 
 public class VolumeCalculator {
   // public String volumeCalculator(String[] arguments, FileReader xml) {
@@ -14,8 +10,10 @@ public class VolumeCalculator {
   //     parser.addPositional("length", "float", "the length of the volume");
   //     parser.addPositional("width", "float", "the width of the volume");
   //     parser.addPositional("height", "float", "the height of the volume");
-  //     parser.addNonPositional("type", "t", "string", "the type of volume {box, pyramid, ellipsoid}", "box", acceptedType);
-  //     parser.addNonPositional("precision", "p", "integer", "the maximum number of decimal places for the volume", "4");
+  //     parser.addNonPositional("type", "t", "string", "the type of volume {box, pyramid,
+  // ellipsoid}", "box", acceptedType);
+  //     parser.addNonPositional("precision", "p", "integer", "the maximum number of decimal places
+  // for the volume", "4");
   //     parser.parse(arguments);
   //     float length = parser.getValue("length");
   //     float width = parser.getValue("width");
