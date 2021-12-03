@@ -2,9 +2,6 @@ package edu.wofford.woclo;
 
 import java.io.*;
 import java.util.*;
-import javax.xml.parsers.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
 
 /**
  * The ArgumentParser class takes the arguments entered into the command line and parses each
@@ -33,9 +30,6 @@ public class ArgumentParser {
     short_name_names = new ArrayList<String>();
   }
 
-  public ArgumentParser(String longXmlString) {
-    XMLparser.parseXML(longXmlString);
-  }
   /**
    * The addPositional method adds an expected argument to ArgumentParser that will not be named
    * when arguments are given on the command line.
