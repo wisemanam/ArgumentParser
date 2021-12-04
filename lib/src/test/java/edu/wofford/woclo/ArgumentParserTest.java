@@ -882,11 +882,75 @@ public class ArgumentParserTest {
     String[] arguments = {"--type", "box", "--precision", "6"};
     ArgumentParser a = XMLparser.parseXML(test_string);
 
-    System.out.println(a.numArgs());
     a.parse(arguments);
 
     String type = a.getValue("type");
     int p = a.getValue("p");
+    assertEquals(type, "box");
+    assertEquals(p, 6);
+  }
+
+  @Test
+  public void testXMLAllArgTypes() {
+    String test_string =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "<name>length</name>"
+            + "</positional>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<name>width</name>"
+            + "<description>the width of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<description>the height of the volume</description>"
+            + "<name>height</name>"
+            + "<type>float</type>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<description>the type of volume</description>"
+            + "<shortname>t</shortname>"
+            + "<type>string</type>"
+            + "<name>type</name>"
+            + "<default>"
+            + "<value>box</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>box</restriction>"
+            + "<restriction>pyramid</restriction>"
+            + "<restriction>ellipsoid</restriction>"
+            + "</restrictions>"
+            + "</named>"
+            + "<named>"
+            + "<default>"
+            + "<value>4</value>"
+            + "</default>"
+            + "<type>integer</type>"
+            + "<description>the maximum number of decimal places for the volume</description>"
+            + "<name>precision</name>"
+            + "<shortname>p</shortname>"
+            + "</named>"
+            + "</namedArgs>"
+            + "</arguments>";
+    String[] arguments = {"4.56", "6.0", "3.12", "--type", "box", "--precision", "6"};
+    ArgumentParser a = XMLparser.parseXML(test_string);
+
+    a.parse(arguments);
+
+    float length = a.getValue("length");
+    float width = a.getValue("width");
+    float height = a.getValue("height");
+    String type = a.getValue("type");
+    int p = a.getValue("p");
+    assertEquals(length, 4.56, 0.1);
+    assertEquals(width, 6.0, 0.1);
+    assertEquals(height, 3.12, 0.1);
     assertEquals(type, "box");
     assertEquals(p, 6);
   }
