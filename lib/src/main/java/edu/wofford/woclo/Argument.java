@@ -122,4 +122,8 @@ public class Argument {
       return false;
     }
   }
+
+  public String[] getAcceptedValues() {
+    return accepted_values;
+  }
 }
