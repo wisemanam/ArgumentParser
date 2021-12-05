@@ -165,4 +165,38 @@ public class XMLparser {
     }
     return argParse;
   }
+
+  public static String toXML(ArgumentParser argParse) {
+    String xmlString = "";
+
+    List<String> positional_names = argParse.getPositionalNames();
+    List<String> nonpositional_names = argParse.getNonPositionalNames();
+
+    xmlString += positionalsToXML(positional_names, argParse);
+    xmlString += nonpositionalsToXML(nonpositional_names, argParse);
+
+    return xmlString;
+  }
+
+  private static String positionalsToXML(List<String> positional_names, ArgumentParser argParse) {
+    String positionalString = "<positionalArgs>";
+    for (int i = 0; i < positional_names.size(); i++) {
+      positionalString += "<positional>";
+      String name = positional_names.get(i);
+      positionalString += name;
+      Argument arg = argParse.getArgument(name);
+      positionalString += arg.getType();
+      positionalString += arg.getDescription();
+      // if restrictions, add restrictions
+      positionalString += "</positional>";
+    }
+    positionalString += "</positionalArgs>";
+    return positionalString;
+  }
+
+  private static String nonpositionalsToXML(
+      List<String> nonpositional_names, ArgumentParser argParse) {
+    // loop through nonppositionals and add to XML string
+    return "";
+  }
 }

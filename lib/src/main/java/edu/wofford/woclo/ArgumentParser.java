@@ -415,4 +415,12 @@ public class ArgumentParser {
   public int numArgs() {
     return args.size();
   }
+
+  public List<String> getPositionalNames() {
+    return positional_names;
+  }
+
+  public List<String> getNonPositionalNames() {
+    return nonpositional_names;
+  }
 }
