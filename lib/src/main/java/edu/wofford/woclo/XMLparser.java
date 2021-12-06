@@ -152,12 +152,15 @@ public class XMLparser {
         }
 
         // does this named contain accepted values?
-
-        for (int j = 0; j < accepted_value_list2.getLength(); j++) {
-          Node restrict_val = accepted_value_list2.item(j);
-          Element e = (Element) restrict_val;
-          String val = e.getElementsByTagName("restriction").item(0).getTextContent();
-          accepted_values.add(val);
+        if (accepted_value_list2.getLength() > 0) {
+          for (int j = 0; j < accepted_value_list2.item(0).getChildNodes().getLength(); j++) {
+            System.out.println(
+                accepted_value_list2.item(0).getChildNodes().item(j).getTextContent());
+            Node restrict_val = accepted_value_list2.item(0).getChildNodes().item(j);
+            Element e = (Element) restrict_val;
+            String val = e.getElementsByTagName("restriction").item(0).getTextContent();
+            accepted_values.add(val);
+          }
         }
 
         // start putting in addnonpositional
@@ -177,6 +180,7 @@ public class XMLparser {
     return argParse;
   }
 
+  @SuppressWarnings("unchecked")
   public String toXML(ArgumentParser argParse, String xmlpath) {
     List<String> positional_names = argParse.getPositionalNames();
     List<String> nonpositional_names = argParse.getNonPositionalNames();
@@ -292,8 +296,8 @@ public class XMLparser {
       Transformer transformer = transformerFactory.newTransformer();
       DOMSource domSource = new DOMSource(doc);
       StreamResult result = new StreamResult(strWriter);
-      StreamResult streamResult = new StreamResult(new File(xmlpath));
-      transformer.transform(domSource, streamResult);
+      // StreamResult streamResult = new StreamResult(new File(xmlpath));
+      // transformer.transform(domSource, streamResult);
       transformer.transform(domSource, result);
     } catch (ParserConfigurationException e) {
       e.printStackTrace();
