@@ -954,4 +954,27 @@ public class ArgumentParserTest {
     assertEquals(type, "box");
     assertEquals(p, 6);
   }
+
+  @Test
+  public void testWriteXMLJustPositionals() {
+    ArgumentParser argParse = new ArgumentParser();
+    String[] accepted = {"6", "7", "8"};
+    argParse.addPositional("length", "integer", "the length");
+    argParse.addPositional("width", "integer", "the width");
+    argParse.addPositional("height", "integer", "the height", accepted);
+    XMLparser xmlParse = new XMLparser();
+    String xmlresult = xmlParse.toXML(argParse, "Test2.xml");
+  }
+
+  @Test
+  public void testWriteXMLJustNonPositionals() {
+    ArgumentParser argParse = new ArgumentParser();
+    String[] accepted = {"6", "7", "8"};
+    argParse.addNonPositional("length", "integer", "the length", "9");
+    argParse.addNonPositional("width", "w", "integer", "the width", "10");
+    argParse.addNonPositional("height", "integer", "the height", "7", accepted);
+    XMLparser xmlParse = new XMLparser();
+
+    xmlParse.toXML(argParse, "Test3.xml");
+  }
 }

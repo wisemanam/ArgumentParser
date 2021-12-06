@@ -417,10 +417,18 @@ public class ArgumentParser {
   }
 
   public List<String> getPositionalNames() {
-    return positional_names;
+    List<String> cloned = new ArrayList<>();
+    for (int i = 0; i < positional_names.size(); i++) {
+      cloned.add(positional_names.get(i));
+    }
+    return cloned;
   }
 
   public List<String> getNonPositionalNames() {
-    return nonpositional_names;
+    List<String> cloned = new ArrayList<>();
+    for (int i = 0; i < nonpositional_names.size(); i++) {
+      cloned.add(nonpositional_names.get(i));
+    }
+    return cloned;
   }
 }

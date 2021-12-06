@@ -3,17 +3,22 @@ package edu.wofford.woclo;
 import java.io.*;
 import java.util.*;
 import javax.xml.parsers.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
+import org.w3c.dom.*;
+import org.xml.sax.*;
 
 public class XMLparser {
   // will return argumentParser with all the arguments added to it
+  public static ArgumentParser parseXML(File XMLfile) {
+    // convert file to giant string
+    String giantString = "";
+    return parseXML(giantString);
+  }
+
   public static ArgumentParser parseXML(String giantXmlString) {
     ArgumentParser argParse = new ArgumentParser();
     // has args, short_args, positional, nonpositional_names, and short_name_names
@@ -138,8 +143,8 @@ public class XMLparser {
 
         // was default value there?
         if (value_list != null) {
-          // Node restrict_val = accepted_value_list2.item(0);
-          Element e = (Element) node;
+          Node valu = value_list.item(0);
+          Element e = (Element) valu;
           String val = e.getElementsByTagName("value").item(0).getTextContent();
           value = val;
         } else {
@@ -149,8 +154,8 @@ public class XMLparser {
         // does this named contain accepted values?
 
         for (int j = 0; j < accepted_value_list2.getLength(); j++) {
-          // Node restrict_val = accepted_value_list2.item(j);
-          Element e = (Element) node;
+          Node restrict_val = accepted_value_list2.item(j);
+          Element e = (Element) restrict_val;
           String val = e.getElementsByTagName("restriction").item(0).getTextContent();
           accepted_values.add(val);
         }
@@ -172,9 +177,10 @@ public class XMLparser {
     return argParse;
   }
 
-  public static void toXML(ArgumentParser argParse, String xmlpath) {
+  public String toXML(ArgumentParser argParse, String xmlpath) {
     List<String> positional_names = argParse.getPositionalNames();
     List<String> nonpositional_names = argParse.getNonPositionalNames();
+    StringWriter strWriter = new StringWriter();
     try {
       DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
       DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -189,7 +195,7 @@ public class XMLparser {
       root.appendChild(positionalArgs);
 
       // loop through and add positionals
-      for (int i = 0; i < positional_names.size(); i++){
+      for (int i = 0; i < positional_names.size(); i++) {
         Element positional = doc.createElement("positional");
         positionalArgs.appendChild(positional);
 
@@ -217,7 +223,7 @@ public class XMLparser {
           String[] restrict = a.getAcceptedValues();
           Element restrictions = doc.createElement("restrictions");
           for (int r = 0; r < restrict.length; r++) {
-            String res_str = restrict[i];
+            String res_str = restrict[r];
             Element restriction = doc.createElement("restriction");
             restriction.appendChild(doc.createTextNode(res_str));
             restrictions.appendChild(restriction);
@@ -231,7 +237,7 @@ public class XMLparser {
       root.appendChild(namedArgs);
 
       // loop through and add positionals
-      for (int i = 0; i < nonpositional_names.size(); i++){
+      for (int i = 0; i < nonpositional_names.size(); i++) {
         Element named = doc.createElement("named");
         namedArgs.appendChild(named);
 
@@ -259,7 +265,7 @@ public class XMLparser {
           String[] restrict = a.getAcceptedValues();
           Element restrictions = doc.createElement("restrictions");
           for (int r = 0; r < restrict.length; r++) {
-            String res_str = restrict[i];
+            String res_str = restrict[r];
             Element restriction = doc.createElement("restriction");
             restriction.appendChild(doc.createTextNode(res_str));
             restrictions.appendChild(restriction);
@@ -267,13 +273,15 @@ public class XMLparser {
           named.appendChild(restrictions);
         }
 
-        // add short name if has it 
-        OptionalArgument o = (OptionalArgument) a;
-        String short_str = o.getShortName();
-        if (!short_str.equals("")) {
-          Element shortname = doc.createElement("shortname");
-          shortname.appendChild(doc.createTextNode(short_str));
-          named.appendChild(shortname);
+        // add short name if has it
+        if (a instanceof OptionalArgument) {
+          OptionalArgument o = (OptionalArgument) a;
+          String short_str = o.getShortName();
+          if (!short_str.equals("")) {
+            Element shortname = doc.createElement("shortname");
+            shortname.appendChild(doc.createTextNode(short_str));
+            named.appendChild(shortname);
+          }
         }
       }
 
@@ -283,14 +291,15 @@ public class XMLparser {
       TransformerFactory transformerFactory = TransformerFactory.newInstance();
       Transformer transformer = transformerFactory.newTransformer();
       DOMSource domSource = new DOMSource(doc);
+      StreamResult result = new StreamResult(strWriter);
       StreamResult streamResult = new StreamResult(new File(xmlpath));
       transformer.transform(domSource, streamResult);
-
+      transformer.transform(domSource, result);
     } catch (ParserConfigurationException e) {
       e.printStackTrace();
     } catch (TransformerException e) {
       e.printStackTrace();
     }
+    return strWriter.getBuffer().toString();
   }
-
 }

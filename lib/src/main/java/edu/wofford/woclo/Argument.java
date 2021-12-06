@@ -124,6 +124,6 @@ public class Argument {
   }
 
   public String[] getAcceptedValues() {
-    return accepted_values;
+    return accepted_values.clone();
   }
 }
