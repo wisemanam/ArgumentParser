@@ -155,6 +155,7 @@ public class XMLparser {
 
         for (int j = 0; j < accepted_value_list2.getLength(); j++) {
           Node restrict_val = accepted_value_list2.item(j);
+          System.out.println(restrict_val.toString());
           Element e = (Element) restrict_val;
           String val = e.getElementsByTagName("restriction").item(0).getTextContent();
           accepted_values.add(val);
