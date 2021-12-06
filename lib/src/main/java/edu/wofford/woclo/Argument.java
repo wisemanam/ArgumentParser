@@ -109,6 +109,9 @@ public class Argument {
     }
   }
 
+  public String[] getAcceptedValues() {
+    return accepted_values;
+  }
   /**
    * Returns whether or not the given argument is an acceptable value for this argument.
    *
