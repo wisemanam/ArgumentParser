@@ -951,30 +951,34 @@ public class ArgumentParserTest {
     assertEquals(length, 4.56, 0.1);
     assertEquals(width, 6.0, 0.1);
     assertEquals(height, 3.12, 0.1);
+    String[] restricted_args = {"box", "pyramid", "ellipsoid"};
+    Argument t = a.getArgument("type");
+    String[] actual_restricted = t.getAcceptedValues();
+    assertEquals(restricted_args, actual_restricted);
     assertEquals(type, "box");
     assertEquals(p, 6);
   }
 
-  @Test
-  public void testWriteXMLJustPositionals() {
-    ArgumentParser argParse = new ArgumentParser();
-    String[] accepted = {"6", "7", "8"};
-    argParse.addPositional("length", "integer", "the length");
-    argParse.addPositional("width", "integer", "the width");
-    argParse.addPositional("height", "integer", "the height", accepted);
-    XMLparser xmlParse = new XMLparser();
-    String xmlresult = xmlParse.toXML(argParse, "Test2.xml");
-  }
+  // @Test
+  // public void testWriteXMLJustPositionals() {
+  //   ArgumentParser argParse = new ArgumentParser();
+  //   String[] accepted = {"6", "7", "8"};
+  //   argParse.addPositional("length", "integer", "the length");
+  //   argParse.addPositional("width", "integer", "the width");
+  //   argParse.addPositional("height", "integer", "the height", accepted);
+  //   XMLparser xmlParse = new XMLparser();
+  //   String xmlresult = xmlParse.toXML(argParse, "Test2.xml");
+  // }
 
-  @Test
-  public void testWriteXMLJustNonPositionals() {
-    ArgumentParser argParse = new ArgumentParser();
-    String[] accepted = {"6", "7", "8"};
-    argParse.addNonPositional("length", "integer", "the length", "9");
-    argParse.addNonPositional("width", "w", "integer", "the width", "10");
-    argParse.addNonPositional("height", "integer", "the height", "7", accepted);
-    XMLparser xmlParse = new XMLparser();
+  // @Test
+  // public void testWriteXMLJustNonPositionals() {
+  //   ArgumentParser argParse = new ArgumentParser();
+  //   String[] accepted = {"6", "7", "8"};
+  //   argParse.addNonPositional("length", "integer", "the length", "9");
+  //   argParse.addNonPositional("width", "w", "integer", "the width", "10");
+  //   argParse.addNonPositional("height", "integer", "the height", "7", accepted);
+  //   XMLparser xmlParse = new XMLparser();
 
-    xmlParse.toXML(argParse, "Test3.xml");
-  }
+  //   xmlParse.toXML(argParse, "Test3.xml");
+  // }
 }
