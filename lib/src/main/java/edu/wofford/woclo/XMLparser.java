@@ -5,6 +5,12 @@ import java.util.*;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 
 public class XMLparser {
   // will return argumentParser with all the arguments added to it
@@ -166,37 +172,125 @@ public class XMLparser {
     return argParse;
   }
 
-  public static String toXML(ArgumentParser argParse) {
-    String xmlString = "";
-
+  public static void toXML(ArgumentParser argParse, String xmlpath) {
     List<String> positional_names = argParse.getPositionalNames();
     List<String> nonpositional_names = argParse.getNonPositionalNames();
+    try {
+      DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
+      DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
+      Document doc = documentBuilder.newDocument();
 
-    xmlString += positionalsToXML(positional_names, argParse);
-    xmlString += nonpositionalsToXML(nonpositional_names, argParse);
+      // root element (arguments)
+      Element root = doc.createElement("arguments");
+      doc.appendChild(root);
 
-    return xmlString;
-  }
+      // add positionalArgs element
+      Element positionalArgs = doc.createElement("positionalArgs");
+      root.appendChild(positionalArgs);
 
-  private static String positionalsToXML(List<String> positional_names, ArgumentParser argParse) {
-    String positionalString = "<positionalArgs>";
-    for (int i = 0; i < positional_names.size(); i++) {
-      positionalString += "<positional>";
-      String name = positional_names.get(i);
-      positionalString += name;
-      Argument arg = argParse.getArgument(name);
-      positionalString += arg.getType();
-      positionalString += arg.getDescription();
-      // if restrictions, add restrictions
-      positionalString += "</positional>";
+      // loop through and add positionals
+      for (int i = 0; i < positional_names.size(); i++){
+        Element positional = doc.createElement("positional");
+        positionalArgs.appendChild(positional);
+
+        // add name
+        String name_str = positional_names.get(i);
+        Argument a = argParse.getArgument(name_str);
+        Element name = doc.createElement("name");
+        name.appendChild(doc.createTextNode(name_str));
+        positional.appendChild(name);
+
+        // add type
+        String type_str = a.getType();
+        Element type = doc.createElement("type");
+        type.appendChild(doc.createTextNode(type_str));
+        positional.appendChild(type);
+
+        // add description
+        String desc_str = a.getDescription();
+        Element description = doc.createElement("description");
+        description.appendChild(doc.createTextNode(desc_str));
+        positional.appendChild(description);
+
+        // add restriction if they have it
+        if (a.hasAcceptedValues()) {
+          String[] restrict = a.getAcceptedValues();
+          Element restrictions = doc.createElement("restrictions");
+          for (int r = 0; r < restrict.length; r++) {
+            String res_str = restrict[i];
+            Element restriction = doc.createElement("restriction");
+            restriction.appendChild(doc.createTextNode(res_str));
+            restrictions.appendChild(restriction);
+          }
+          positional.appendChild(restrictions);
+        }
+      }
+
+      // add namedArgs element
+      Element namedArgs = doc.createElement("namedArgs");
+      root.appendChild(namedArgs);
+
+      // loop through and add positionals
+      for (int i = 0; i < nonpositional_names.size(); i++){
+        Element named = doc.createElement("named");
+        namedArgs.appendChild(named);
+
+        // add name
+        String name_str = positional_names.get(i);
+        Argument a = argParse.getArgument(name_str);
+        Element name = doc.createElement("name");
+        name.appendChild(doc.createTextNode(name_str));
+        named.appendChild(name);
+
+        // add type
+        String type_str = a.getType();
+        Element type = doc.createElement("type");
+        type.appendChild(doc.createTextNode(type_str));
+        named.appendChild(type);
+
+        // add description
+        String desc_str = a.getDescription();
+        Element description = doc.createElement("description");
+        description.appendChild(doc.createTextNode(desc_str));
+        named.appendChild(description);
+
+        // add restriction if has it
+        if (a.hasAcceptedValues()) {
+          String[] restrict = a.getAcceptedValues();
+          Element restrictions = doc.createElement("restrictions");
+          for (int r = 0; r < restrict.length; r++) {
+            String res_str = restrict[i];
+            Element restriction = doc.createElement("restriction");
+            restriction.appendChild(doc.createTextNode(res_str));
+            restrictions.appendChild(restriction);
+          }
+          named.appendChild(restrictions);
+        }
+
+        // add short name if has it 
+        OptionalArgument o = (OptionalArgument) a;
+        String short_str = o.getShortName();
+        if (!short_str.equals("")) {
+          Element shortname = doc.createElement("shortname");
+          shortname.appendChild(doc.createTextNode(short_str));
+          named.appendChild(shortname);
+        }
+      }
+
+      // create XML file
+      // transform DOM object to XML file
+
+      TransformerFactory transformerFactory = TransformerFactory.newInstance();
+      Transformer transformer = transformerFactory.newTransformer();
+      DOMSource domSource = new DOMSource(doc);
+      StreamResult streamResult = new StreamResult(new File(xmlpath));
+      transformer.transform(domSource, streamResult);
+
+    } catch (ParserConfigurationException e) {
+      e.printStackTrace();
+    } catch (TransformerException e) {
+      e.printStackTrace();
     }
-    positionalString += "</positionalArgs>";
-    return positionalString;
   }
 
-  private static String nonpositionalsToXML(
-      List<String> nonpositional_names, ArgumentParser argParse) {
-    // loop through nonppositionals and add to XML string
-    return "";
-  }
 }
