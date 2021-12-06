@@ -16,6 +16,7 @@ public class VolumeCalculator {
       Argument t = parser.getArgument("type");
       String[] t_accepted = t.getAcceptedValues();
       System.out.println(t_accepted);
+
       int precision = parser.getValue("precision");
       Float volume = (float) 0.0;
       if (type.equals("box")) {
