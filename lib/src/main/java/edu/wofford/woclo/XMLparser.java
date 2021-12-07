@@ -83,9 +83,7 @@ public class XMLparser {
           for (int j = 0; j < accepted_value_list.item(0).getChildNodes().getLength(); j++) {
             System.out.println(
                 accepted_value_list.item(0).getChildNodes().item(j).getTextContent());
-            Node restrict_val = accepted_value_list.item(0).getChildNodes().item(j);
-            Element e = (Element) restrict_val;
-            String val = e.getElementsByTagName("restriction").item(0).getTextContent();
+            String val = accepted_value_list.item(0).getChildNodes().item(j).getTextContent();
             accepted_values.add(val);
           }
         }
@@ -181,7 +179,7 @@ public class XMLparser {
   }
 
   @SuppressWarnings("unchecked")
-  public String toXML(ArgumentParser argParse, String xmlpath) {
+  public String toXML(ArgumentParser argParse) {
     List<String> positional_names = argParse.getPositionalNames();
     List<String> nonpositional_names = argParse.getNonPositionalNames();
     StringWriter strWriter = new StringWriter();
