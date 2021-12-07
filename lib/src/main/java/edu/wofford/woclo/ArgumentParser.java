@@ -431,4 +431,6 @@ public class ArgumentParser {
     }
     return cloned;
   }
+
+  public static void main(String[] args) {}
 }

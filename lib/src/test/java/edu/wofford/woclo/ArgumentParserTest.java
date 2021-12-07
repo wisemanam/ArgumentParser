@@ -954,7 +954,9 @@ public class ArgumentParserTest {
     String[] restricted_args = {"box", "pyramid", "ellipsoid"};
     Argument t = a.getArgument("type");
     String[] actual_restricted = t.getAcceptedValues();
-    assertEquals(restricted_args, actual_restricted);
+    assertEquals(restricted_args[0], actual_restricted[0]);
+    assertEquals(restricted_args[1], actual_restricted[1]);
+    assertEquals(restricted_args[2], actual_restricted[2]);
     assertEquals(type, "box");
     assertEquals(p, 6);
   }

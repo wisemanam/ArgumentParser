@@ -79,10 +79,12 @@ public class XMLparser {
 
         // does this positional contain accepted values?
 
-        for (int j = 0; j < accepted_value_list.getLength(); j++) {
-          Node restrict_val = accepted_value_list.item(j);
-          if (restrict_val.getNodeType() == Node.ELEMENT_NODE) {
-            Element e = (Element) node;
+        if (accepted_value_list.getLength() > 0) {
+          for (int j = 0; j < accepted_value_list.item(0).getChildNodes().getLength(); j++) {
+            System.out.println(
+                accepted_value_list.item(0).getChildNodes().item(j).getTextContent());
+            Node restrict_val = accepted_value_list.item(0).getChildNodes().item(j);
+            Element e = (Element) restrict_val;
             String val = e.getElementsByTagName("restriction").item(0).getTextContent();
             accepted_values.add(val);
           }
@@ -156,9 +158,7 @@ public class XMLparser {
           for (int j = 0; j < accepted_value_list2.item(0).getChildNodes().getLength(); j++) {
             System.out.println(
                 accepted_value_list2.item(0).getChildNodes().item(j).getTextContent());
-            Node restrict_val = accepted_value_list2.item(0).getChildNodes().item(j);
-            Element e = (Element) restrict_val;
-            String val = e.getElementsByTagName("restriction").item(0).getTextContent();
+            String val = accepted_value_list2.item(0).getChildNodes().item(j).getTextContent();
             accepted_values.add(val);
           }
         }
