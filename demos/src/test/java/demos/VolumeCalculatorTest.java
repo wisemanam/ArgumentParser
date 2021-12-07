@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 public class VolumeCalculatorTest {
   @Test
-  public void testPositionals() {
+  public void testWithGivenType() {
     String xml =
         "<?xml version=\"1.0\"?>"
             + "<arguments>"
@@ -58,4 +58,29 @@ public class VolumeCalculatorTest {
     String result = v.volumeCalculator(xml, args);
     assertEquals("125.664", result);
   }
+  // @Test
+  // public void testPositionals() {
+  //   String xml =
+  //       "<?xml version=\"1.0\"?>"
+  //           + "<arguments>"
+  //           + "<positionalArgs>"
+  //           + "<positional>"
+  //           + "<type>float</type>"
+  //           + "<description>the length of the volume</description>"
+  //           + "<name>length</name>"
+  //           + "</positional>"
+  //           + "<positional>"
+  //           + "<type>float</type>"
+  //           + "<name>width</name>"
+  //           + "<description>the width of the volume</description>"
+  //           + "</positional>"
+  //           + "<positional>"
+  //           + "<description>the height of the volume</description>"
+  //           + "<name>height</name>"
+  //           + "<type>float</type>"
+  //           + "</positional>"
+  //           + "</positionalArgs>"
+  //           + "</arguments>";
+  //   String[] args = {};
+  // }
 }
