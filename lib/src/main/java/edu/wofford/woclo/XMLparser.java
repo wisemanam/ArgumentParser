@@ -81,8 +81,6 @@ public class XMLparser {
 
         if (accepted_value_list.getLength() > 0) {
           for (int j = 0; j < accepted_value_list.item(0).getChildNodes().getLength(); j++) {
-            System.out.println(
-                accepted_value_list.item(0).getChildNodes().item(j).getTextContent());
             String val = accepted_value_list.item(0).getChildNodes().item(j).getTextContent();
             accepted_values.add(val);
           }
@@ -154,8 +152,6 @@ public class XMLparser {
         // does this named contain accepted values?
         if (accepted_value_list2.getLength() > 0) {
           for (int j = 0; j < accepted_value_list2.item(0).getChildNodes().getLength(); j++) {
-            System.out.println(
-                accepted_value_list2.item(0).getChildNodes().item(j).getTextContent());
             String val = accepted_value_list2.item(0).getChildNodes().item(j).getTextContent();
             accepted_values.add(val);
           }
