@@ -13,10 +13,6 @@ public class VolumeCalculator {
       float width = parser.getValue("width");
       float height = parser.getValue("height");
       String type = parser.getValue("type");
-      Argument t = parser.getArgument("type");
-      String[] t_accepted = t.getAcceptedValues();
-      System.out.println(t_accepted);
-
       int precision = parser.getValue("precision");
       Float volume = (float) 0.0;
       if (type.equals("box")) {
@@ -26,13 +22,14 @@ public class VolumeCalculator {
       } else if (type.equals("ellipsoid")) {
         volume = (float) Math.PI * length * width * height * 4 / 3;
       }
-      String decimalFormat = "#";
+      StringBuffer buff = new StringBuffer("#");
       if (precision > 0) {
-        decimalFormat += ".";
+        buff.append(".");
         for (int i = 0; i < precision; i++) {
-          decimalFormat += "#";
+          buff.append("#");
         }
       }
+      String decimalFormat = buff.toString().trim();
       DecimalFormat df = new DecimalFormat(decimalFormat);
       df.setRoundingMode(RoundingMode.CEILING);
       Double d = volume.doubleValue();
