@@ -258,6 +258,30 @@ public class XMLparser {
         description.appendChild(doc.createTextNode(desc_str));
         named.appendChild(description);
 
+        // add default
+        if (type_str.equals("integer")) {
+          String val = Integer.toString(a.getValue());
+          Element def = doc.createElement("default");
+          Element value = doc.createElement("value");
+          value.appendChild(doc.createTextNode(val));
+          def.appendChild(value);
+          named.appendChild(def);
+        } else if (type_str.equals("float")) {
+          String val = Float.toString(a.getValue());
+          Element def = doc.createElement("default");
+          Element value = doc.createElement("value");
+          value.appendChild(doc.createTextNode(val));
+          def.appendChild(value);
+          named.appendChild(def);          
+        } else {
+          String val = a.getValue();
+          Element def = doc.createElement("default");
+          Element value = doc.createElement("value");
+          value.appendChild(doc.createTextNode(val));
+          def.appendChild(value);
+          named.appendChild(def);   
+        }
+
         // add restriction if has it
         if (a.hasAcceptedValues()) {
           String[] restrict = a.getAcceptedValues();
