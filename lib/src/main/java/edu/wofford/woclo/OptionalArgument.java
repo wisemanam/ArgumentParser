@@ -10,6 +10,7 @@ import java.util.*;
 public class OptionalArgument extends Argument {
   private String value;
   private String short_name;
+  private boolean required;
 
   /**
    * The OptionalArgument constructor takes the name of the variable, its type, the description used
@@ -86,6 +87,59 @@ public class OptionalArgument extends Argument {
     short_name = "";
     this.accepted_values = accepted_values.clone();
   }
+
+
+// required, no short name, accepted values
+  public OptionalArgument(
+    String name, String type, String description, String[] accepted_values, boolean required) {
+  super(name, type, description);
+  this.required = required;
+  short_name = "";
+  value = "";
+  this.accepted_values = accepted_values.clone();
+}
+
+// required, short name, accepted values
+public OptionalArgument(
+  String name,
+  String short_name,
+  String type,
+  String description,
+  String[] accepted_values,
+  boolean required) {
+  super(name, type, description);
+  this.required = required;
+  this.short_name = short_name;
+  this.accepted_values = accepted_values.clone();
+  value = "";
+}
+
+// required, short name, no accepted values
+public OptionalArgument(
+  String name,
+  String short_name,
+  String type,
+  String description,
+  boolean required) {
+  super(name, type, description);
+  this.required = required;
+  this.short_name = short_name;
+  value = "";
+}
+
+// required, no short name, no accepted values
+public OptionalArgument(
+  String name,
+  String type,
+  String description,
+  boolean required) {
+  super(name, type, description);
+  this.required = required;
+  short_name = "";
+  value = "";
+}
+
+
   /** setValue sets the value of the Argument to be the value given as a parameter */
   public void setValue(String value) {
     this.value = value;
@@ -122,5 +176,9 @@ public class OptionalArgument extends Argument {
    */
   public String getShortName() {
     return short_name;
+  }
+
+  public boolean isRequired() {
+    return required;
   }
 }

@@ -16,6 +16,7 @@ public class ArgumentParser {
   private List<String> positional_names;
   private List<String> nonpositional_names;
   private List<String> short_name_names;
+  private List<String> required_names;
 
   /**
    * ArgumentParser parses the arguments for the user to retreive. If there are fewer or more
@@ -28,6 +29,7 @@ public class ArgumentParser {
     positional_names = new ArrayList<String>();
     nonpositional_names = new ArrayList<String>();
     short_name_names = new ArrayList<String>();
+    required_names = new ArrayList<String>();
   }
 
   /**
@@ -142,6 +144,235 @@ public class ArgumentParser {
     short_args.put(short_name, name);
   }
 
+  public void addNonPositional(String name, String type, String description, boolean required) {
+    Argument arg = new OptionalArgument(name, type, description, required);
+    nonpositional_names.add(name);
+    args.put(name, arg);
+    required_names.add(name);
+  }
+
+  public void addNonPositional(String name, String shortname, String type, String description, boolean required) {
+    Argument arg = new OptionalArgument(name, shortname, type, description, required);
+    nonpositional_names.add(name);
+    short_name_names.add(shortname);
+    args.put(name, arg);
+    short_args.put(shortname, name);
+    required_names.add(name);
+  }
+
+  public void addNonPositional(String name, String type, String description, String[] accepted, boolean required) {
+    Argument arg = new OptionalArgument(name, type, description, accepted, required);
+    nonpositional_names.add(name);
+    args.put(name, arg);
+    required_names.add(name);
+  }
+
+  public void addNonPositional(String name, String shortname, String type, String description, String[] accepted, boolean required) {
+    Argument arg = new OptionalArgument(name, shortname, type, description, accepted, required);
+    nonpositional_names.add(name);
+    short_name_names.add(shortname);
+    args.put(name, arg);
+    short_args.put(shortname, name);
+    required_names.add(name);
+  }
+
+  public void positionalFound(String name, String value) {
+    Argument arg = args.get(name);
+    if (!arg.hasAcceptedValues()) {
+      if (arg.getType().equals("integer")) {
+        try {
+          Integer.parseInt(value);
+          arg.setValue(value);
+        } catch (NumberFormatException e) {
+          throw new WrongTypeException(value, arg.getType());
+        }
+      } else if (arg.getType().equals("float")) {
+        try {
+          Float.parseFloat(value);
+          arg.setValue(value);
+        } catch (NumberFormatException e) {
+          throw new WrongTypeException(value, arg.getType());
+        }
+      } else {
+        arg.setValue(value);
+      }
+    } else {
+      if (arg.getType().equals("integer") && arg.isAcceptedValue(value)) {
+        try {
+          Integer.parseInt(value);
+          arg.setValue(value);
+        } catch (NumberFormatException e) {
+          throw new WrongTypeException(value, arg.getType());
+        }
+      } else if (arg.getType().equals("float") && arg.isAcceptedValue(value)) {
+        try {
+          Float.parseFloat(value);
+          arg.setValue(value);
+        } catch (NumberFormatException e) {
+          throw new WrongTypeException(value, arg.getType());
+        }
+      } else if (!arg.isAcceptedValue(value)) {
+        throw new ValueNotAcceptedException(value, name);
+      } else {
+        arg.setValue(value);
+      }
+    }
+  }
+
+  public int shortnameStackedFound(String name, Queue<String> arguments, int num_required) {
+    Argument arg = args.get(name);
+    if (arg == null) {
+      throw new ArgumentNameNotSpecifiedException(name);
+    } else {
+      OptionalArgument o = (OptionalArgument) arg;
+      if (o.isRequired()) {
+        num_required++;
+      }
+      String type = arg.getType();
+      if (!type.equals("boolean")) {
+        throw new WrongTypeException(name, arg.getType());
+      } else {
+        arg.setValue("true");
+      }
+    }
+    return num_required;
+  }
+
+
+  public int shortnameFound(String name, Queue<String> arguments, int num_required) {
+    Argument arg = args.get(name);
+    if (arg == null) {
+      throw new ArgumentNameNotSpecifiedException(name);
+    } else {
+      OptionalArgument o = (OptionalArgument) arg;
+      if (o.isRequired()) {
+        num_required++;
+      }
+      String type = arg.getType();
+      if (!type.equals("boolean")) {
+        if (arguments.isEmpty()) {
+          throw new NoValueException(name);
+        } else {
+          String value = arguments.poll();
+          if (!arg.hasAcceptedValues()) {
+            if (arg.getType().equals("integer")) {
+              try {
+                Integer.parseInt(value);
+                arg.setValue(value);
+              } catch (NumberFormatException e) {
+                throw new WrongTypeException(value, arg.getType());
+              }
+            } else if (arg.getType().equals("float")) {
+              try {
+                Float.parseFloat(value);
+                arg.setValue(value);
+              } catch (NumberFormatException e) {
+                throw new WrongTypeException(value, arg.getType());
+              }
+            } else {
+              arg.setValue(value);
+            }
+          } else {
+            if (arg.getType().equals("integer") && arg.isAcceptedValue(value)) {
+              try {
+                Integer.parseInt(value);
+                arg.setValue(value);
+              } catch (NumberFormatException e) {
+                throw new WrongTypeException(value, arg.getType());
+              }
+            } else if (arg.getType().equals("float") && arg.isAcceptedValue(value)) {
+              try {
+                Float.parseFloat(value);
+                arg.setValue(value);
+              } catch (NumberFormatException e) {
+                throw new WrongTypeException(value, arg.getType());
+              }
+            } else if (!arg.isAcceptedValue(value)) {
+              throw new ValueNotAcceptedException(value, name);
+            } else {
+              arg.setValue(value);
+            }
+          }
+        }
+      } else {
+        arg.setValue("true");
+      }
+    }
+    return num_required;
+  }
+
+  public int nonpositionalFound(String name, Queue<String> arguments, int num_required) {
+    Argument arg = args.get(name);
+    if (arg == null) {
+      throw new ArgumentNameNotSpecifiedException(name);
+    } else {
+      OptionalArgument o = (OptionalArgument) arg;
+      if (o.isRequired()) {
+        num_required++;
+      }
+      // the argument exists, so get the type
+      String type = arg.getType();
+      // if the queue is empty after this, then the argument has to be a boolean value
+      if (arguments.isEmpty()) {
+        // if it isnt, throw that there isn't a value
+        if (!type.equals("boolean")) {
+          throw new NoValueException(name);
+          // if there is, the set the value to true
+        } else {
+          arg.setValue("true");
+        }
+
+        // the queue isn't empty
+      } else {
+        if (type.equals("boolean")) {
+          arg.setValue("true");
+        } else {
+          String value = arguments.poll();
+          if (!arg.hasAcceptedValues()) {
+            if (arg.getType().equals("integer")) {
+              try {
+                Integer.parseInt(value);
+                arg.setValue(value);
+              } catch (NumberFormatException e) {
+                throw new WrongTypeException(value, arg.getType());
+              }
+            } else if (arg.getType().equals("float")) {
+              try {
+                Float.parseFloat(value);
+                arg.setValue(value);
+              } catch (NumberFormatException e) {
+                throw new WrongTypeException(value, arg.getType());
+              }
+            } else {
+              arg.setValue(value);
+            }
+          } else {
+            if (arg.getType().equals("integer") && arg.isAcceptedValue(value)) {
+              try {
+                Integer.parseInt(value);
+                arg.setValue(value);
+              } catch (NumberFormatException e) {
+                throw new WrongTypeException(value, arg.getType());
+              }
+            } else if (arg.getType().equals("float") && arg.isAcceptedValue(value)) {
+              try {
+                Float.parseFloat(value);
+                arg.setValue(value);
+              } catch (NumberFormatException e) {
+                throw new WrongTypeException(value, arg.getType());
+              }
+            } else if (arg.getType().equals("string") && arg.isAcceptedValue(value)) {
+              arg.setValue(value);
+            } else {
+              throw new ValueNotAcceptedException(value, name);
+            }
+          }
+        }
+      }
+    }
+    return num_required;
+  }
+
   /**
    * The parse method takes the arguments given on the command line and sorts them into the expected
    * arguments that are defined using addPositional and addNonPositional
@@ -150,223 +381,62 @@ public class ArgumentParser {
    */
   public void parse(String[] arguments) {
     int expected_positional = positional_names.size();
-    // check_digits is used to double check and make sure we don't have
-    // a negative number that is meant to be a value rather than an argument name
+    int expected_required = required_names.size();
     String[] check_digits = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."};
-    // check and see if we need to throw the help exception
+
     if (Arrays.asList(arguments).contains("--help") || Arrays.asList(arguments).contains("-h")) {
       throw new HelpException("Help needed.");
     }
-    // put all of the arguments into a queue
+
     Queue<String> box_of_garbage = new LinkedList<String>();
     for (int i = 0; i < arguments.length; i++) {
       box_of_garbage.add(arguments[i]);
     }
     // start the current positional at index 0
     int current_positional_name_index = 0;
-    // while there is still stuff in the queue
-    // meaning we have not gotten through everything given on the command line
+    // set number of required arguments we have encounterd to 0
+    int num_required = 0;
+
     while (!box_of_garbage.isEmpty()) {
+
       // LONG NAME ARGUMENTS
       // create a long_name_arg_parser
       // add check mutally exclusive and required specification
       if (box_of_garbage.peek().startsWith("--")) {
         String name = box_of_garbage.poll().substring(2);
-        Argument a = args.get(name);
-        // if we don't know what that name is, throw name not specified exception
-        if (a == null) {
-          throw new ArgumentNameNotSpecifiedException(name);
-        } else {
-          // the argument exists, so get the type
-          String type = a.getType();
-          // if the queue is empty after this, then the argument has to be a boolean value
-          if (box_of_garbage.isEmpty()) {
-            // if it isnt, throw that there isn't a value
-            if (!type.equals("boolean")) {
-              throw new NoValueException(name);
-              // if there is, the set the value to true
-            } else {
-              a.setValue("true");
-            }
+        num_required = nonpositionalFound(name, box_of_garbage, num_required);
 
-            // the queue isn't empty
-          } else {
-            if (type.equals("boolean")) {
-              a.setValue("true");
-            } else {
-              String value = box_of_garbage.poll();
-              if (!a.hasAcceptedValues()) {
-                if (a.getType().equals("integer")) {
-                  try {
-                    Integer.parseInt(value);
-                    a.setValue(value);
-                  } catch (NumberFormatException e) {
-                    throw new WrongTypeException(value, a.getType());
-                  }
-                } else if (a.getType().equals("float")) {
-                  try {
-                    Float.parseFloat(value);
-                    a.setValue(value);
-                  } catch (NumberFormatException e) {
-                    throw new WrongTypeException(value, a.getType());
-                  }
-                } else {
-                  a.setValue(value);
-                }
-              } else {
-                if (a.getType().equals("integer") && a.isAcceptedValue(value)) {
-                  try {
-                    Integer.parseInt(value);
-                    a.setValue(value);
-                  } catch (NumberFormatException e) {
-                    throw new WrongTypeException(value, a.getType());
-                  }
-                } else if (a.getType().equals("float") && a.isAcceptedValue(value)) {
-                  try {
-                    Float.parseFloat(value);
-                    a.setValue(value);
-                  } catch (NumberFormatException e) {
-                    throw new WrongTypeException(value, a.getType());
-                  }
-                } else if (a.getType().equals("string") && a.isAcceptedValue(value)) {
-                  a.setValue(value);
-                } else {
-                  throw new ValueNotAcceptedException(value, name);
-                }
-              }
-            }
-          }
-        }
-        // SHORT NAME ARGUMENTS
-        // create a stack_name_arg_parser
-        // add check mutally exclusive and required specification
+
+      // SHORT NAME ARGUMENTS
+      // create a stack_name_arg_parser
+      // add check mutally exclusive and required specification
       } else if (box_of_garbage.peek().startsWith("-")
           && !Arrays.asList(check_digits)
               .contains(Character.toString(box_of_garbage.peek().charAt(1)))) {
         String short_name_argument = box_of_garbage.poll();
-        // if the short name is stacked
+  
         if (short_name_argument.length() > 2) {
+          // if the short name is stacked
           for (int i = 1; i < short_name_argument.length(); i++) {
-            String name = Character.toString(short_name_argument.charAt(i));
-            String long_name = short_args.get(name);
-            Argument a = args.get(long_name);
-            if (a == null) {
-              throw new ArgumentNameNotSpecifiedException(name);
-            } else {
-              String type = a.getType();
-              if (!type.equals("boolean")) {
-                throw new WrongTypeException(name, a.getType());
-              } else {
-                a.setValue("true");
-              }
-            }
+            String short_name = Character.toString(short_name_argument.charAt(i));
+            String name = short_args.get(short_name);
+            num_required = shortnameStackedFound(name, box_of_garbage, num_required);
           }
+
         } else {
           // if short args are not stacked
-          String name = Character.toString(short_name_argument.charAt(1));
-          String long_name = short_args.get(name);
-          // create a short_name_arg_parser
-          Argument a = args.get(long_name);
-          if (a == null) {
-            throw new ArgumentNameNotSpecifiedException(name);
-          } else {
-            String type = a.getType();
-            if (!type.equals("boolean")) {
-              if (box_of_garbage.isEmpty()) {
-                throw new NoValueException(name);
-              } else {
-                String value = box_of_garbage.poll();
-                if (!a.hasAcceptedValues()) {
-                  if (a.getType().equals("integer")) {
-                    try {
-                      Integer.parseInt(value);
-                      a.setValue(value);
-                    } catch (NumberFormatException e) {
-                      throw new WrongTypeException(value, a.getType());
-                    }
-                  } else if (a.getType().equals("float")) {
-                    try {
-                      Float.parseFloat(value);
-                      a.setValue(value);
-                    } catch (NumberFormatException e) {
-                      throw new WrongTypeException(value, a.getType());
-                    }
-                  } else {
-                    a.setValue(value);
-                  }
-                } else {
-                  if (a.getType().equals("integer") && a.isAcceptedValue(value)) {
-                    try {
-                      Integer.parseInt(value);
-                      a.setValue(value);
-                    } catch (NumberFormatException e) {
-                      throw new WrongTypeException(value, a.getType());
-                    }
-                  } else if (a.getType().equals("float") && a.isAcceptedValue(value)) {
-                    try {
-                      Float.parseFloat(value);
-                      a.setValue(value);
-                    } catch (NumberFormatException e) {
-                      throw new WrongTypeException(value, a.getType());
-                    }
-                  } else if (!a.isAcceptedValue(value)) {
-                    throw new ValueNotAcceptedException(value, long_name);
-                  } else {
-                    a.setValue(value);
-                  }
-                }
-              }
-            } else {
-              a.setValue("true");
-            }
-          }
+          String short_name = Character.toString(short_name_argument.charAt(1));
+          String name = short_args.get(short_name);
+          num_required = shortnameFound(name, box_of_garbage, num_required);
         }
-        // POSITIONAL ARGUMENTS
-        // create a positional_argument_parser
+
+
+      // POSITIONAL ARGUMENTS
       } else {
         String value = box_of_garbage.poll();
         try {
           String name = positional_names.get(current_positional_name_index);
-          Argument a = args.get(name);
-          if (!a.hasAcceptedValues()) {
-            if (a.getType().equals("integer")) {
-              try {
-                Integer.parseInt(value);
-                a.setValue(value);
-              } catch (NumberFormatException e) {
-                throw new WrongTypeException(value, a.getType());
-              }
-            } else if (a.getType().equals("float")) {
-              try {
-                Float.parseFloat(value);
-                a.setValue(value);
-              } catch (NumberFormatException e) {
-                throw new WrongTypeException(value, a.getType());
-              }
-            } else {
-              a.setValue(value);
-            }
-          } else {
-            if (a.getType().equals("integer") && a.isAcceptedValue(value)) {
-              try {
-                Integer.parseInt(value);
-                a.setValue(value);
-              } catch (NumberFormatException e) {
-                throw new WrongTypeException(value, a.getType());
-              }
-            } else if (a.getType().equals("float") && a.isAcceptedValue(value)) {
-              try {
-                Float.parseFloat(value);
-                a.setValue(value);
-              } catch (NumberFormatException e) {
-                throw new WrongTypeException(value, a.getType());
-              }
-            } else if (!a.isAcceptedValue(value)) {
-              throw new ValueNotAcceptedException(value, name);
-            } else {
-              a.setValue(value);
-            }
-          }
+          positionalFound(name, value);
           current_positional_name_index++;
         } catch (IndexOutOfBoundsException e) {
           throw new TooManyException(value);
@@ -375,6 +445,9 @@ public class ArgumentParser {
     }
     if (expected_positional > current_positional_name_index) {
       throw new TooFewException(current_positional_name_index, positional_names);
+    }
+    if (expected_required > num_required) {
+      throw new RequiredArgumentMissingException("Required argument missing");
     }
   }
 
