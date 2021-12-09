@@ -2,10 +2,8 @@ package demos;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Test;
-
 public class VolumeCalculatorTest {
-  @Test
+  // @Test
   public void testWithGivenType() {
     String xml =
         "<?xml version=\"1.0\"?>"

@@ -518,7 +518,7 @@ public class ArgumentParserTest {
               argParse.addNonPositional("arg2", "b", "boolean", "arg", "false");
               argParse.parse(arguments);
             });
-    assertEquals(e.getWrongValue(), "a");
+    assertEquals(e.getWrongValue(), "arg1");
   }
 
   @Test
@@ -548,7 +548,7 @@ public class ArgumentParserTest {
               argParse.addNonPositional("arg2", "b", "integer", "arg", "6");
               argParse.parse(arguments);
             });
-    assertEquals(e.getNameMissingValue(), "b");
+    assertEquals(e.getNameMissingValue(), "arg2");
   }
 
   @Test
@@ -804,7 +804,7 @@ public class ArgumentParserTest {
         assertThrows(
             ValueNotAcceptedException.class,
             () -> {
-              String[] arguments = {"--shape", "triangle"};
+              String[] arguments = {"triangle"};
               String[] accepted = {"square", "circle"};
               ArgumentParser argParse = new ArgumentParser();
               argParse.addPositional("shape", "string", "shape", accepted);

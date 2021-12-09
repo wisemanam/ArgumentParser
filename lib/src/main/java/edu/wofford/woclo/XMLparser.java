@@ -58,20 +58,20 @@ public class XMLparser {
         String description = "";
         ArrayList<String> accepted_values = new ArrayList<String>();
         // was name there?
-        if (name_list != null) {
+        if (name_list.item(0) != null) {
           name = name_list.item(0).getTextContent();
         } else {
           throw new MissingFromXMLException("name");
         }
         // was type there?
-        if (type_list != null) {
+        if (type_list.item(0) != null) {
           type = type_list.item(0).getTextContent();
         } else {
           throw new MissingFromXMLException("type");
         }
 
         // was description there?
-        if (description_list != null) {
+        if (description_list.item(0) != null) {
           description = description_list.item(0).getTextContent();
         } else {
           throw new MissingFromXMLException("description");
@@ -117,30 +117,33 @@ public class XMLparser {
         String short_name = "";
         ArrayList<String> accepted_values = new ArrayList<String>();
         // was name there?
-        if (name_list != null) {
+        if (name_list.item(0) != null) {
           name = name_list.item(0).getTextContent();
         } else {
           throw new MissingFromXMLException("name");
         }
 
         // was type there?
-        if (type_list != null) {
+        if (type_list.item(0) != null) {
           type = type_list.item(0).getTextContent();
         } else {
           throw new MissingFromXMLException("type");
         }
 
         // was description there?
-        if (description_list != null) {
+        if (description_list.item(0) != null) {
           description = description_list.item(0).getTextContent();
         } else {
           throw new MissingFromXMLException("description");
         }
 
-        short_name = short_name_list.item(0).getTextContent();
+        if (short_name_list.item(0) != null) {
+          short_name = short_name_list.item(0).getTextContent();
+        }
 
         // was default value there?
-        if (value_list != null) {
+        System.out.println(value_list.getLength());
+        if (value_list.getLength() != 0) {
           Node valu = value_list.item(0);
           Element e = (Element) valu;
           String val = e.getElementsByTagName("value").item(0).getTextContent();
@@ -272,14 +275,14 @@ public class XMLparser {
           Element value = doc.createElement("value");
           value.appendChild(doc.createTextNode(val));
           def.appendChild(value);
-          named.appendChild(def);          
+          named.appendChild(def);
         } else {
           String val = a.getValue();
           Element def = doc.createElement("default");
           Element value = doc.createElement("value");
           value.appendChild(doc.createTextNode(val));
           def.appendChild(value);
-          named.appendChild(def);   
+          named.appendChild(def);
         }
 
         // add restriction if has it

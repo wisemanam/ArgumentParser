@@ -1,13 +1,13 @@
 package edu.wofford.woclo;
 
-public class RequiredArgumentMissingException extends RuntimeException{
-    private String message;
+public class RequiredArgumentMissingException extends RuntimeException {
+  private String message;
 
-    public RequiredArgumentMissingException(String message) {
-        this.message = message;
-    }
+  public RequiredArgumentMissingException(String message) {
+    this.message = message;
+  }
 
-    public String message() {
-        return message;
-    }
+  public String message() {
+    return message;
+  }
 }

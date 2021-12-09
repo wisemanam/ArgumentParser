@@ -151,7 +151,8 @@ public class ArgumentParser {
     required_names.add(name);
   }
 
-  public void addNonPositional(String name, String shortname, String type, String description, boolean required) {
+  public void addNonPositional(
+      String name, String shortname, String type, String description, boolean required) {
     Argument arg = new OptionalArgument(name, shortname, type, description, required);
     nonpositional_names.add(name);
     short_name_names.add(shortname);
@@ -160,14 +161,21 @@ public class ArgumentParser {
     required_names.add(name);
   }
 
-  public void addNonPositional(String name, String type, String description, String[] accepted, boolean required) {
+  public void addNonPositional(
+      String name, String type, String description, String[] accepted, boolean required) {
     Argument arg = new OptionalArgument(name, type, description, accepted, required);
     nonpositional_names.add(name);
     args.put(name, arg);
     required_names.add(name);
   }
 
-  public void addNonPositional(String name, String shortname, String type, String description, String[] accepted, boolean required) {
+  public void addNonPositional(
+      String name,
+      String shortname,
+      String type,
+      String description,
+      String[] accepted,
+      boolean required) {
     Argument arg = new OptionalArgument(name, shortname, type, description, accepted, required);
     nonpositional_names.add(name);
     short_name_names.add(shortname);
@@ -219,10 +227,11 @@ public class ArgumentParser {
     }
   }
 
-  public int shortnameStackedFound(String name, Queue<String> arguments, int num_required) {
+  public int shortnameStackedFound(String short_name, Queue<String> arguments, int num_required) {
+    String name = short_args.get(short_name);
     Argument arg = args.get(name);
     if (arg == null) {
-      throw new ArgumentNameNotSpecifiedException(name);
+      throw new ArgumentNameNotSpecifiedException(short_name);
     } else {
       OptionalArgument o = (OptionalArgument) arg;
       if (o.isRequired()) {
@@ -238,11 +247,11 @@ public class ArgumentParser {
     return num_required;
   }
 
-
-  public int shortnameFound(String name, Queue<String> arguments, int num_required) {
+  public int shortnameFound(String short_name, Queue<String> arguments, int num_required) {
+    String name = short_args.get(short_name);
     Argument arg = args.get(name);
     if (arg == null) {
-      throw new ArgumentNameNotSpecifiedException(name);
+      throw new ArgumentNameNotSpecifiedException(short_name);
     } else {
       OptionalArgument o = (OptionalArgument) arg;
       if (o.isRequired()) {
@@ -406,32 +415,28 @@ public class ArgumentParser {
         String name = box_of_garbage.poll().substring(2);
         num_required = nonpositionalFound(name, box_of_garbage, num_required);
 
-
-      // SHORT NAME ARGUMENTS
-      // create a stack_name_arg_parser
-      // add check mutally exclusive and required specification
+        // SHORT NAME ARGUMENTS
+        // create a stack_name_arg_parser
+        // add check mutally exclusive and required specification
       } else if (box_of_garbage.peek().startsWith("-")
           && !Arrays.asList(check_digits)
               .contains(Character.toString(box_of_garbage.peek().charAt(1)))) {
         String short_name_argument = box_of_garbage.poll();
-  
+
         if (short_name_argument.length() > 2) {
           // if the short name is stacked
           for (int i = 1; i < short_name_argument.length(); i++) {
             String short_name = Character.toString(short_name_argument.charAt(i));
-            String name = short_args.get(short_name);
-            num_required = shortnameStackedFound(name, box_of_garbage, num_required);
+            num_required = shortnameStackedFound(short_name, box_of_garbage, num_required);
           }
 
         } else {
           // if short args are not stacked
           String short_name = Character.toString(short_name_argument.charAt(1));
-          String name = short_args.get(short_name);
-          num_required = shortnameFound(name, box_of_garbage, num_required);
+          num_required = shortnameFound(short_name, box_of_garbage, num_required);
         }
 
-
-      // POSITIONAL ARGUMENTS
+        // POSITIONAL ARGUMENTS
       } else {
         String value = box_of_garbage.poll();
         try {

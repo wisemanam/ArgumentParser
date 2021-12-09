@@ -33,6 +33,8 @@ public class VolumeCalculator {
       return "VolumeCalculator error: the value " + e.getFirstExtra() + " matches no argument";
     } catch (TooFewException e) {
       return "VolumeCalculator error: the argument " + e.getNextExpectedName() + " is required";
+    } catch (MissingFromXMLException e) {
+      return "VolumeCalculator error: invalid XML";
     }
   }
 
