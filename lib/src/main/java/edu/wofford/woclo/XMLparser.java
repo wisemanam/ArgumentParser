@@ -110,6 +110,8 @@ public class XMLparser {
             element.getElementsByTagName("restrictions"); // restrictions
         NodeList short_name_list = element.getElementsByTagName("shortname");
         NodeList value_list = element.getElementsByTagName("default");
+        System.out.println(name_list.item(0));
+        System.out.println(value_list);
         String name = "";
         String type = "";
         String description = "";
