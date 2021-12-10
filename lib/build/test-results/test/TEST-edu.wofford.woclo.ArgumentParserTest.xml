@@ -1,76 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="edu.wofford.woclo.ArgumentParserTest" tests="60" skipped="0" failures="0" errors="0" timestamp="2021-12-09T23:59:17" hostname="Emilys-Air-4.wofford.int" time="0.617">
+<testsuite name="edu.wofford.woclo.ArgumentParserTest" tests="61" skipped="0" failures="0" errors="0" timestamp="2021-12-10T00:15:41" hostname="Emilys-Air-4.wofford.int" time="0.225">
   <properties/>
-  <testcase name="testWrongTypeExceptionInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.124"/>
-  <testcase name="testPositionalNotAcceptedException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.004"/>
-  <testcase name="testArgumentNameNotSpecifiedException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.004"/>
+  <testcase name="testWrongTypeExceptionInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.055"/>
+  <testcase name="testPositionalNotAcceptedException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
+  <testcase name="testArgumentNameNotSpecifiedException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
   <testcase name="testGetValueWantingAcceptedFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testAcceptedValues()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
-  <testcase name="testGetValueWantingAcceptedInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
-  <testcase name="testShortNamedArguments()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
+  <testcase name="testAcceptedValues()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testGetValueWantingAcceptedInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testShortNamedArguments()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
   <testcase name="testNotStackedAcceptedInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testNotStackedWrongTypeExceptionFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.046"/>
-  <testcase name="testNotStackedNoValueException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.012"/>
-  <testcase name="testNonPositionalFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
-  <testcase name="testWrongTypeExceptionFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.007"/>
-  <testcase name="testXMLAllArgTypes()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.21"/>
+  <testcase name="testNotStackedWrongTypeExceptionFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testNotStackedNoValueException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testNonPositionalFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testWrongTypeExceptionFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testXMLAllArgTypes()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.074"/>
   <testcase name="testNamedArgumentsNotGiven()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testNamedArgsAllGiven()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.008"/>
-  <testcase name="testGivenOtherThanFloatNamed()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.005"/>
-  <testcase name="testHelp()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
-  <testcase name="testLongNameAcceptedValuesIntsException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testGetValueNamedInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.007"/>
+  <testcase name="testRequiredNamed()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testNamedArgsAllGiven()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testGivenOtherThanFloatNamed()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testHelp()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testLongNameAcceptedValuesIntsException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
+  <testcase name="testGetValueNamedInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
   <testcase name="testNotStackedAcceptedString()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testUnacceptedValuesPositional()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.004"/>
-  <testcase name="testGetShortName()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.004"/>
+  <testcase name="testUnacceptedValuesPositional()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testGetShortName()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
   <testcase name="testPositionalAcceptedStrings()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
-  <testcase name="testGetValueOptionalArgumentWrongValueInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.009"/>
-  <testcase name="testNamedArgsAllGivenUnordered()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testNotStackedAcceptedFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
-  <testcase name="testUnacceptedValuesNonPositional()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testGetValueOptionalArgumentWrongValueInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testNamedArgsAllGivenUnordered()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testNotStackedAcceptedFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testRequiredNamedMissing()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testUnacceptedValuesNonPositional()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
   <testcase name="testNotStackedString()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testBooleanFlagsNotLast()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
-  <testcase name="testGetValueWantingInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
-  <testcase name="testArgumentParserTwoArg()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testLongNameAcceptedValuesFloatsException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testBooleanFlagsNotLast()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
+  <testcase name="testGetValueWantingInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testArgumentParserTwoArg()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testLongNameAcceptedValuesFloatsException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
   <testcase name="testGetArgument()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
-  <testcase name="testBooleanFlags()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
-  <testcase name="testNumWordsNotExpected()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.006"/>
-  <testcase name="testNotStackedWrongTypeExceptionAcceptedInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
+  <testcase name="testBooleanFlags()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testNumWordsNotExpected()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
+  <testcase name="testNotStackedWrongTypeExceptionAcceptedInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
   <testcase name="testStackedNotSpecifiedException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testGetValueWantingFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testStackedNoValueException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
-  <testcase name="testNotStackedWrongTypeExceptionAcceptedFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testGetValueWantingFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
+  <testcase name="testStackedNoValueException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testNotStackedWrongTypeExceptionAcceptedFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
   <testcase name="testLongNameAcceptedValuesInts()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
   <testcase name="testWrongTypeExceptionAcceptedInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
   <testcase name="testGetValueOptionalArgumentWrongValueFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
-  <testcase name="testShortNameStacked()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
-  <testcase name="testNotStackedWrongTypeExceptionInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
-  <testcase name="testWrongTypeExceptionExpectInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testXMLJustNonPositionals()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.012"/>
+  <testcase name="testShortNameStacked()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testNotStackedWrongTypeExceptionInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testWrongTypeExceptionExpectInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testXMLJustNonPositionals()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
   <testcase name="testGetValueArgumentWrongValueFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testGetValueOptionalArgumentFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testGetValueOptionalArgumentFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
   <testcase name="testWrongTypeExceptionAcceptedFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
   <testcase name="testNoValueException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
-  <testcase name="testLongNameAcceptedValuesFloats()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testLongNameAcceptedValuesFloats()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
   <testcase name="testArgumentParserNoArg()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testNotStackedNotSpecifiedException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.005"/>
-  <testcase name="testNotStackedFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
-  <testcase name="testNotStackedNotAcceptedException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.003"/>
-  <testcase name="testXmlJustPositionals()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.004"/>
-  <testcase name="testNumArgs()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.001"/>
+  <testcase name="testNotStackedNotSpecifiedException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testNotStackedFloat()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testNotStackedNotAcceptedException()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
+  <testcase name="testXmlJustPositionals()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
+  <testcase name="testNumArgs()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.0"/>
   <testcase name="testGetValueArgumentWrongValueInt()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.002"/>
-  <testcase name="testMissingDefault()" classname="edu.wofford.woclo.ArgumentParserTest" time="0.008"/>
   <system-out><![CDATA[[name: null]
-com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@5963658d
+com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@79b26954
 [name: null]
-com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@6d01ab93
+com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@373c39ea
 [name: null]
-com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@b1f4ff9
+com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@526d2e74
 [name: null]
-com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@46d269e1
-[name: null]
-com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@3aff4578
+com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@68c6cd9b
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
