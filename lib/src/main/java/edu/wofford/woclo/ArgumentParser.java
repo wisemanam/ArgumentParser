@@ -18,7 +18,6 @@ public class ArgumentParser {
   private List<String> short_name_names;
   private List<String> required_names;
   private List<List<String>> mutually_exclusive;
-  private boolean mutual_exclusions;
   private List<String> trashcan;
 
   /**
@@ -34,7 +33,6 @@ public class ArgumentParser {
     short_name_names = new ArrayList<String>();
     required_names = new ArrayList<String>();
     mutually_exclusive = new ArrayList<List<String>>();
-    mutual_exclusions = false;
     trashcan = new ArrayList<String>();
   }
 
@@ -191,8 +189,9 @@ public class ArgumentParser {
   }
 
   public void addMutuallyExclusiveGroup(List<String> mutuallyExclusive) {
-    mutual_exclusions = true;
-    mutually_exclusive.add(mutuallyExclusive);
+    if (mutuallyExclusive.size() > 1) {
+      mutually_exclusive.add(mutuallyExclusive);
+    }
   }
 
   public boolean mutuallyExclusiveError(List<String> mutexc, String[] arguments) {
@@ -440,7 +439,7 @@ public class ArgumentParser {
       throw new HelpException("Help needed.");
     }
 
-    if (mutual_exclusions) {
+    if (mutually_exclusive.size() > 0) {
       for (int i = 0; i < mutually_exclusive.size(); i++) {
         if (mutuallyExclusiveError(mutually_exclusive.get(i), arguments)) {
           throw new MutualExclusionException(mutually_exclusive.get(i));
@@ -503,7 +502,10 @@ public class ArgumentParser {
     if (expected_positional > current_positional_name_index) {
       throw new TooFewException(current_positional_name_index, positional_names);
     }
+    System.out.println("required expected: " + Integer.toString(expected_required));
+    System.out.println("required actual: " + Integer.toString(num_required));
     if (expected_required > num_required) {
+      System.out.println("throwing required exception");
       throw new RequiredArgumentMissingException("Required argument missing");
     }
   }

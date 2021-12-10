@@ -1107,4 +1107,225 @@ public class ArgumentParserTest {
     error.add("shape");
     assertEquals(e.getMutuallyExcList(), error);
   }
+
+  @Test
+  public void testReadMutuallyExclusiveFromXML() {
+    String test =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "<name>length</name>"
+            + "</positional>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<name>width</name>"
+            + "<description>the width of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<description>the height of the volume</description>"
+            + "<name>height</name>"
+            + "<type>float</type>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<description>the type of volume</description>"
+            + "<shortname>t</shortname>"
+            + "<type>string</type>"
+            + "<name>type</name>"
+            + "<default>"
+            + "<value>box</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>box</restriction>"
+            + "<restriction>pyramid</restriction>"
+            + "<restriction>ellipsoid</restriction>"
+            + "</restrictions>"
+            + "</named>"
+            + "<named>"
+            + "<default>"
+            + "<value>4</value>"
+            + "</default>"
+            + "<type>integer</type>"
+            + "<required/>"
+            + "<description>the maximum number of decimal places for the volume</description>"
+            + "<name>precision</name>"
+            + "<shortname>p</shortname>"
+            + "</named>"
+            + "<named>"
+            + "<name>foo</name>"
+            + "<type>boolean</type>"
+            + "<shortname>f</shortname>"
+            + "<default><value>false</value></default>"
+            + "</named>"
+            + "<named>"
+            + "<name>bar</name>"
+            + "<type>boolean</type>"
+            + "<default><value>false</value></default>"
+            + "</named>"
+            + "</namedArgs>"
+            + "<mutuallyExclusive>"
+            + "<group>"
+            + "<name>foo</name>"
+            + "<name>precision</name>"
+            + "</group>"
+            + "</mutuallyExclusive>"
+            + "</arguments>";
+    ArgumentParser a = XMLparser.parseXML(test);
+    String[] arguments = {"2", "--type", "ellipsoid", "5", "-p", "2", "3"};
+    a.parse(arguments);
+    float length = a.getValue("length");
+    float width = a.getValue("width");
+    float height = a.getValue("height");
+    String type = a.getValue("type");
+    int precision = a.getValue("precision");
+    assertEquals(length, 2.0, 0.1);
+    assertEquals(width, 5.0, 0.1);
+    assertEquals(height, 3.0, 0.1);
+    assertEquals(type, "ellipsoid");
+    assertEquals(precision, 2);
+  }
+
+  @Test
+  public void testReadMutuallyExclusiveFromXMLExceptionThrown() {
+    MutualExclusionException e =
+        assertThrows(
+            MutualExclusionException.class,
+            () -> {
+              String test =
+                  "<?xml version=\"1.0\"?>"
+                      + "<arguments>"
+                      + "<positionalArgs>"
+                      + "<positional>"
+                      + "<type>float</type>"
+                      + "<description>the length of the volume</description>"
+                      + "<name>length</name>"
+                      + "</positional>"
+                      + "<positional>"
+                      + "<type>float</type>"
+                      + "<name>width</name>"
+                      + "<description>the width of the volume</description>"
+                      + "</positional>"
+                      + "<positional>"
+                      + "<description>the height of the volume</description>"
+                      + "<name>height</name>"
+                      + "<type>float</type>"
+                      + "</positional>"
+                      + "</positionalArgs>"
+                      + "<namedArgs>"
+                      + "<named>"
+                      + "<description>the type of volume</description>"
+                      + "<shortname>t</shortname>"
+                      + "<type>string</type>"
+                      + "<name>type</name>"
+                      + "<default>"
+                      + "<value>box</value>"
+                      + "</default>"
+                      + "<restrictions>"
+                      + "<restriction>box</restriction>"
+                      + "<restriction>pyramid</restriction>"
+                      + "<restriction>ellipsoid</restriction>"
+                      + "</restrictions>"
+                      + "</named>"
+                      + "<named>"
+                      + "<default>"
+                      + "<value>4</value>"
+                      + "</default>"
+                      + "<type>integer</type>"
+                      + "<required/>"
+                      + "<description>the maximum number of decimal places for the volume</description>"
+                      + "<name>precision</name>"
+                      + "<shortname>p</shortname>"
+                      + "</named>"
+                      + "<named>"
+                      + "<name>foo</name>"
+                      + "<type>boolean</type>"
+                      + "<shortname>f</shortname>"
+                      + "<default><value>false</value></default>"
+                      + "</named>"
+                      + "<named>"
+                      + "<name>bar</name>"
+                      + "<type>boolean</type>"
+                      + "<default><value>false</value></default>"
+                      + "</named>"
+                      + "</namedArgs>"
+                      + "<mutuallyExclusive>"
+                      + "<group>"
+                      + "<name>foo</name>"
+                      + "<name>precision</name>"
+                      + "</group>"
+                      + "</mutuallyExclusive>"
+                      + "</arguments>";
+              ArgumentParser a = XMLparser.parseXML(test);
+              String[] arguments = {"2", "--type", "ellipsoid", "5", "-p", "2", "-f", "3"};
+              a.parse(arguments);
+            });
+    List<String> error = new ArrayList<String>();
+    error.add("foo");
+    error.add("precision");
+    assertEquals(e.getMutuallyExcList(), error);
+  }
+
+  @Test
+  public void testRequiredArgumentsReadXML() {
+    RequiredArgumentMissingException e =
+        assertThrows(
+            RequiredArgumentMissingException.class,
+            () -> {
+              String test =
+                  "<?xml version=\"1.0\"?>"
+                      + "<arguments>"
+                      + "<positionalArgs>"
+                      + "<positional>"
+                      + "<type>float</type>"
+                      + "<description>the length of the volume</description>"
+                      + "<name>length</name>"
+                      + "</positional>"
+                      + "<positional>"
+                      + "<type>float</type>"
+                      + "<name>width</name>"
+                      + "<description>the width of the volume</description>"
+                      + "</positional>"
+                      + "<positional>"
+                      + "<description>the height of the volume</description>"
+                      + "<name>height</name>"
+                      + "<type>float</type>"
+                      + "</positional>"
+                      + "</positionalArgs>"
+                      + "<namedArgs>"
+                      + "<named>"
+                      + "<description>the type of volume</description>"
+                      + "<shortname>t</shortname>"
+                      + "<type>string</type>"
+                      + "<name>type</name>"
+                      + "<default>"
+                      + "<value>box</value>"
+                      + "</default>"
+                      + "<restrictions>"
+                      + "<restriction>box</restriction>"
+                      + "<restriction>pyramid</restriction>"
+                      + "<restriction>ellipsoid</restriction>"
+                      + "</restrictions>"
+                      + "</named>"
+                      + "<named>"
+                      + "<default>"
+                      + "<value>4</value>"
+                      + "</default>"
+                      + "<type>integer</type>"
+                      + "<required/>"
+                      + "<description>the maximum number of decimal places for the volume</description>"
+                      + "<name>precision</name>"
+                      + "<shortname>p</shortname>"
+                      + "</named>"
+                      + "</namedArgs>"
+                      + "</arguments>";
+              String[] arguments = {"2", "--type", "ellipsoid", "5", "3"};
+              ArgumentParser a = new XMLparser().parseXML(test);
+              a.parse(arguments);
+            });
+    assertEquals(e.message(), "Required argument missing.");
+  }
 }

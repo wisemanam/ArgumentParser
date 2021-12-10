@@ -3,11 +3,6 @@ package edu.wofford.woclo;
 import java.io.*;
 import java.util.*;
 import javax.xml.parsers.*;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
@@ -37,6 +32,11 @@ public class XMLparser {
 
       NodeList named_list = doc.getElementsByTagName("named");
       argParse = parseNonpositionals(argParse, named_list);
+
+      NodeList mutually_exclusive_list = doc.getElementsByTagName("mutuallyExclusive");
+      if (mutually_exclusive_list != null) {
+        argParse = parseMutuallyExclusive(argParse, mutually_exclusive_list);
+      }
 
     } catch (ParserConfigurationException | SAXException | IOException e) {
       e.printStackTrace();
@@ -110,11 +110,13 @@ public class XMLparser {
             element.getElementsByTagName("restrictions"); // restrictions
         NodeList short_name_list = element.getElementsByTagName("shortname");
         NodeList value_list = element.getElementsByTagName("default");
+        NodeList required_list = element.getElementsByTagName("required");
         String name = "";
         String type = "";
         String description = "";
         String value = "";
         String short_name = "";
+        boolean required = false;
         ArrayList<String> accepted_values = new ArrayList<String>();
         // was name there?
         if (name_list.item(0) != null) {
@@ -133,21 +135,24 @@ public class XMLparser {
         // was description there?
         if (description_list.item(0) != null) {
           description = description_list.item(0).getTextContent();
-        } else {
-          throw new MissingFromXMLException("description");
         }
 
         if (short_name_list.item(0) != null) {
           short_name = short_name_list.item(0).getTextContent();
         }
 
-        // was default value there?
-        if (value_list.getLength() > 0) {
-          Node valu = value_list.item(0);
-          Element e = (Element) valu;
-          value = e.getElementsByTagName("value").item(0).getTextContent();
+        if (required_list != null) {
+          System.out.print(name + " found required");
+          required = true;
         } else {
-          throw new MissingFromXMLException("default");
+          // was default value there?
+          if (value_list.getLength() > 0) {
+            Node valu = value_list.item(0);
+            Element e = (Element) valu;
+            value = e.getElementsByTagName("value").item(0).getTextContent();
+          } else {
+            throw new MissingFromXMLException("default");
+          }
         }
 
         // does this named contain accepted values?
@@ -167,6 +172,14 @@ public class XMLparser {
           argParse.addNonPositional(name, short_name, type, description, value);
         } else if (!accepted_values.isEmpty() && short_name.equals("")) {
           argParse.addNonPositional(name, type, description, value, accepted);
+        } else if (required && accepted_values.isEmpty() && short_name.equals("")) {
+          argParse.addNonPositional(name, type, description, required);
+        } else if (required && accepted_values.isEmpty() && !short_name.equals("")) {
+          argParse.addNonPositional(name, short_name, type, description, required);
+        } else if (required && !accepted_values.isEmpty() && short_name.equals("")) {
+          argParse.addNonPositional(name, type, description, accepted, required);
+        } else if (required && !accepted_values.isEmpty() && !short_name.equals("")) {
+          argParse.addNonPositional(name, short_name, type, description, accepted, required);
         } else {
           argParse.addNonPositional(name, short_name, type, description, value, accepted);
         }
@@ -175,155 +188,40 @@ public class XMLparser {
     return argParse;
   }
 
-  @SuppressWarnings("unchecked")
-  public String toXML(ArgumentParser argParse) {
-    List<String> positional_names = argParse.getPositionalNames();
-    List<String> nonpositional_names = argParse.getNonPositionalNames();
-    StringWriter strWriter = new StringWriter();
-    try {
-      DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
-      DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
-      Document doc = documentBuilder.newDocument();
-
-      // root element (arguments)
-      Element root = doc.createElement("arguments");
-      doc.appendChild(root);
-
-      // add positionalArgs element
-      Element positionalArgs = doc.createElement("positionalArgs");
-      root.appendChild(positionalArgs);
-
-      // loop through and add positionals
-      for (int i = 0; i < positional_names.size(); i++) {
-        Element positional = doc.createElement("positional");
-        positionalArgs.appendChild(positional);
-
-        // add name
-        String name_str = positional_names.get(i);
-        Argument a = argParse.getArgument(name_str);
-        Element name = doc.createElement("name");
-        name.appendChild(doc.createTextNode(name_str));
-        positional.appendChild(name);
-
-        // add type
-        String type_str = a.getType();
-        Element type = doc.createElement("type");
-        type.appendChild(doc.createTextNode(type_str));
-        positional.appendChild(type);
-
-        // add description
-        String desc_str = a.getDescription();
-        Element description = doc.createElement("description");
-        description.appendChild(doc.createTextNode(desc_str));
-        positional.appendChild(description);
-
-        // add restriction if they have it
-        if (a.hasAcceptedValues()) {
-          String[] restrict = a.getAcceptedValues();
-          Element restrictions = doc.createElement("restrictions");
-          for (int r = 0; r < restrict.length; r++) {
-            String res_str = restrict[r];
-            Element restriction = doc.createElement("restriction");
-            restriction.appendChild(doc.createTextNode(res_str));
-            restrictions.appendChild(restriction);
+  private static ArgumentParser parseMutuallyExclusive(
+      ArgumentParser argParse, NodeList mut_exc_list) {
+    for (int i = 0; i < mut_exc_list.getLength(); i++) {
+      Node node = mut_exc_list.item(i); // another list
+      if (node.getNodeType() == Node.ELEMENT_NODE) {
+        Element element = (Element) node;
+        NodeList group_list = element.getElementsByTagName("group");
+        for (int j = 0; j < group_list.getLength(); j++) {
+          NodeList name_list = group_list.item(j).getChildNodes();
+          List<String> mutually_exclusive = new ArrayList<String>();
+          for (int k = 0; k < name_list.getLength(); k++) {
+            String mut_name = "";
+            if (name_list.item(k) != null) {
+              mut_name = name_list.item(k).getTextContent();
+              mutually_exclusive.add(mut_name);
+            }
           }
-          positional.appendChild(restrictions);
+          argParse.addMutuallyExclusiveGroup(mutually_exclusive);
         }
+
+        // if (name.getNodeType() == Node.ELEMENT_NODE) {
+        //   Element e = (Element) name;
+        //   NodeList names_list = e.getElementsByTagName("name");
+
+        //   if (names_list.item(0) != null) {
+        //     mut_name = names_list.item(0).getTextContent();
+        //     mutually_exclusive.add(mut_name);
+        //   }
+
       }
-
-      // add namedArgs element
-      Element namedArgs = doc.createElement("namedArgs");
-      root.appendChild(namedArgs);
-
-      // loop through and add positionals
-      for (int i = 0; i < nonpositional_names.size(); i++) {
-        Element named = doc.createElement("named");
-        namedArgs.appendChild(named);
-
-        // add name
-        String name_str = positional_names.get(i);
-        Argument a = argParse.getArgument(name_str);
-        Element name = doc.createElement("name");
-        name.appendChild(doc.createTextNode(name_str));
-        named.appendChild(name);
-
-        // add type
-        String type_str = a.getType();
-        Element type = doc.createElement("type");
-        type.appendChild(doc.createTextNode(type_str));
-        named.appendChild(type);
-
-        // add description
-        String desc_str = a.getDescription();
-        Element description = doc.createElement("description");
-        description.appendChild(doc.createTextNode(desc_str));
-        named.appendChild(description);
-
-        // add default
-        if (type_str.equals("integer")) {
-          String val = Integer.toString(a.getValue());
-          Element def = doc.createElement("default");
-          Element value = doc.createElement("value");
-          value.appendChild(doc.createTextNode(val));
-          def.appendChild(value);
-          named.appendChild(def);
-        } else if (type_str.equals("float")) {
-          String val = Float.toString(a.getValue());
-          Element def = doc.createElement("default");
-          Element value = doc.createElement("value");
-          value.appendChild(doc.createTextNode(val));
-          def.appendChild(value);
-          named.appendChild(def);
-        } else {
-          String val = a.getValue();
-          Element def = doc.createElement("default");
-          Element value = doc.createElement("value");
-          value.appendChild(doc.createTextNode(val));
-          def.appendChild(value);
-          named.appendChild(def);
-        }
-
-        // add restriction if has it
-        if (a.hasAcceptedValues()) {
-          String[] restrict = a.getAcceptedValues();
-          Element restrictions = doc.createElement("restrictions");
-          for (int r = 0; r < restrict.length; r++) {
-            String res_str = restrict[r];
-            Element restriction = doc.createElement("restriction");
-            restriction.appendChild(doc.createTextNode(res_str));
-            restrictions.appendChild(restriction);
-          }
-          named.appendChild(restrictions);
-        }
-
-        // add short name if has it
-        if (a instanceof OptionalArgument) {
-          OptionalArgument o = (OptionalArgument) a;
-          String short_str = o.getShortName();
-          if (!short_str.equals("")) {
-            Element shortname = doc.createElement("shortname");
-            shortname.appendChild(doc.createTextNode(short_str));
-            named.appendChild(shortname);
-          }
-        }
-      }
-
-      // create XML file
-      // transform DOM object to XML file
-
-      TransformerFactory transformerFactory = TransformerFactory.newInstance();
-      Transformer transformer = transformerFactory.newTransformer();
-      DOMSource domSource = new DOMSource(doc);
-      StreamResult result = new StreamResult(strWriter);
-      // StreamResult streamResult = new StreamResult(new File(xmlpath));
-      // transformer.transform(domSource, streamResult);
-      transformer.transform(domSource, result);
-    } catch (ParserConfigurationException e) {
-      e.printStackTrace();
-    } catch (TransformerException e) {
-      e.printStackTrace();
     }
-    return strWriter.getBuffer().toString();
+    // }
+    // }
+    return argParse;
   }
 
   public String parserToXML(ArgumentParser argParse) {

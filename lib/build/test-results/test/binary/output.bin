@@ -1,20 +1,70 @@
---shape
-shape
-square
-6
--f
-foo
-numContains = 2
-[name: null]
-Acom.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@70a51b18
-[name: null]
-@com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@5dd4168
---shape
-shape
-square
-6
-numContains = 1
-4[name: null]
-4Acom.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@4b34e925
-4[name: null]
-4Acom.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@22c1b529
+required expected: 0
+required actual: 0
+required expected: 0
+required actual: 0
+required expected: 0
+required actual: 0
+	required expected: 0
+	required actual: 0
+
+required expected: 0
+
+required actual: 0
+required expected: 0
+required actual: 0
+@type found requiredprecision found requiredrequired expected: 1
+required actual: 1
+required expected: 0
+required actual: 0
+required expected: 0
+required actual: 0
+required expected: 1
+required actual: 1
+required expected: 0
+required actual: 0
+required expected: 0
+required actual: 0
+required expected: 0
+required actual: 0
+required expected: 0
+required actual: 0
+required expected: 0
+required actual: 0
+Otype found requiredprecision found requiredfoo found requiredbar found requiredrequired expected: 0
+required actual: 0
+ required expected: 1
+ required actual: 0
+ throwing required exception
+ Hello
+"@type found requiredprecision found requiredrequired expected: 1
+"required actual: 1
+#required expected: 0
+#required actual: 0
+$required expected: 0
+$required actual: 0
+%required expected: 0
+%required actual: 0
+&required expected: 0
+&required actual: 0
+(required expected: 0
+(required actual: 0
+)required expected: 0
+)required actual: 0
+-required expected: 0
+-required actual: 0
+0required expected: 0
+0required actual: 0
+2dtype found requiredprecision found requiredfoo found requiredbar found requiredrequired expected: 1
+2required actual: 1
+4required expected: 0
+4required actual: 0
+7@type found requiredprecision found requiredrequired expected: 1
+7required actual: 1
+<required expected: 0
+<required actual: 0
+?required expected: 0
+?required actual: 0
+Arequired expected: 0
+Arequired actual: 0
+Brequired expected: 0
+Brequired actual: 0

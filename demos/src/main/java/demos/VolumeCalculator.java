@@ -35,6 +35,14 @@ public class VolumeCalculator {
       return "VolumeCalculator error: the argument " + e.getNextExpectedName() + " is required";
     } catch (MissingFromXMLException e) {
       return "VolumeCalculator error: invalid XML";
+    } catch (MutualExclusionException e) {
+      return "VolumeCalculator error: mutual exclusion ["
+          + e.getMutuallyExcList().get(1)
+          + ", "
+          + e.getMutuallyExcList().get(3)
+          + "]";
+    } catch (RequiredArgumentMissingException e) {
+      return "";
     }
   }
 
