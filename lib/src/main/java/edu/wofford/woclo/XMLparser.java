@@ -330,21 +330,25 @@ public class XMLparser {
     String s = "<?xml version=\"1.0\"?><arguments>";
     if (!argParse.getPositionalNames().isEmpty()) {
       s += "<positionalArgs>";
+      StringBuilder sb = new StringBuilder();
       for (int i = 0; i < argParse.getPositionalNames().size(); i++) {
         String name = argParse.getPositionalNames().get(i);
         Argument a = argParse.getArgument(name);
-        s += argumentToXML(a, false);
+        sb.append(argumentToXML(a, false));
       }
+      s += sb.toString();
       s += "</positionalArgs>";
     }
 
     if (!argParse.getNonPositionalNames().isEmpty()) {
       s += "<namedArgs>";
+      StringBuilder sb = new StringBuilder();
       for (int i = 0; i < argParse.getNonPositionalNames().size(); i++) {
         String name = argParse.getNonPositionalNames().get(i);
         Argument a = argParse.getArgument(name);
-        s += argumentToXML(a, true);
+        sb.append(argumentToXML(a, true));
       }
+      s += sb.toString();
       s += "</namedArgs>";
     }
     s += "</arguments>";
@@ -371,9 +375,13 @@ public class XMLparser {
       s += "<default><value>" + optArg.getValue() + "</value></default>";
       if (optArg.hasAcceptedValues()) {
         s += "<restrictions>";
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < optArg.getAcceptedValues().length; i++) {
-          s += "<restriction>" + optArg.getAcceptedValues()[i] + "</restriction>";
+          sb.append("<restriction>");
+          sb.append(optArg.getAcceptedValues()[i]);
+          sb.append("</restriction>");
         }
+        s += sb.toString();
         s += "</restrictions>";
       }
       s += "</named>";
