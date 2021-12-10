@@ -326,6 +326,31 @@ public class XMLparser {
     return strWriter.getBuffer().toString();
   }
 
+  private String parserToXML(ArgumentParser argParse) {
+    String s = "<?xml version=\"1.0\"?><arguments>";
+    if (!argParse.getPositionalNames().isEmpty()) {
+      s += "<positionalArgs>";
+      for (int i = 0; i < argParse.getPositionalNames().size(); i++) {
+        String name = argParse.getPositionalNames().get(i);
+        Argument a = argParse.getArgument(name);
+        s += argumentToXML(a);
+      }
+      s += "</positionalArgs>";
+    }
+
+    if (!argParse.getNonPositionalNames().isEmpty()) {
+      s += "<namedArgs>";
+      for (int i = 0; i < argParse.getNonPositionalNames().size(); i++) {
+        String name = argParse.getNonPositionalNames().get(i);
+        Argument a = argParse.getArgument(name);
+        s += argumentToXML(a);
+      }
+      s += "</namedArgs>";
+    }
+    s += "</arguments>";
+    return s;
+  }
+
   private String argumentToXML(Argument a) {
     String s = "";
     if (a instanceof OptionalArgument) {
