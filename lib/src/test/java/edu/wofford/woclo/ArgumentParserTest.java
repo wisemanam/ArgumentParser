@@ -961,6 +961,34 @@ public class ArgumentParserTest {
     assertEquals(p, 6);
   }
 
+  @Test
+  public void testMissingDefault() {
+    MissingFromXMLException e =
+        assertThrows(
+            MissingFromXMLException.class,
+            () -> {
+              String test =
+                  "<?xml version=\"1.0\"?>"
+                      + "<arguments>"
+                      + "<namedArgs>"
+                      + "<named>"
+                      + "<description>the type of volume</description>"
+                      + "<shortname>t</shortname>"
+                      + "<type>string</type>"
+                      + "<name>type</name>"
+                      + "<restrictions>"
+                      + "<restriction>box</restriction>"
+                      + "<restriction>pyramid</restriction>"
+                      + "<restriction>ellipsoid</restriction>"
+                      + "</restrictions>"
+                      + "</named>"
+                      + "</namedArgs>"
+                      + "</arguments>";
+              ArgumentParser a = XMLparser.parseXML(test);
+            });
+    assertEquals(e.getMissing(), "default");
+  }
+
   // @Test
   // public void testWriteXMLJustPositionals() {
   //   ArgumentParser argParse = new ArgumentParser();

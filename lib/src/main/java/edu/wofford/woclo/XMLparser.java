@@ -144,8 +144,7 @@ public class XMLparser {
         }
 
         // was default value there?
-        System.out.println(value_list.getLength());
-        if (value_list.getLength() != 0) {
+        if (value_list.getLength() > 0) {
           Node valu = value_list.item(0);
           Element e = (Element) valu;
           String val = e.getElementsByTagName("value").item(0).getTextContent();
