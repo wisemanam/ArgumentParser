@@ -17,6 +17,9 @@ public class ArgumentParser {
   private List<String> nonpositional_names;
   private List<String> short_name_names;
   private List<String> required_names;
+  private List<List<String>> mutually_exclusive;
+  private boolean mutual_exclusions;
+  private List<String> trashcan;
 
   /**
    * ArgumentParser parses the arguments for the user to retreive. If there are fewer or more
@@ -30,6 +33,9 @@ public class ArgumentParser {
     nonpositional_names = new ArrayList<String>();
     short_name_names = new ArrayList<String>();
     required_names = new ArrayList<String>();
+    mutually_exclusive = new ArrayList<List<String>>();
+    mutual_exclusions = false;
+    trashcan = new ArrayList<String>();
   }
 
   /**
@@ -182,6 +188,43 @@ public class ArgumentParser {
     args.put(name, arg);
     short_args.put(shortname, name);
     required_names.add(name);
+  }
+
+  public void addMutuallyExclusiveGroup(List<String> mutuallyExclusive) {
+    mutual_exclusions = true;
+    mutually_exclusive.add(mutuallyExclusive);
+  }
+
+  public boolean mutuallyExclusiveError(List<String> mutexc, String[] arguments) {
+    int numContains = 0;
+    String[] check_digits = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."};
+    Queue<String> args = new LinkedList<String>();
+    for (int i = 0; i < arguments.length; i++) {
+      args.add(arguments[i]);
+    }
+    while (!args.isEmpty()) {
+      if (args.peek().startsWith("--")) {
+        String name = args.poll().substring(2);
+        if (mutexc.contains(name)) {
+          numContains++;
+        }
+      } else if (args.peek().startsWith("-")
+          && !Arrays.asList(check_digits).contains(Character.toString(args.peek().charAt(1)))) {
+        String short_name = args.poll().substring(1);
+        String name = short_args.get(short_name);
+        if (mutexc.contains(name)) {
+          numContains++;
+        }
+      } else {
+        String extra = args.poll();
+        trashcan.add(extra);
+      }
+    }
+    if (numContains > 1) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public void positionalFound(String name, String value) {
@@ -397,10 +440,19 @@ public class ArgumentParser {
       throw new HelpException("Help needed.");
     }
 
+    if (mutual_exclusions) {
+      for (int i = 0; i < mutually_exclusive.size(); i++) {
+        if (mutuallyExclusiveError(mutually_exclusive.get(i), arguments)) {
+          throw new MutualExclusionException(mutually_exclusive.get(i));
+        }
+      }
+    }
+
     Queue<String> box_of_garbage = new LinkedList<String>();
     for (int i = 0; i < arguments.length; i++) {
       box_of_garbage.add(arguments[i]);
     }
+
     // start the current positional at index 0
     int current_positional_name_index = 0;
     // set number of required arguments we have encounterd to 0

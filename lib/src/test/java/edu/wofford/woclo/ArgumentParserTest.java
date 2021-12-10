@@ -2,6 +2,7 @@ package edu.wofford.woclo;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
 import org.junit.jupiter.api.*;
 
 public class ArgumentParserTest {
@@ -1064,5 +1065,46 @@ public class ArgumentParserTest {
               argParse.parse(arguments);
             });
     assertEquals(e.message(), "Required argument missing");
+  }
+
+  @Test
+  public void testMutuallyExclusiveValues() {
+    String[] arguments = {"--shape", "square", "6"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("int1", "integer", "int");
+    argParse.addNonPositional("shape", "s", "string", "shape", "triangle");
+    argParse.addNonPositional("foo", "f", "boolean", "mutually exclusive", "false");
+    List<String> mutExc = new ArrayList<String>();
+    mutExc.add("foo");
+    mutExc.add("shape");
+    argParse.addMutuallyExclusiveGroup(mutExc);
+    argParse.parse(arguments);
+    int int1 = argParse.getValue("int1");
+    String shape = argParse.getValue("shape");
+    assertEquals(int1, 6);
+    assertEquals(shape, "square");
+  }
+
+  @Test
+  public void testMutualExclusionError() {
+    MutualExclusionException e =
+        assertThrows(
+            MutualExclusionException.class,
+            () -> {
+              String[] arguments = {"--shape", "square", "6", "-f"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("int1", "integer", "int");
+              argParse.addNonPositional("shape", "s", "string", "shape", true);
+              argParse.addNonPositional("foo", "f", "boolean", "bool", "false");
+              List<String> mutexc = new ArrayList<String>();
+              mutexc.add("foo");
+              mutexc.add("shape");
+              argParse.addMutuallyExclusiveGroup(mutexc);
+              argParse.parse(arguments);
+            });
+    List<String> error = new ArrayList<String>();
+    error.add("foo");
+    error.add("shape");
+    assertEquals(e.getMutuallyExcList(), error);
   }
 }

@@ -1,8 +1,20 @@
-[name: null]
-Acom.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@79b26954
-[name: null]
-Acom.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@373c39ea
-2[name: null]
-2Acom.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@526d2e74
-2[name: null]
-2Acom.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@68c6cd9b
+--shape
+shape
+square
+6
+-f
+foo
+numContains = 2
+[name: null]
+Acom.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@70a51b18
+[name: null]
+@com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@5dd4168
+--shape
+shape
+square
+6
+numContains = 1
+4[name: null]
+4Acom.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@4b34e925
+4[name: null]
+4Acom.sun.org.apache.xerces.internal.dom.DeepNodeListImpl@22c1b529
