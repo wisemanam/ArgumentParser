@@ -355,6 +355,7 @@ public class XMLparser {
     return s;
   }
 
+  @SuppressWarnings("unchecked")
   private String argumentToXML(Argument a, boolean named) {
     String s = "";
     if (named) {
@@ -367,7 +368,7 @@ public class XMLparser {
     s += "<type>" + a.getType() + "</type>";
     s += "<description>" + a.getDescription() + "</description>";
 
-    if (named) {
+    if (a instanceof OptionalArgument) {
       OptionalArgument optArg = (OptionalArgument) a;
       if (!optArg.getShortName().equals("")) {
         s += "<shortname>" + optArg.getShortName() + "</shortname>";
@@ -384,6 +385,7 @@ public class XMLparser {
         s += sb.toString();
         s += "</restrictions>";
       }
+
       s += "</named>";
     } else {
       s += "</positional>";
