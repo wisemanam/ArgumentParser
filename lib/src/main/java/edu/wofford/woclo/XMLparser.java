@@ -333,7 +333,7 @@ public class XMLparser {
       for (int i = 0; i < argParse.getPositionalNames().size(); i++) {
         String name = argParse.getPositionalNames().get(i);
         Argument a = argParse.getArgument(name);
-        s += argumentToXML(a);
+        s += argumentToXML(a, false);
       }
       s += "</positionalArgs>";
     }
@@ -343,7 +343,7 @@ public class XMLparser {
       for (int i = 0; i < argParse.getNonPositionalNames().size(); i++) {
         String name = argParse.getNonPositionalNames().get(i);
         Argument a = argParse.getArgument(name);
-        s += argumentToXML(a);
+        s += argumentToXML(a, true);
       }
       s += "</namedArgs>";
     }
@@ -351,9 +351,9 @@ public class XMLparser {
     return s;
   }
 
-  private String argumentToXML(Argument a) {
+  private String argumentToXML(Argument a, boolean named) {
     String s = "";
-    if (a instanceof OptionalArgument) {
+    if (named) {
       s += "<named>";
     } else {
       s += "<positional>";
@@ -363,15 +363,16 @@ public class XMLparser {
     s += "<type>" + a.getType() + "</type>";
     s += "<description>" + a.getDescription() + "</description>";
 
-    if (a instanceof OptionalArgument) {
-      if (!a.getShortName().equals("")) {
-        s += "<shortname>" + a.getShortName() + "</shortname>";
+    if (named) {
+      OptionalArgument optArg = (OptionalArgument) a;
+      if (!optArg.getShortName().equals("")) {
+        s += "<shortname>" + optArg.getShortName() + "</shortname>";
       }
-      s += "<default><value>" + a.getValue() + "</value></default>";
-      if (a.hasAcceptedValues()) {
+      s += "<default><value>" + optArg.getValue() + "</value></default>";
+      if (optArg.hasAcceptedValues()) {
         s += "<restrictions>";
-        for (int i = 0; i < a.getAcceptedValues().length; i++) {
-          s += "<restriction>" + a.getAcceptedValues()[i] + "</restriction>";
+        for (int i = 0; i < optArg.getAcceptedValues().length; i++) {
+          s += "<restriction>" + optArg.getAcceptedValues()[i] + "</restriction>";
         }
         s += "</restrictions>";
       }
