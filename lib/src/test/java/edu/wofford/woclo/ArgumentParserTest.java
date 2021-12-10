@@ -961,7 +961,7 @@ public class ArgumentParserTest {
     assertEquals(p, 6);
   }
 
-  @Test
+  // @Test
   public void testMissingDefault() {
     MissingFromXMLException e =
         assertThrows(
@@ -970,6 +970,23 @@ public class ArgumentParserTest {
               String test =
                   "<?xml version=\"1.0\"?>"
                       + "<arguments>"
+                      + "<positionalArgs>"
+                      + "<positional>"
+                      + "<type>float</type>"
+                      + "<description>the length of the volume</description>"
+                      + "<name>length</name>"
+                      + "</positional>"
+                      + "<positional>"
+                      + "<name>width</type>"
+                      + "<type>float</type>"
+                      + "<description>the width of the volume</description>"
+                      + "</positional>"
+                      + "<positional>"
+                      + "<description>the height of the volume</description>"
+                      + "<name>height</name>"
+                      + "<type>float</type>"
+                      + "</positional>"
+                      + "</positionalArgs>"
                       + "<namedArgs>"
                       + "<named>"
                       + "<description>the type of volume</description>"
@@ -981,6 +998,15 @@ public class ArgumentParserTest {
                       + "<restriction>pyramid</restriction>"
                       + "<restriction>ellipsoid</restriction>"
                       + "</restrictions>"
+                      + "</named>"
+                      + "<named>"
+                      + "<default>"
+                      + "<value>4</value>"
+                      + "</default>"
+                      + "<type>integer</type>"
+                      + "<description>the maximum number of decimal places for the volume</description>"
+                      + "<name>precision</name>"
+                      + "<shortname>p</shortname>"
                       + "</named>"
                       + "</namedArgs>"
                       + "</arguments>";
@@ -1011,4 +1037,32 @@ public class ArgumentParserTest {
 
   //   xmlParse.toXML(argParse, "Test3.xml");
   // }
+
+  @Test
+  public void testRequiredNamed() {
+    String[] arguments = {"--shape", "square", "6"};
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("int1", "integer", "int");
+    argParse.addNonPositional("shape", "s", "string", "shape", true);
+    argParse.parse(arguments);
+    int int1 = argParse.getValue("int1");
+    String shape = argParse.getValue("shape");
+    assertEquals(int1, 6);
+    assertEquals(shape, "square");
+  }
+
+  @Test
+  public void testRequiredNamedMissing() {
+    RequiredArgumentMissingException e =
+        assertThrows(
+            RequiredArgumentMissingException.class,
+            () -> {
+              String[] arguments = {"6"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("int1", "integer", "int");
+              argParse.addNonPositional("shape", "s", "string", "shape", true);
+              argParse.parse(arguments);
+            });
+    assertEquals(e.message(), "Required argument missing");
+  }
 }
