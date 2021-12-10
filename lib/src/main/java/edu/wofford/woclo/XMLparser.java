@@ -325,4 +325,35 @@ public class XMLparser {
     }
     return strWriter.getBuffer().toString();
   }
+
+  private String argumentToXML(Argument a) {
+    String s = "";
+    if (a instanceof OptionalArgument) {
+      s += "<named>";
+    } else {
+      s += "<positional>";
+    }
+
+    s += "<name>" + a.getName() + "</name>";
+    s += "<type>" + a.getType() + "</type>";
+    s += "<description>" + a.getDescription() + "</description>";
+
+    if (a instanceof OptionalArgument) {
+      if (!a.getShortName().equals("")) {
+        s += "<shortname>" + a.getShortName() + "</shortname>";
+      }
+      s += "<default><value>" + a.getValue() + "</value></default>";
+      if (a.hasAcceptedValues()) {
+        s += "<restrictions>";
+        for (int i = 0; i < a.getAcceptedValues().length; i++) {
+          s += "<restriction>" + a.getAcceptedValues()[i] + "</restriction>";
+        }
+        s += "</restrictions>";
+      }
+      s += "</named>";
+    } else {
+      s += "</positional>";
+    }
+    return s;
+  }
 }
