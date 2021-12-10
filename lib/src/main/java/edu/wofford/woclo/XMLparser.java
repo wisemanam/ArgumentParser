@@ -326,7 +326,7 @@ public class XMLparser {
     return strWriter.getBuffer().toString();
   }
 
-  private String parserToXML(ArgumentParser argParse) {
+  public String parserToXML(ArgumentParser argParse) {
     String s = "<?xml version=\"1.0\"?><arguments>";
     if (!argParse.getPositionalNames().isEmpty()) {
       s += "<positionalArgs>";
