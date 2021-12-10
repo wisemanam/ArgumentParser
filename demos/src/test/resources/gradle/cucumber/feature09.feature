@@ -361,7 +361,7 @@ Feature: Allow argument information to be loaded from an XML file.
           <name>length</name>
         </positional>
         <positional>
-          <name>width</type>
+          <name>width</name>
           <type>float</type>
           <description>the width of the volume</description>
         </positional>
