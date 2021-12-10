@@ -107,6 +107,6 @@ public class VolumeCalculatorTest {
     String[] args = {"2", "--type", "pyramid", "5", "-p", "2", "3"};
     VolumeCalculator v = new VolumeCalculator();
     String result = v.volumeCalculator(xml, args);
-    assertEquals("125.664", result);
+    assertEquals("VolumeCalculator error: invalid XML", result);
   }
 }
