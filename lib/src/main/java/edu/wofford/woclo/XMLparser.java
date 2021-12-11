@@ -232,7 +232,7 @@ public class XMLparser {
       for (int i = 0; i < argParse.getPositionalNames().size(); i++) {
         String name = argParse.getPositionalNames().get(i);
         Argument a = argParse.getArgument(name);
-        sb.append(argumentToXML(a, false));
+        sb.append(argumentToXML(argParse, a));
       }
       s += sb.toString();
       s += "</positionalArgs>";
@@ -244,7 +244,7 @@ public class XMLparser {
       for (int i = 0; i < argParse.getNonPositionalNames().size(); i++) {
         String name = argParse.getNonPositionalNames().get(i);
         Argument a = argParse.getArgument(name);
-        sb.append(argumentToXML(a, true));
+        sb.append(argumentToXML(argParse, a));
       }
       s += sb.toString();
       s += "</namedArgs>";
@@ -254,9 +254,9 @@ public class XMLparser {
   }
 
   @SuppressWarnings("unchecked")
-  private static String argumentToXML(Argument a, boolean named) {
+  private static String argumentToXML(ArgumentParser argParse, Argument a) {
     String s = "";
-    if (named) {
+    if (a instanceof OptionalArgument) {
       s += "<named>";
     } else {
       s += "<positional>";
@@ -265,6 +265,10 @@ public class XMLparser {
     s += "<name>" + a.getName() + "</name>";
     s += "<type>" + a.getType() + "</type>";
     s += "<description>" + a.getDescription() + "</description>";
+
+    if (argParse.getRequiredNames().contains(a.getName())) {
+      s += "<required/>";
+    }
 
     if (a instanceof OptionalArgument) {
       OptionalArgument optArg = (OptionalArgument) a;
@@ -283,7 +287,6 @@ public class XMLparser {
         s += sb.toString();
         s += "</restrictions>";
       }
-
       s += "</named>";
     } else {
       s += "</positional>";

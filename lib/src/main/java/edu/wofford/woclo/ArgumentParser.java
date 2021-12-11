@@ -563,4 +563,8 @@ public class ArgumentParser {
     }
     return cloned;
   }
+
+  public List<String> getRequiredNames() {
+    return new ArrayList<String>(required_names);
+  }
 }
