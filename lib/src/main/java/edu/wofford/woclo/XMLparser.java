@@ -98,7 +98,7 @@ public class XMLparser {
     return argParse;
   }
 
-  private static ArgumentParser parseNonpositionals(ArgumentParser argParse, NodeList named_list) {
+  public static ArgumentParser parseNonpositionals(ArgumentParser argParse, NodeList named_list) {
     for (int i = 0; i < named_list.getLength(); i++) {
       Node node = named_list.item(i);
       if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -141,7 +141,7 @@ public class XMLparser {
           short_name = short_name_list.item(0).getTextContent();
         }
 
-        if (required_list != null) {
+        if (required_list.item(0) != null) {
           System.out.print(name + " found required");
           required = true;
         } else {
@@ -224,7 +224,7 @@ public class XMLparser {
     return argParse;
   }
 
-  public String parserToXML(ArgumentParser argParse) {
+  public static String parserToXML(ArgumentParser argParse) {
     String s = "<?xml version=\"1.0\"?><arguments>";
     if (!argParse.getPositionalNames().isEmpty()) {
       s += "<positionalArgs>";
@@ -254,7 +254,7 @@ public class XMLparser {
   }
 
   @SuppressWarnings("unchecked")
-  private String argumentToXML(Argument a, boolean named) {
+  private static String argumentToXML(Argument a, boolean named) {
     String s = "";
     if (named) {
       s += "<named>";
