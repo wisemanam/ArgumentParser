@@ -172,6 +172,10 @@ public class OptionalArgument extends Argument {
     return short_name;
   }
 
+  public String getValueAsString() {
+    return value;
+  }
+
   public boolean isRequired() {
     return required;
   }

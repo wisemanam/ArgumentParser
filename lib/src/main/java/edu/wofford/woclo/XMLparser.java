@@ -273,23 +273,8 @@ public class XMLparser {
       if (!optArg.getShortName().equals("")) {
         s += "<shortname>" + optArg.getShortName() + "</shortname>";
       }
-      System.out.println("Name: " + a.getName());
-      System.out.println(a.getType());
-      String value = "";
-      if (a.getType().equals("integer")) {
-        System.out.println("integer");
-        int v = optArg.getValue();
-        value = Integer.toString(v);
-      } else if (a.getType().equals("float")) {
-        System.out.println("float");
-        value = Float.toString(optArg.getValue());
-      } else if (a.getType().equals("boolean")) {
-        System.out.println("boolean");
-        value = Boolean.toString(optArg.getValue());
-      } else {
-        System.out.println("string");
-        value = a.getValue();
-      }
+
+      String value = optArg.getValueAsString();
       if (!value.equals("")) {
         s += "<default><value>" + value + "</value></default>";
       }
