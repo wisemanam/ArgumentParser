@@ -568,4 +568,13 @@ public class ArgumentParser {
   public List<List<String>> getMutuallyExclusive() {
     return new ArrayList<List<String>>(mutually_exclusive);
   }
+
+  public List<String> getShortNames() {
+    return new ArrayList<String>(short_name_names);
+  }
+
+  public Argument getArgByShortName(String shortName) {
+    String l = short_args.get(shortName);
+    return getArgument(l);
+  }
 }

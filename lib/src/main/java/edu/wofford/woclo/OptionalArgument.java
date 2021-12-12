@@ -179,4 +179,8 @@ public class OptionalArgument extends Argument {
   public boolean isRequired() {
     return required;
   }
+
+  public boolean hasShortName() {
+    return !short_name.equals("");
+  }
 }

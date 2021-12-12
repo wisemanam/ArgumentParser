@@ -42,7 +42,9 @@ public class VolumeCalculator {
           + e.getMutuallyExcList().get(3)
           + "]";
     } catch (RequiredArgumentMissingException e) {
-      return "";
+      return "VolumeCalculator error: required named argument "
+          + e.getMissingRequired()
+          + " not given";
     }
   }
 
