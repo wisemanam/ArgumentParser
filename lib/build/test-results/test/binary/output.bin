@@ -1,70 +1,18 @@
-required expected: 0
-required actual: 0
-required expected: 0
-required actual: 0
-required expected: 0
-required actual: 0
-	required expected: 0
-	required actual: 0
-
-required expected: 0
-
-required actual: 0
-required expected: 0
-required actual: 0
-@type found requiredprecision found requiredrequired expected: 1
-required actual: 1
-required expected: 0
-required actual: 0
-required expected: 0
-required actual: 0
-required expected: 1
-required actual: 1
-required expected: 0
-required actual: 0
-required expected: 0
-required actual: 0
-required expected: 0
-required actual: 0
-required expected: 0
-required actual: 0
-required expected: 0
-required actual: 0
-Otype found requiredprecision found requiredfoo found requiredbar found requiredrequired expected: 0
-required actual: 0
- required expected: 1
- required actual: 0
- throwing required exception
- Hello
-"@type found requiredprecision found requiredrequired expected: 1
-"required actual: 1
-#required expected: 0
-#required actual: 0
-$required expected: 0
-$required actual: 0
-%required expected: 0
-%required actual: 0
-&required expected: 0
-&required actual: 0
-(required expected: 0
-(required actual: 0
-)required expected: 0
-)required actual: 0
--required expected: 0
--required actual: 0
-0required expected: 0
-0required actual: 0
-2dtype found requiredprecision found requiredfoo found requiredbar found requiredrequired expected: 1
-2required actual: 1
-4required expected: 0
-4required actual: 0
-7@type found requiredprecision found requiredrequired expected: 1
-7required actual: 1
-<required expected: 0
-<required actual: 0
-?required expected: 0
-?required actual: 0
-Arequired expected: 0
-Arequired actual: 0
-Brequired expected: 0
-Brequired actual: 0
+-Name: type
+-string
+-string
+-Name: precision
+-integer
+-integer
+6Name: type
+6string
+6string
+6Name: precision
+6integer
+6integer
+7Name: type
+7string
+7string
+7Name: precision
+7integer
+7integer

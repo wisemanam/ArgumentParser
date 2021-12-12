@@ -30,6 +30,7 @@ public class OptionalArgument extends Argument {
     this.value = value;
     this.short_name = short_name;
     accepted_values = null;
+    required = false;
   }
 
   /**
@@ -45,6 +46,7 @@ public class OptionalArgument extends Argument {
     this.value = value;
     short_name = "";
     accepted_values = null;
+    required = false;
   }
 
   /**
@@ -69,6 +71,7 @@ public class OptionalArgument extends Argument {
     this.value = value;
     this.short_name = short_name;
     this.accepted_values = accepted_values.clone();
+    required = false;
   }
   /**
    * Takes the arguments name, type, description, value, and list of accepted values and creates an
@@ -86,6 +89,7 @@ public class OptionalArgument extends Argument {
     this.value = value;
     short_name = "";
     this.accepted_values = accepted_values.clone();
+    required = false;
   }
 
   // required, no short name, accepted values

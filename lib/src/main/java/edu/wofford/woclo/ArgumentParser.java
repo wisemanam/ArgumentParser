@@ -502,11 +502,8 @@ public class ArgumentParser {
     if (expected_positional > current_positional_name_index) {
       throw new TooFewException(current_positional_name_index, positional_names);
     }
-    System.out.println("required expected: " + Integer.toString(expected_required));
-    System.out.println("required actual: " + Integer.toString(num_required));
     if (expected_required > num_required) {
-      System.out.println("throwing required exception");
-      throw new RequiredArgumentMissingException("Required argument missing");
+      throw new RequiredArgumentMissingException(required_names, arguments, short_args);
     }
   }
 
@@ -566,5 +563,9 @@ public class ArgumentParser {
 
   public List<String> getRequiredNames() {
     return new ArrayList<String>(required_names);
+  }
+
+  public List<List<String>> getMutuallyExclusive() {
+    return new ArrayList<List<String>>(mutually_exclusive);
   }
 }

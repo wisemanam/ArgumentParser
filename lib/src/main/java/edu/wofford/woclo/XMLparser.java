@@ -141,8 +141,7 @@ public class XMLparser {
           short_name = short_name_list.item(0).getTextContent();
         }
 
-        if (required_list.item(0) != null) {
-          System.out.print(name + " found required");
+        if (required_list.getLength() != 0) {
           required = true;
         } else {
           // was default value there?
@@ -166,11 +165,11 @@ public class XMLparser {
         // start putting in addnonpositional
         String[] accepted = new String[accepted_values.size()];
         accepted = accepted_values.toArray(accepted);
-        if (accepted_values.isEmpty() && short_name.equals("")) {
+        if (!required && accepted_values.isEmpty() && short_name.equals("")) {
           argParse.addNonPositional(name, type, description, value);
-        } else if (accepted_values.isEmpty() && !short_name.equals("")) {
+        } else if (!required && accepted_values.isEmpty() && !short_name.equals("")) {
           argParse.addNonPositional(name, short_name, type, description, value);
-        } else if (!accepted_values.isEmpty() && short_name.equals("")) {
+        } else if (!required && !accepted_values.isEmpty() && short_name.equals("")) {
           argParse.addNonPositional(name, type, description, value, accepted);
         } else if (required && accepted_values.isEmpty() && short_name.equals("")) {
           argParse.addNonPositional(name, type, description, required);
@@ -207,20 +206,8 @@ public class XMLparser {
           }
           argParse.addMutuallyExclusiveGroup(mutually_exclusive);
         }
-
-        // if (name.getNodeType() == Node.ELEMENT_NODE) {
-        //   Element e = (Element) name;
-        //   NodeList names_list = e.getElementsByTagName("name");
-
-        //   if (names_list.item(0) != null) {
-        //     mut_name = names_list.item(0).getTextContent();
-        //     mutually_exclusive.add(mut_name);
-        //   }
-
       }
     }
-    // }
-    // }
     return argParse;
   }
 
@@ -249,6 +236,14 @@ public class XMLparser {
       s += sb.toString();
       s += "</namedArgs>";
     }
+
+    if (!argParse.getMutuallyExclusive().isEmpty()) {
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < argParse.getMutuallyExclusive().size(); i++) {
+        sb.append(mutualExclusiveGroupToXML(argParse.getMutuallyExclusive().get(i)));
+      }
+      s += sb.toString();
+    }
     s += "</arguments>";
     return s;
   }
@@ -264,9 +259,12 @@ public class XMLparser {
 
     s += "<name>" + a.getName() + "</name>";
     s += "<type>" + a.getType() + "</type>";
-    s += "<description>" + a.getDescription() + "</description>";
+    if (!a.getDescription().equals("")) {
+      s += "<description>" + a.getDescription() + "</description>";
+    }
 
-    if (argParse.getRequiredNames().contains(a.getName())) {
+    boolean required = argParse.getRequiredNames().contains(a.getName());
+    if (required) {
       s += "<required/>";
     }
 
@@ -275,7 +273,26 @@ public class XMLparser {
       if (!optArg.getShortName().equals("")) {
         s += "<shortname>" + optArg.getShortName() + "</shortname>";
       }
-      s += "<default><value>" + optArg.getValue() + "</value></default>";
+      System.out.println("Name: " + a.getName());
+      System.out.println(a.getType());
+      String value = "";
+      if (a.getType().equals("integer")) {
+        System.out.println("integer");
+        int v = optArg.getValue();
+        value = Integer.toString(v);
+      } else if (a.getType().equals("float")) {
+        System.out.println("float");
+        value = Float.toString(optArg.getValue());
+      } else if (a.getType().equals("boolean")) {
+        System.out.println("boolean");
+        value = Boolean.toString(optArg.getValue());
+      } else {
+        System.out.println("string");
+        value = a.getValue();
+      }
+      if (!value.equals("")) {
+        s += "<default><value>" + value + "</value></default>";
+      }
       if (optArg.hasAcceptedValues()) {
         s += "<restrictions>";
         StringBuilder sb = new StringBuilder();
@@ -291,6 +308,17 @@ public class XMLparser {
     } else {
       s += "</positional>";
     }
+    return s;
+  }
+
+  public static String mutualExclusiveGroupToXML(List<String> group) {
+    String s = "<mutuallyExclusive><group>";
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < group.size(); i++) {
+      sb.append("<name>" + group.get(i) + "</name>");
+    }
+    s += sb.toString();
+    s += "</group></mutuallyExclusive>";
     return s;
   }
 }

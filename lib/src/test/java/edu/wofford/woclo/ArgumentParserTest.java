@@ -962,7 +962,7 @@ public class ArgumentParserTest {
     assertEquals(p, 6);
   }
 
-  // @Test
+  @Test
   public void testMissingDefault() {
     MissingFromXMLException e =
         assertThrows(
@@ -978,7 +978,7 @@ public class ArgumentParserTest {
                       + "<name>length</name>"
                       + "</positional>"
                       + "<positional>"
-                      + "<name>width</type>"
+                      + "<name>width</name>"
                       + "<type>float</type>"
                       + "<description>the width of the volume</description>"
                       + "</positional>"
@@ -1016,29 +1016,6 @@ public class ArgumentParserTest {
     assertEquals(e.getMissing(), "default");
   }
 
-  // @Test
-  // public void testWriteXMLJustPositionals() {
-  //   ArgumentParser argParse = new ArgumentParser();
-  //   String[] accepted = {"6", "7", "8"};
-  //   argParse.addPositional("length", "integer", "the length");
-  //   argParse.addPositional("width", "integer", "the width");
-  //   argParse.addPositional("height", "integer", "the height", accepted);
-  //   XMLparser xmlParse = new XMLparser();
-  //   String xmlresult = xmlParse.toXML(argParse, "Test2.xml");
-  // }
-
-  // @Test
-  // public void testWriteXMLJustNonPositionals() {
-  //   ArgumentParser argParse = new ArgumentParser();
-  //   String[] accepted = {"6", "7", "8"};
-  //   argParse.addNonPositional("length", "integer", "the length", "9");
-  //   argParse.addNonPositional("width", "w", "integer", "the width", "10");
-  //   argParse.addNonPositional("height", "integer", "the height", "7", accepted);
-  //   XMLparser xmlParse = new XMLparser();
-
-  //   xmlParse.toXML(argParse, "Test3.xml");
-  // }
-
   @Test
   public void testRequiredNamed() {
     String[] arguments = {"--shape", "square", "6"};
@@ -1064,7 +1041,7 @@ public class ArgumentParserTest {
               argParse.addNonPositional("shape", "s", "string", "shape", true);
               argParse.parse(arguments);
             });
-    assertEquals(e.message(), "Required argument missing");
+    assertEquals(e.getMissingRequired(), "shape");
   }
 
   @Test
@@ -1269,7 +1246,7 @@ public class ArgumentParserTest {
     assertEquals(e.getMutuallyExcList(), error);
   }
 
-  // @Test
+  @Test
   public void testRequiredArgumentsReadXML() {
     RequiredArgumentMissingException e =
         assertThrows(
@@ -1326,7 +1303,7 @@ public class ArgumentParserTest {
               ArgumentParser a = XMLparser.parseXML(test);
               a.parse(arguments);
             });
-    assertEquals(e.message(), "Required argument missing.");
+    assertEquals(e.getMissingRequired(), "precision");
   }
 
   @Test
@@ -1381,5 +1358,128 @@ public class ArgumentParserTest {
         "precision", "p", "integer", "the maximum number of decimal places for the volume", "4");
     String s = XMLparser.parserToXML(argParse);
     assertEquals(xmlString, s);
+  }
+
+  @Test
+  public void testWriteXMLWithRequired() {
+    String xmlString =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<name>length</name>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<name>width</name>"
+            + "<type>float</type>"
+            + "<description>the width of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<name>height</name>"
+            + "<type>float</type>"
+            + "<description>the height of the volume</description>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<name>type</name>"
+            + "<type>string</type>"
+            + "<description>the type of volume</description>"
+            + "<required/>"
+            + "<shortname>t</shortname>"
+            + "</named>"
+            + "<named>"
+            + "<name>precision</name>"
+            + "<type>integer</type>"
+            + "<description>the maximum number of decimal places for the volume</description>"
+            + "<shortname>p</shortname>"
+            + "<default>"
+            + "<value>4</value>"
+            + "</default>"
+            + "</named>"
+            + "</namedArgs>"
+            + "</arguments>";
+    ArgumentParser argParse = new ArgumentParser();
+    argParse.addPositional("length", "float", "the length of the volume");
+    argParse.addPositional("width", "float", "the width of the volume");
+    argParse.addPositional("height", "float", "the height of the volume");
+    argParse.addNonPositional("type", "t", "string", "the type of volume", true);
+    argParse.addNonPositional(
+        "precision", "p", "integer", "the maximum number of decimal places for the volume", "4");
+    String s = XMLparser.parserToXML(argParse);
+    assertEquals(xmlString, s);
+  }
+
+  @Test
+  public void testMutuallyExclusiveWriteXML() {
+    String test_string =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<name>length</name>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<name>width</name>"
+            + "<type>float</type>"
+            + "<description>the width of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<name>height</name>"
+            + "<type>float</type>"
+            + "<description>the height of the volume</description>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<name>type</name>"
+            + "<type>string</type>"
+            + "<description>the type of volume</description>"
+            + "<shortname>t</shortname>"
+            + "<default>"
+            + "<value>box</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>box</restriction>"
+            + "<restriction>pyramid</restriction>"
+            + "<restriction>ellipsoid</restriction>"
+            + "</restrictions>"
+            + "</named>"
+            + "<named>"
+            + "<name>precision</name>"
+            + "<type>integer</type>"
+            + "<description>the maximum number of decimal places for the volume</description>"
+            + "<required/>"
+            + "<shortname>p</shortname>"
+            + "<default>"
+            + "<value>4</value>"
+            + "</default>"
+            + "</named>"
+            + "<named>"
+            + "<name>foo</name>"
+            + "<type>boolean</type>"
+            + "<shortname>f</shortname>"
+            + "<default><value>false</value></default>"
+            + "</named>"
+            + "<named>"
+            + "<name>bar</name>"
+            + "<type>boolean</type>"
+            + "<default><value>false</value></default>"
+            + "</named>"
+            + "</namedArgs>"
+            + "<mutuallyExclusive>"
+            + "<group>"
+            + "<name>foo</name>"
+            + "<name>precision</name>"
+            + "</group>"
+            + "</mutuallyExclusive>"
+            + "</arguments>";
+    ArgumentParser argParse = XMLparser.parseXML(test_string);
+    String s = XMLparser.parserToXML(argParse);
+    assertEquals(test_string, s);
   }
 }
