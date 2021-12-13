@@ -7,7 +7,11 @@ import org.w3c.dom.*;
 import org.xml.sax.*;
 
 public class XMLparser {
-
+  /**
+   * parseXML takes a string
+   * @param giantXmlString
+   * @return
+   */
   public ArgumentParser parseXML(String giantXmlString) {
     ArgumentParser argParse = new ArgumentParser();
     // has args, short_args, positional, nonpositional_names, and short_name_names
@@ -209,7 +213,7 @@ public class XMLparser {
     return argParse;
   }
 
-  public static String parserToXML(ArgumentParser argParse) {
+  public String parserToXML(ArgumentParser argParse) {
     String s = "<?xml version=\"1.0\"?><arguments>";
     if (!argParse.getPositionalNames().isEmpty()) {
       s += "<positionalArgs>";
