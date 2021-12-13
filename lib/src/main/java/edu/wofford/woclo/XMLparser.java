@@ -6,6 +6,10 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
+/**
+ * The XMLparser class helps read arguments into an ArgumentParser from an XML string and write arguments from
+ * an ArgumentParser into an XML string.
+ */
 public class XMLparser {
   /**
    * parseXML takes a string and parses the arguments into an ArgumentParser
