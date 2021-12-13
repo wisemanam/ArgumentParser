@@ -8,9 +8,9 @@ import org.xml.sax.*;
 
 public class XMLparser {
   /**
-   * parseXML takes a string
-   * @param giantXmlString
-   * @return
+   * parseXML takes a string and parses the arguments into an ArgumentParser
+   * @param giantXmlString an XML string that contains the arguments to be parsed
+   * @return the ArgumentParser containing the arguments in the XML string
    */
   public ArgumentParser parseXML(String giantXmlString) {
     ArgumentParser argParse = new ArgumentParser();
@@ -42,6 +42,13 @@ public class XMLparser {
     return argParse;
   }
 
+  /**
+   * parsePositionals takes an ArgumentParser and the names of the positional arguments and adds the positional
+   * arguments to the ArgumentParser
+   * @param argParse the ArgumentParser
+   * @param pos_list the list of positional arguments
+   * @return the ArgumentParser
+   */
   private static ArgumentParser parsePositionals(ArgumentParser argParse, NodeList pos_list) {
     for (int i = 0; i < pos_list.getLength(); i++) {
       Node node = pos_list.item(i);
@@ -96,6 +103,13 @@ public class XMLparser {
     return argParse;
   }
 
+  /**
+   * parseNonpositionals takes an ArgumentParser and the names of the nonpositional arguments and adds the 
+   * nonpositional arguments to the ArgumentParser
+   * @param argParse the ArgumentParser
+   * @param pos_list the list of nonpositional arguments
+   * @return the ArgumentParser
+   */
   public static ArgumentParser parseNonpositionals(ArgumentParser argParse, NodeList named_list) {
     for (int i = 0; i < named_list.getLength(); i++) {
       Node node = named_list.item(i);
@@ -187,6 +201,13 @@ public class XMLparser {
     return argParse;
   }
 
+  /**
+   * parseMutuallyExclusive takes the ArgumentParser and a list of mutually exclusive groups
+   * and adds those groups to the ArgumentParser.
+   * @param argParse the ArgumentParser
+   * @param mut_exc_list the list of lists containing mutually exclusive arguments
+   * @return the ArgumentParser
+   */
   private static ArgumentParser parseMutuallyExclusive(
       ArgumentParser argParse, NodeList mut_exc_list) {
     for (int i = 0; i < mut_exc_list.getLength(); i++) {
@@ -213,6 +234,11 @@ public class XMLparser {
     return argParse;
   }
 
+  /**
+   * parserToXML takes an ArgumentParser and converts the arguments it contains into an XML string
+   * @param argParse the ArgumentParser
+   * @return the XML string containing the arguments in the ArgumentParser
+   */
   public String parserToXML(ArgumentParser argParse) {
     String s = "<?xml version=\"1.0\"?><arguments>";
     if (!argParse.getPositionalNames().isEmpty()) {
@@ -250,6 +276,12 @@ public class XMLparser {
     return s;
   }
 
+  /**
+   * argumentToXML takes an Argument and converts it into XML format
+   * @param argParse the ArgumentParser
+   * @param a the Argument
+   * @return the String containing the argument in XML format
+   */
   @SuppressWarnings("unchecked")
   private static String argumentToXML(ArgumentParser argParse, Argument a) {
     String s = "";
@@ -301,6 +333,12 @@ public class XMLparser {
     return s;
   }
 
+  /**
+   * mutualExclusiveGroupToXML takes a group of mutually exclusive arguments and returns a string of those
+   * arguments in XML format
+   * @param group the group of mutually exclusive arguments
+   * @return the String of arguments in XML format
+   */
   public static String mutualExclusiveGroupToXML(List<String> group) {
     String s = "<mutuallyExclusive><group>";
     StringBuilder sb = new StringBuilder();
