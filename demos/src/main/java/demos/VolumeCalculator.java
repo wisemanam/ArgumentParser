@@ -8,8 +8,9 @@ import java.util.Arrays;
 public class VolumeCalculator {
   public String volumeCalculator(String xml, String[] arguments) {
     ArgumentParser parser = null;
+    XMLparser x = new XMLparser();
     try {
-      parser = XMLparser.parseXML(xml);
+      parser = x.parseXML(xml);
     } catch (MissingFromXMLException e) {
       return "VolumeCalculator error: invalid XML";
     }
