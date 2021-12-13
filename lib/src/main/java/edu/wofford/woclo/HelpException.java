@@ -60,43 +60,61 @@ public class HelpException extends RuntimeException {
       Argument arg = argParse.getArgument(name);
       String shortName = "";
       String defaultValue = "";
+      boolean required = false;
       if (arg instanceof OptionalArgument) {
         OptionalArgument optArg = (OptionalArgument) arg;
         shortName = optArg.getShortName();
         defaultValue = optArg.getValueAsString();
+        required = optArg.isRequired();
       }
 
       // if there is a short name
       String name_str = "";
-      if (!shortName.equals("")) {
-        name_str += "-" + shortName;
-        if (arg.getType() != "boolean") {
-          name_str += " " + arg.getName().toUpperCase() + ", ";
-        }
+      if (!shortName.equals("") && !arg.getType().equals("boolean")) {
+        name_str +=
+            " -"
+                + shortName
+                + " "
+                + arg.getName().toUpperCase()
+                + ", "
+                + "--"
+                + arg.getName()
+                + " "
+                + arg.getName().toUpperCase();
+      } else if (!shortName.equals("") && arg.getType().equals("boolean")) {
+        name_str += " -" + shortName + ", " + "--" + arg.getName().trim();
+      } else if (shortName.equals("") && !arg.getType().equals("boolean")) {
+        name_str += " --" + arg.getName() + " " + arg.getName().toUpperCase();
+      } else {
+        String tmp_str = "--" + arg.getName();
+        name_str += tmp_str.trim();
       }
-      name_str += "--" + arg.getName() + " " + arg.getName().toUpperCase();
-
+      if (arg.getType().equals("boolean")) {
+        name_str += "\n";
+      }
       argumentList.add(name_str);
-      argumentList.add("(" + arg.getType() + ")");
+      if (!arg.getType().equals("boolean")) {
+        argumentList.add("(" + arg.getType() + ")");
+      }
       argumentList.add(arg.getDescription());
 
       if (arg.hasAcceptedValues()) {
         StringBuilder sb = new StringBuilder();
         String[] accepted = arg.getAcceptedValues();
 
-        sb.append("{" + accepted[0] + ", " + accepted[1] + ", " + accepted[2] + "}");
+        // sb.append("{" + accepted[0] + ", " + accepted[1] + ", " + accepted[2] + "}");
+        sb.append("{");
 
-        // for (int j = 0; j < accepted.length - 1; j++) {
-        //   sb.append(accepted[j] + ", ");
-        // }
-        // sb.append(accepted[accepted.length - 1] + "}");
-
-        System.out.println(sb.toString());
+        for (int j = 0; j < accepted.length - 1; j++) {
+          sb.append(accepted[j].trim() + ", ");
+        }
+        sb.append(accepted[accepted.length - 1] + "}");
 
         argumentList.add(sb.toString());
       }
-
-      argumentList.add("(default: " + defaultValue + ")");
+      if (!required) {
+        argumentList.add("(default: " + defaultValue + ")");
+      }
 
       if (arg.getType().equals("boolean")) {
         flags.add(argumentList);
@@ -130,20 +148,21 @@ public class HelpException extends RuntimeException {
         OptionalArgument optArg = (OptionalArgument) a;
         if (!optArg.isRequired()) {
           sb.append("[");
+        }
+        if (optArg.hasShortName()) {
+          sb.append("-" + optArg.getShortName());
+        } else {
+          sb.append("--" + optArg.getName());
+        }
 
-          if (optArg.hasShortName()) {
-            sb.append("-" + optArg.getShortName());
-          } else {
-            sb.append("--" + optArg.getName());
-          }
+        if (!optArg.getType().equals("boolean")) {
+          sb.append(" " + optArg.getName().toUpperCase());
+        }
 
-          if (!optArg.getType().equals("boolean")) {
-            sb.append(" " + optArg.getName().toUpperCase());
-          }
-
-          if (!optArg.isRequired()) {
-            sb.append("] ");
-          }
+        if (!optArg.isRequired()) {
+          sb.append("] ");
+        } else {
+          sb.append(" ");
         }
       }
     }
@@ -192,7 +211,7 @@ public class HelpException extends RuntimeException {
     if (namedStringList.size() != 0) {
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < namedStringList.size(); i++) {
-        sb.append(" " + namedStringList.get(i).get(0));
+        sb.append(namedStringList.get(i).get(0));
 
         numSpaces1 = findSpacing() - namedStringList.get(i).get(0).length();
         sb.append(String.join("", Collections.nCopies(numSpaces1, " ")));
@@ -210,7 +229,7 @@ public class HelpException extends RuntimeException {
 
         sb.append("\n");
       }
-      s += sb.toString() + "\n\n";
+      s += sb.toString();
     }
 
     if (flags.size() != 0) {
@@ -221,6 +240,7 @@ public class HelpException extends RuntimeException {
         sb.append(flags.get(i).get(1));
       }
       sb.append("\n");
+      s += sb.toString();
     }
 
     List<List<String>> mutually_exclusive = argParse.getMutuallyExclusive();
@@ -228,7 +248,7 @@ public class HelpException extends RuntimeException {
       s += "mutually exclusive:\n";
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < mutually_exclusive.size(); i++) {
-        sb.append("[");
+        sb.append(" [");
         for (int j = 0; j < mutually_exclusive.get(i).size(); j++) {
           if (j == mutually_exclusive.get(i).size() - 1) {
             sb.append(mutually_exclusive.get(i).get(j) + "]\n");

@@ -110,7 +110,7 @@ public class VolumeCalculatorTest {
     assertEquals("VolumeCalculator error: invalid XML", result);
   }
 
-  @Test
+  // @Test
   public void testHelp() {
     String xml =
         "<?xml version=\"1.0\"?>"

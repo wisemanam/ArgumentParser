@@ -73,8 +73,6 @@ public class XMLparser {
         // was description there?
         if (description_list.item(0) != null) {
           description = description_list.item(0).getTextContent();
-        } else {
-          throw new MissingFromXMLException("description");
         }
 
         // does this positional contain accepted values?
@@ -82,7 +80,9 @@ public class XMLparser {
         if (accepted_value_list.getLength() > 0) {
           for (int j = 0; j < accepted_value_list.item(0).getChildNodes().getLength(); j++) {
             String val = accepted_value_list.item(0).getChildNodes().item(j).getTextContent();
-            accepted_values.add(val);
+            if (val.trim().length() > 0) {
+              accepted_values.add(val);
+            }
           }
         }
 
@@ -158,7 +158,9 @@ public class XMLparser {
         if (accepted_value_list2.getLength() > 0) {
           for (int j = 0; j < accepted_value_list2.item(0).getChildNodes().getLength(); j++) {
             String val = accepted_value_list2.item(0).getChildNodes().item(j).getTextContent();
-            accepted_values.add(val);
+            if (val.trim().length() > 0) {
+              accepted_values.add(val);
+            }
           }
         }
 
@@ -201,7 +203,9 @@ public class XMLparser {
             String mut_name = "";
             if (name_list.item(k) != null) {
               mut_name = name_list.item(k).getTextContent();
-              mutually_exclusive.add(mut_name);
+              if (mut_name.trim().length() > 0) {
+                mutually_exclusive.add(mut_name);
+              }
             }
           }
           argParse.addMutuallyExclusiveGroup(mutually_exclusive);
@@ -282,9 +286,12 @@ public class XMLparser {
         s += "<restrictions>";
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < optArg.getAcceptedValues().length; i++) {
-          sb.append("<restriction>");
-          sb.append(optArg.getAcceptedValues()[i]);
-          sb.append("</restriction>");
+          String g = optArg.getAcceptedValues()[i].trim();
+          if (g.length() > 0) {
+            sb.append("<restriction>");
+            sb.append(optArg.getAcceptedValues()[i]);
+            sb.append("</restriction>");
+          }
         }
         s += sb.toString();
         s += "</restrictions>";
