@@ -4,7 +4,7 @@ import edu.wofford.woclo.*;
 import java.io.*;
 
 public class XMLReadWriteDemo {
-  public void readWrite(String[] args) throws IOException {
+  public void readWrite(String[] args) {
     OutputStreamWriter fw = null;
     XMLparser x = new XMLparser();
     try {
@@ -18,8 +18,12 @@ public class XMLReadWriteDemo {
       fw.write(resultingXMLString);
       fw.close();
     } catch (IOException e) {
-      if (fw != null) {
-        fw.close();
+      try {
+        if (fw != null){
+          fw.close();
+        }
+      } catch (IOException e2) {
+        e2.printStackTrace();
       }
     }
   }
