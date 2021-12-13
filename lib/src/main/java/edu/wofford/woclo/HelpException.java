@@ -72,7 +72,7 @@ public class HelpException extends RuntimeException {
       String name_str = "";
       if (!shortName.equals("") && !arg.getType().equals("boolean")) {
         name_str +=
-            " -"
+            "-"
                 + shortName
                 + " "
                 + arg.getName().toUpperCase()
@@ -81,16 +81,18 @@ public class HelpException extends RuntimeException {
                 + arg.getName()
                 + " "
                 + arg.getName().toUpperCase();
-      } else if (!shortName.equals("") && arg.getType().equals("boolean")) {
-        name_str += " -" + shortName + ", " + "--" + arg.getName().trim();
-      } else if (shortName.equals("") && !arg.getType().equals("boolean")) {
-        name_str += " --" + arg.getName() + " " + arg.getName().toUpperCase();
-      } else {
-        String tmp_str = "--" + arg.getName();
-        name_str += tmp_str.trim();
       }
+      // else if (!shortName.equals("") && arg.getType().equals("boolean")) {
+      //   name_str += " -" + shortName + ", " + "--" + arg.getName().trim();
+      // }
+      else if (shortName.equals("") && !arg.getType().equals("boolean")) {
+        name_str += "--" + arg.getName() + " " + arg.getName().toUpperCase();
+      }
+      // else {
+      //   name_str += "--" + arg.getName();
+      // }
       if (arg.getType().equals("boolean")) {
-        name_str += "\n";
+        // name_str += "\n";
       }
       argumentList.add(name_str);
       if (!arg.getType().equals("boolean")) {
@@ -117,7 +119,14 @@ public class HelpException extends RuntimeException {
       }
 
       if (arg.getType().equals("boolean")) {
-        flags.add(argumentList);
+        argumentList.clear();
+        if (!shortName.equals("")) {
+          argumentList.add(" -" + shortName + ", " + "--" + arg.getName().trim());
+          flags.add(argumentList);
+        } else {
+          argumentList.add(" --" + arg.getName());
+          flags.add(argumentList);
+        }
       } else {
         namedStringList.add(argumentList);
       }
@@ -211,8 +220,7 @@ public class HelpException extends RuntimeException {
     if (namedStringList.size() != 0) {
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < namedStringList.size(); i++) {
-        sb.append(namedStringList.get(i).get(0));
-
+        sb.append(" " + namedStringList.get(i).get(0));
         numSpaces1 = findSpacing() - namedStringList.get(i).get(0).length();
         sb.append(String.join("", Collections.nCopies(numSpaces1, " ")));
 
@@ -236,11 +244,13 @@ public class HelpException extends RuntimeException {
       StringBuilder sb = new StringBuilder();
       for (int i = 0; i < flags.size(); i++) {
         sb.append(flags.get(i).get(0));
+        numSpaces1 = findSpacing() - flags.get(i).get(0).length() + 1;
         sb.append(String.join("", Collections.nCopies(numSpaces1, " ")));
-        sb.append(flags.get(i).get(1));
+        // sb.append(flags.get(i).get(1));
+        sb.append("\n");
       }
-      sb.append("\n");
       s += sb.toString();
+      s += "\n";
     }
 
     List<List<String>> mutually_exclusive = argParse.getMutuallyExclusive();
