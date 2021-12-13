@@ -8,7 +8,7 @@ import org.xml.sax.*;
 
 public class XMLparser {
 
-  public static ArgumentParser parseXML(String giantXmlString) {
+  public ArgumentParser parseXML(String giantXmlString) {
     ArgumentParser argParse = new ArgumentParser();
     // has args, short_args, positional, nonpositional_names, and short_name_names
 
