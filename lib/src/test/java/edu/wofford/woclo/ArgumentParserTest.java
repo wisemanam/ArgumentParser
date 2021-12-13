@@ -838,7 +838,8 @@ public class ArgumentParserTest {
             + "</positionalArgs>"
             + "</arguments>";
     String[] arguments = {"4.56", "6.0", "3.12"};
-    ArgumentParser a = XMLparser.parseXML(test_string);
+    XMLparser x = new XMLparser();
+    ArgumentParser a = x.parseXML(test_string);
     a.parse(arguments);
 
     float length = a.getValue("length");
@@ -881,7 +882,8 @@ public class ArgumentParserTest {
             + "</namedArgs>"
             + "</arguments>";
     String[] arguments = {"--type", "box", "--precision", "6"};
-    ArgumentParser a = XMLparser.parseXML(test_string);
+    XMLparser x = new XMLparser();
+    ArgumentParser a = x.parseXML(test_string);
 
     a.parse(arguments);
 
@@ -940,7 +942,8 @@ public class ArgumentParserTest {
             + "</namedArgs>"
             + "</arguments>";
     String[] arguments = {"4.56", "6.0", "3.12", "--type", "box", "--precision", "6"};
-    ArgumentParser a = XMLparser.parseXML(test_string);
+    XMLparser x = new XMLparser();
+    ArgumentParser a = x.parseXML(test_string);
 
     a.parse(arguments);
 
@@ -1011,7 +1014,8 @@ public class ArgumentParserTest {
                       + "</named>"
                       + "</namedArgs>"
                       + "</arguments>";
-              ArgumentParser a = XMLparser.parseXML(test);
+              XMLparser x = new XMLparser();
+              ArgumentParser a = x.parseXML(test);
             });
     assertEquals(e.getMissing(), "default");
   }
@@ -1151,7 +1155,8 @@ public class ArgumentParserTest {
             + "</group>"
             + "</mutuallyExclusive>"
             + "</arguments>";
-    ArgumentParser a = XMLparser.parseXML(test);
+    XMLparser x = new XMLparser();
+    ArgumentParser a = x.parseXML(test);
     String[] arguments = {"2", "--type", "ellipsoid", "5", "-p", "2", "3"};
     a.parse(arguments);
     float length = a.getValue("length");
@@ -1236,7 +1241,8 @@ public class ArgumentParserTest {
                       + "</group>"
                       + "</mutuallyExclusive>"
                       + "</arguments>";
-              ArgumentParser a = XMLparser.parseXML(test);
+              XMLparser x = new XMLparser();
+              ArgumentParser a = x.parseXML(test);
               String[] arguments = {"2", "--type", "ellipsoid", "5", "-p", "2", "-f", "3"};
               a.parse(arguments);
             });
@@ -1300,7 +1306,8 @@ public class ArgumentParserTest {
                       + "</namedArgs>"
                       + "</arguments>";
               String[] arguments = {"2", "--type", "ellipsoid", "5", "3"};
-              ArgumentParser a = XMLparser.parseXML(test);
+              XMLparser x = new XMLparser();
+              ArgumentParser a = x.parseXML(test);
               a.parse(arguments);
             });
     assertEquals(e.getMissingRequired(), "precision");
@@ -1349,6 +1356,7 @@ public class ArgumentParserTest {
             + "</named>"
             + "</namedArgs>"
             + "</arguments>";
+    XMLparser x = new XMLparser();
     ArgumentParser argParse = new ArgumentParser();
     argParse.addPositional("length", "float", "the length of the volume");
     argParse.addPositional("width", "float", "the width of the volume");
@@ -1356,7 +1364,7 @@ public class ArgumentParserTest {
     argParse.addNonPositional("type", "t", "string", "the type of volume", "box");
     argParse.addNonPositional(
         "precision", "p", "integer", "the maximum number of decimal places for the volume", "4");
-    String s = XMLparser.parserToXML(argParse);
+    String s = x.parserToXML(argParse);
     assertEquals(xmlString, s);
   }
 
@@ -1401,6 +1409,7 @@ public class ArgumentParserTest {
             + "</named>"
             + "</namedArgs>"
             + "</arguments>";
+    XMLparser x = new XMLparser();
     ArgumentParser argParse = new ArgumentParser();
     argParse.addPositional("length", "float", "the length of the volume");
     argParse.addPositional("width", "float", "the width of the volume");
@@ -1408,7 +1417,7 @@ public class ArgumentParserTest {
     argParse.addNonPositional("type", "t", "string", "the type of volume", true);
     argParse.addNonPositional(
         "precision", "p", "integer", "the maximum number of decimal places for the volume", "4");
-    String s = XMLparser.parserToXML(argParse);
+    String s = x.parserToXML(argParse);
     assertEquals(xmlString, s);
   }
 
@@ -1475,85 +1484,93 @@ public class ArgumentParserTest {
             + "</group>"
             + "</mutuallyExclusive>"
             + "</arguments>";
-    ArgumentParser argParse = XMLparser.parseXML(test_string);
-    String s = XMLparser.parserToXML(argParse);
+    XMLparser x = new XMLparser();
+    ArgumentParser argParse = x.parseXML(test_string);
+    String s = x.parserToXML(argParse);
     assertEquals(test_string, s);
   }
 
-  // @Test
+  @Test
   public void testHelpException() {
+    String demo_name = "VolumeCalculator";
+    String demo_description = "Calculate the volume.";
+    String test_string =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<name>length</name>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<name>width</name>"
+            + "<type>float</type>"
+            + "<description>the width of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<name>height</name>"
+            + "<type>float</type>"
+            + "<description>the height of the volume</description>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<name>type</name>"
+            + "<type>string</type>"
+            + "<description>the type of volume</description>"
+            + "<shortname>t</shortname>"
+            + "<default>"
+            + "<value>box</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>box</restriction>"
+            + "<restriction>pyramid</restriction>"
+            + "<restriction>ellipsoid</restriction>"
+            + "</restrictions>"
+            + "</named>"
+            + "<named>"
+            + "<name>precision</name>"
+            + "<type>integer</type>"
+            + "<description>the maximum number of decimal places for the volume</description>"
+            + "<required/>"
+            + "<shortname>p</shortname>"
+            + "</named>"
+            + "<named>"
+            + "<name>foo</name>"
+            + "<type>boolean</type>"
+            + "<shortname>f</shortname>"
+            + "<default><value>false</value></default>"
+            + "</named>"
+            + "<named>"
+            + "<name>bar</name>"
+            + "<type>boolean</type>"
+            + "<default><value>false</value></default>"
+            + "</named>"
+            + "</namedArgs>"
+            + "<mutuallyExclusive>"
+            + "<group>"
+            + "<name>foo</name>"
+            + "<name>precision</name>"
+            + "</group>"
+            + "<group>"
+            + "<name>type</name>"
+            + "<name>bar</name>"
+            + "</group>"
+            + "</mutuallyExclusive>"
+            + "</arguments>";
+    XMLparser x = new XMLparser();
+    ArgumentParser argParse = x.parseXML(test_string);
+    String help =
+        "usage: java VolumeCalculator [-h] [-t TYPE] -p PRECISION [-f] [--bar] length width height\n\nCalculate the volume.\n\npositional arguments:\n length                               (float)       the length of the volume\n width                                (float)       the width of the volume\n height                               (float)       the height of the volume\n\nnamed arguments:\n -h, --help                           show this help message and exit\n -t TYPE, --type TYPE                 (string)      the type of volume {box, pyramid, ellipsoid} (default: box)\n -p PRECISION, --precision PRECISION  (integer)     the maximum number of decimal places for the volume\n -f, --foo                            \n --bar                                \n\nmutually exclusive:\n [foo, precision]\n [type, bar]";
     HelpException e =
         assertThrows(
             HelpException.class,
             () -> {
-              String test_string =
-                  "<?xml version=\"1.0\"?>"
-                      + "<arguments>"
-                      + "<positionalArgs>"
-                      + "<positional>"
-                      + "<name>length</name>"
-                      + "<type>float</type>"
-                      + "<description>the length of the volume</description>"
-                      + "</positional>"
-                      + "<positional>"
-                      + "<name>width</name>"
-                      + "<type>float</type>"
-                      + "<description>the width of the volume</description>"
-                      + "</positional>"
-                      + "<positional>"
-                      + "<name>height</name>"
-                      + "<type>float</type>"
-                      + "<description>the height of the volume</description>"
-                      + "</positional>"
-                      + "</positionalArgs>"
-                      + "<namedArgs>"
-                      + "<named>"
-                      + "<name>type</name>"
-                      + "<type>string</type>"
-                      + "<description>the type of volume</description>"
-                      + "<shortname>t</shortname>"
-                      + "<default>"
-                      + "<value>box</value>"
-                      + "</default>"
-                      + "<restrictions>"
-                      + "<restriction>box</restriction>"
-                      + "<restriction>pyramid</restriction>"
-                      + "<restriction>ellipsoid</restriction>"
-                      + "</restrictions>"
-                      + "</named>"
-                      + "<named>"
-                      + "<name>precision</name>"
-                      + "<type>integer</type>"
-                      + "<description>the maximum number of decimal places for the volume</description>"
-                      + "<required/>"
-                      + "<shortname>p</shortname>"
-                      + "</named>"
-                      + "<named>"
-                      + "<name>foo</name>"
-                      + "<type>boolean</type>"
-                      + "<shortname>f</shortname>"
-                      + "<default><value>false</value></default>"
-                      + "</named>"
-                      + "<named>"
-                      + "<name>bar</name>"
-                      + "<type>boolean</type>"
-                      + "<default><value>false</value></default>"
-                      + "</named>"
-                      + "</namedArgs>"
-                      + "<mutuallyExclusive>"
-                      + "<group>"
-                      + "<name>foo</name>"
-                      + "<name>precision</name>"
-                      + "</group>"
-                      + "</mutuallyExclusive>"
-                      + "</arguments>";
-              ArgumentParser argParse = XMLparser.parseXML(test_string);
               String[] arguments = {"2", "--type", "ellipsoid", "5", "3", "-h"};
               argParse.parse(arguments);
             });
-    // List<String> argList =
-    // e.getArgumentList()
-    assertTrue(true);
+    assertEquals(e.getHelpMessage(argParse, demo_name, demo_description), help);
   }
 
   @Test
@@ -1704,7 +1721,8 @@ public class ArgumentParserTest {
                       + "</positional>"
                       + "</positionalArgs>"
                       + "</arguments>";
-              ArgumentParser a = XMLparser.parseXML(test);
+              XMLparser x = new XMLparser();
+              ArgumentParser a = x.parseXML(test);
             });
     assertEquals(e.getMissing(), "name");
   }
@@ -1725,7 +1743,8 @@ public class ArgumentParserTest {
                       + "</positional>"
                       + "</positionalArgs>"
                       + "</arguments>";
-              ArgumentParser a = XMLparser.parseXML(test);
+              XMLparser x = new XMLparser();
+              ArgumentParser a = x.parseXML(test);
             });
     assertEquals(e.getMissing(), "type");
   }
@@ -1748,7 +1767,8 @@ public class ArgumentParserTest {
             + "</positionalArgs>"
             + "</arguments>";
     String[] arguments = {"4.5"};
-    ArgumentParser a = XMLparser.parseXML(test);
+    XMLparser x = new XMLparser();
+    ArgumentParser a = x.parseXML(test);
     a.parse(arguments);
     float length = a.getValue("length");
     assertEquals(length, 4.5, 0.1);
@@ -1773,7 +1793,8 @@ public class ArgumentParserTest {
                       + "</named>"
                       + "</namedArgs>"
                       + "</arguments>";
-              ArgumentParser a = XMLparser.parseXML(test);
+              XMLparser x = new XMLparser();
+              ArgumentParser a = x.parseXML(test);
             });
     assertEquals(e.getMissing(), "name");
   }
@@ -1797,7 +1818,8 @@ public class ArgumentParserTest {
                       + "</named>"
                       + "</namedArgs>"
                       + "</arguments>";
-              ArgumentParser a = XMLparser.parseXML(test);
+              XMLparser x = new XMLparser();
+              ArgumentParser a = x.parseXML(test);
             });
     assertEquals(e.getMissing(), "type");
   }
@@ -1823,7 +1845,8 @@ public class ArgumentParserTest {
             + "</namedArgs>"
             + "</arguments>";
     String[] arguments = {"--length", "4.5"};
-    ArgumentParser a = XMLparser.parseXML(test);
+    XMLparser x = new XMLparser();
+    ArgumentParser a = x.parseXML(test);
     a.parse(arguments);
     float length = a.getValue("length");
     assertEquals(length, 4.5, 0.1);
@@ -1851,7 +1874,8 @@ public class ArgumentParserTest {
             + "</namedArgs>"
             + "</arguments>";
     String[] arguments = {"--length", "4.5"};
-    ArgumentParser a = XMLparser.parseXML(test);
+    XMLparser x = new XMLparser();
+    ArgumentParser a = x.parseXML(test);
     a.parse(arguments);
     float length = a.getValue("length");
     assertEquals(length, 4.5, 0.1);
@@ -1880,7 +1904,8 @@ public class ArgumentParserTest {
             + "</namedArgs>"
             + "</arguments>";
     String[] arguments = {"--length", "4.5"};
-    ArgumentParser a = XMLparser.parseXML(test);
+    XMLparser x = new XMLparser();
+    ArgumentParser a = x.parseXML(test);
     a.parse(arguments);
     float length = a.getValue("length");
     assertEquals(length, 4.5, 0.1);
@@ -1909,5 +1934,80 @@ public class ArgumentParserTest {
     a.parse(arguments);
     float length = a.getValue("length");
     assertEquals(length, 4.5, 0.1);
+  }
+
+  @Test
+  public void testCopyConstructor() {
+    ArgumentParser a1 = new ArgumentParser();
+    String[] arguments = {"6"};
+    a1.addPositional("int1", "integer", "int1");
+    a1.parse(arguments);
+    ArgumentParser a2 = new ArgumentParser(a1);
+    int int1 = a2.getValue("int1");
+    assertEquals(int1, 6);
+  }
+
+  @Test
+  public void testHelpException2() {
+    String demo_name = "VolumeCalculator";
+    String demo_description = "Calculate the volume.";
+    String test_string =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<name>length</name>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<name>width</name>"
+            + "<type>float</type>"
+            + "<description>the width of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<name>height</name>"
+            + "<type>float</type>"
+            + "<description>the height of the volume</description>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<required/>"
+            + "<default>"
+            + "<value>7</value>"
+            + "</default>"
+            + "<type>integer</type>"
+            + "<description>the maximum number of decimal places for the volume</description>"
+            + "<name>precision</name>"
+            + "</named>"
+            + "<named>"
+            + "<description>the type of volume</description>"
+            + "<shortname>t</shortname>"
+            + "<type>string</type>"
+            + "<name>type</name>"
+            + "<default>"
+            + "<value>box</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>box</restriction>"
+            + "<restriction>pyramid</restriction>"
+            + "<restriction>ellipsoid</restriction>"
+            + "</restrictions>"
+            + "</named>"
+            + "</namedArgs>"
+            + "</arguments>";
+    XMLparser x = new XMLparser();
+    ArgumentParser argParse = x.parseXML(test_string);
+    String help =
+        "usage: java VolumeCalculator [-h] --precision PRECISION [-t TYPE] length width height\n\nCalculate the volume.\n\npositional arguments:\n length                 (float)       the length of the volume\n width                  (float)       the width of the volume\n height                 (float)       the height of the volume\n\nnamed arguments:\n -h, --help             show this help message and exit\n --precision PRECISION  (integer)     the maximum number of decimal places for the volume\n -t TYPE, --type TYPE   (string)      the type of volume {box, pyramid, ellipsoid} (default: box)";
+    HelpException e =
+        assertThrows(
+            HelpException.class,
+            () -> {
+              String[] arguments = {"2", "--type", "ellipsoid", "5", "3", "-h"};
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getHelpMessage(argParse, demo_name, demo_description), help);
   }
 }
