@@ -123,6 +123,10 @@ public class Argument {
     }
   }
 
+  /**
+   * Returns the list of accepted values for the argument.
+   * @return the list of accepted values for the argument
+   */
   public String[] getAcceptedValues() {
     return accepted_values.clone();
   }
