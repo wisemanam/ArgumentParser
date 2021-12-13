@@ -28,7 +28,15 @@ public class VolumeCalculator {
       double val2 = bd.doubleValue();
       return String.valueOf(val2);
     } catch (HelpException e) {
-      return "usage: java VolumeCalculator [-h] [-t TYPE] [-p PRECISION] length width height\n\nCalculate the volume.\n\npositional arguments:\n length                               (float)       the length of the volume\n width                                (float)       the width of the volume\n height                               (float)       the height of the volume\n\nnamed arguments:\n -h, --help                           show this help message and exit\n -t TYPE, --type TYPE                 (string)      the type of volume {box, pyramid, ellipsoid} (default: box)\n -p PRECISION, --precision PRECISION  (integer)     the maximum number of decimal places for the volume (default: 4)";
+      return e.getHelpMessage("VolumeCalculator", "Calculate the volume.");
+      // return "usage: java VolumeCalculator [-h] [-t TYPE] [-p PRECISION] length width
+      // height\n\nCalculate the volume.\n\npositional arguments:\n length
+      //     (float)       the length of the volume\n width                                (float)
+      //     the width of the volume\n height                               (float)       the height
+      // of the volume\n\nnamed arguments:\n -h, --help                           show this help
+      // message and exit\n -t TYPE, --type TYPE                 (string)      the type of volume
+      // {box, pyramid, ellipsoid} (default: box)\n -p PRECISION, --precision PRECISION  (integer)
+      //   the maximum number of decimal places for the volume (default: 4)";
     } catch (TooManyException e) {
       return "VolumeCalculator error: the value " + e.getFirstExtra() + " matches no argument";
     } catch (TooFewException e) {

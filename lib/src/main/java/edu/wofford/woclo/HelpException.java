@@ -1,13 +1,17 @@
 package edu.wofford.woclo;
 
-import java.awt.List;
+// import java.awt.List;
+import java.io.*;
+import java.util.*;
 
 /** The HelpException is thrown by ArgumentParser when "--help" or "--h" is one of the arguments. */
 public class HelpException extends RuntimeException {
   ArgumentParser argParse;
-  String demoName;
   List<List<String>> allArgumentsList;
-
+  List<List<String>> positionalStringList;
+  List<List<String>> namedStringList;
+  List<String> helpArgs;
+  List<List<String>> flags;
   /**
    * Takes a message and prints it when HelpException is thrown.
    *
@@ -17,16 +21,23 @@ public class HelpException extends RuntimeException {
     super(message);
   }
 
-  public HelpException(ArgumentParser argParse, String demoName) {
+  public HelpException(ArgumentParser argParse) {
     this.argParse = argParse;
-    this.demoName = demoName;
-    allArgumentsList = getArgumentList(argParse);
+    allArgumentsList = new ArrayList<List<String>>();
+    positionalStringList = new ArrayList<List<String>>();
+    namedStringList = new ArrayList<List<String>>();
+    helpArgs = new ArrayList<String>();
+    flags = new ArrayList<List<String>>();
   }
 
-  private List<List<String>> getArgumentList() {
-    // add positionals 
+  private void getArgumentList() {
+    // add help flags
+    helpArgs.add("-h, --help");
+    helpArgs.add("show this help message and exit");
+    allArgumentsList.add(helpArgs);
+
+    // add positionals
     // ["length", "(float)", "the length of the volume"]
-    List<List<String>> allArgs = new ArrayList<List<String>>();
 
     for (int i = 0; i < argParse.getPositionalNames().size(); i++) {
       List<String> argumentList = new ArrayList<String>();
@@ -36,11 +47,13 @@ public class HelpException extends RuntimeException {
       argumentList.add("(" + arg.getType() + ")");
       argumentList.add(arg.getDescription());
 
-      allArgs.add(argumentList);
+      positionalStringList.add(argumentList);
+      allArgumentsList.add(argumentList);
     }
 
     // add named args
-    //["-p PRECISION, --precision PRECISION", "(integer)", "the maximum number of decimal places for the volume"]
+    // ["-p PRECISION, --precision PRECISION", "(integer)", "the maximum number of decimal places
+    // for the volume"]
     for (int i = 0; i < argParse.getNonPositionalNames().size(); i++) {
       List<String> argumentList = new ArrayList<String>();
       String name = argParse.getNonPositionalNames().get(i);
@@ -52,14 +65,8 @@ public class HelpException extends RuntimeException {
         shortName = optArg.getShortName();
       }
 
-      // add help flags
-      List<String> helpArgs = new ArrayList<String>();
-      helpArgs.add("-h, --help");
-      helpArgs.add("show this help message and exit");
-      allArgumentsList.add(helpArgs);
-
       // if there is a short name
-      name_str = "";
+      String name_str = "";
       if (!shortName.equals("")) {
         name_str += "-" + shortName;
         if (arg.getType() != "boolean") {
@@ -68,39 +75,56 @@ public class HelpException extends RuntimeException {
       }
       name_str += "--" + arg.getName() + " " + arg.getName().toUpperCase();
 
-      argumentList.add(name_string); 
+      argumentList.add(name_str);
       argumentList.add("(" + arg.getType() + ")");
       argumentList.add(arg.getDescription());
 
-      allArgs.add(argumentList);
+      if (arg.getType().equals("boolean")) {
+        flags.add(argumentList);
+      } else {
+        namedStringList.add(argumentList);
+      }
+      allArgumentsList.add(argumentList);
     }
-    return allArgs;
   }
 
-  public String getSummaryString() {
+  private int findSpacing() {
+    int m = 0;
+    for (int i = 0; i < allArgumentsList.size(); i++) {
+      if (allArgumentsList.get(i).get(0).length() > m) {
+        m = allArgumentsList.get(i).get(0).length();
+      }
+    }
+    return m + 2;
+  }
+
+  private String getSummaryString(String demoName) {
+    getArgumentList();
     String str = "usage: java " + demoName + " [-h] ";
 
-    nonPositionals = argParse.getNonPositionalNames();
+    List<String> nonPositionals = argParse.getNonPositionalNames();
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < nonPositionals.size(); i++) {
-      Argument a = nonPositionals.get(i);
+      String n = nonPositionals.get(i);
+      Argument a = argParse.getArgument(n);
       if (a instanceof OptionalArgument) {
         OptionalArgument optArg = (OptionalArgument) a;
         if (!optArg.isRequired()) {
           sb.append("[");
 
-        if (optArg.hasShortName()) {
-          sb.append("-" + optArg.getShortName());
-        } else {
-          sb.append("--" + optArg.getName());
-        }
+          if (optArg.hasShortName()) {
+            sb.append("-" + optArg.getShortName());
+          } else {
+            sb.append("--" + optArg.getName());
+          }
 
-        if (!optArg.getType().equals("boolean")) {
-          sb.append(" " + optArg.getName().toUpperCase());
-        }
+          if (!optArg.getType().equals("boolean")) {
+            sb.append(" " + optArg.getName().toUpperCase());
+          }
 
-        if (!optArg.isRequired()) {
-          sb.append("]");
+          if (!optArg.isRequired()) {
+            sb.append("] ");
+          }
         }
       }
     }
@@ -110,6 +134,88 @@ public class HelpException extends RuntimeException {
 
     str += sb.toString();
     return str.trim();
+  }
+
+  public String getHelpMessage(String demoName, String demoDescription) {
+    String s = getSummaryString(demoName) + "\n\n";
+    s += demoDescription + "\n\n";
+
+    int numSpaces1 = 0;
+    if (positionalStringList.size() != 0) {
+      s += "positional arguments:\n";
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < positionalStringList.size(); i++) {
+        sb.append(" " + positionalStringList.get(i).get(0));
+
+        numSpaces1 = findSpacing() - positionalStringList.get(i).get(0).length();
+        sb.append(String.join("", Collections.nCopies(numSpaces1, " ")));
+
+        String type = positionalStringList.get(i).get(1);
+        int numSpaces2 = "(integer)     ".length() - type.length();
+        sb.append(type);
+        sb.append(String.join("", Collections.nCopies(numSpaces2, " ")));
+
+        sb.append(positionalStringList.get(i).get(2));
+        sb.append("\n");
+      }
+      s += sb.toString() + "\n";
     }
+
+    s += "named arguments:\n";
+    numSpaces1 = findSpacing() - helpArgs.get(0).length();
+    s +=
+        " "
+            + helpArgs.get(0)
+            + String.join("", Collections.nCopies(numSpaces1, " "))
+            + helpArgs.get(1)
+            + "\n";
+
+    if (namedStringList.size() != 0) {
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < namedStringList.size(); i++) {
+        sb.append(" " + namedStringList.get(i).get(0));
+
+        numSpaces1 = findSpacing() - namedStringList.get(i).get(0).length();
+        sb.append(String.join("", Collections.nCopies(numSpaces1, " ")));
+
+        String type = namedStringList.get(i).get(1);
+
+        int numSpaces2 = "(integer)     ".length() - type.length();
+        sb.append(type);
+        sb.append(String.join("", Collections.nCopies(numSpaces2, " ")));
+
+        sb.append(namedStringList.get(i).get(2));
+        sb.append("\n");
+      }
+      s += sb.toString() + "\n\n";
+    }
+
+    if (flags.size() != 0) {
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < flags.size(); i++) {
+        sb.append(flags.get(i).get(0));
+        sb.append(String.join("", Collections.nCopies(numSpaces1, " ")));
+        sb.append(flags.get(i).get(1));
+      }
+      sb.append("\n");
+    }
+
+    List<List<String>> mutually_exclusive = argParse.getMutuallyExclusive();
+    if (mutually_exclusive.size() != 0) {
+      s += "mutually exclusive:\n";
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < mutually_exclusive.size(); i++) {
+        sb.append("[");
+        for (int j = 0; j < mutually_exclusive.get(i).size(); j++) {
+          if (j == mutually_exclusive.get(i).size() - 1) {
+            sb.append(mutually_exclusive.get(i).get(j) + "]\n");
+          } else {
+            sb.append(mutually_exclusive.get(i).get(j) + ", ");
+          }
+        }
+      }
+      s += sb.toString();
+    }
+    return s;
   }
 }
