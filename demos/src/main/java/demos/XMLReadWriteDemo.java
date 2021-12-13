@@ -19,7 +19,7 @@ public class XMLReadWriteDemo {
       fw.close();
     } catch (IOException e) {
       try {
-        if (fw != null){
+        if (fw != null) {
           fw.close();
         }
       } catch (IOException e2) {
@@ -30,10 +30,6 @@ public class XMLReadWriteDemo {
 
   public static void main(String... args) {
     XMLReadWriteDemo xmlReadWrite = new XMLReadWriteDemo();
-    try {
-      xmlReadWrite.readWrite(args);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    xmlReadWrite.readWrite(args);
   }
 }
