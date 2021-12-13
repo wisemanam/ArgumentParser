@@ -30,7 +30,7 @@ public class HelpException extends RuntimeException {
     flags = new ArrayList<List<String>>();
   }
 
-  private void getArgumentList() {
+  protected void getArgumentList() {
     // add help flags
     helpArgs.add("-h, --help");
     helpArgs.add("show this help message and exit");

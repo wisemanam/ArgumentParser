@@ -1479,4 +1479,72 @@ public class ArgumentParserTest {
     String s = XMLparser.parserToXML(argParse);
     assertEquals(test_string, s);
   }
+
+  @Test
+  public void testHelpException() {
+    String test_string =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<name>length</name>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<name>width</name>"
+            + "<type>float</type>"
+            + "<description>the width of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<name>height</name>"
+            + "<type>float</type>"
+            + "<description>the height of the volume</description>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<name>type</name>"
+            + "<type>string</type>"
+            + "<description>the type of volume</description>"
+            + "<shortname>t</shortname>"
+            + "<default>"
+            + "<value>box</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>box</restriction>"
+            + "<restriction>pyramid</restriction>"
+            + "<restriction>ellipsoid</restriction>"
+            + "</restrictions>"
+            + "</named>"
+            + "<named>"
+            + "<name>precision</name>"
+            + "<type>integer</type>"
+            + "<description>the maximum number of decimal places for the volume</description>"
+            + "<required/>"
+            + "<shortname>p</shortname>"
+            + "</named>"
+            + "<named>"
+            + "<name>foo</name>"
+            + "<type>boolean</type>"
+            + "<shortname>f</shortname>"
+            + "<default><value>false</value></default>"
+            + "</named>"
+            + "<named>"
+            + "<name>bar</name>"
+            + "<type>boolean</type>"
+            + "<default><value>false</value></default>"
+            + "</named>"
+            + "</namedArgs>"
+            + "<mutuallyExclusive>"
+            + "<group>"
+            + "<name>foo</name>"
+            + "<name>precision</name>"
+            + "</group>"
+            + "</mutuallyExclusive>"
+            + "</arguments>";
+    ArgumentParser argParse = XMLparser.parseXML(test_string);
+    String[] arguments = {"2", "--type", "ellipsoid", "5", "3", "-h"};
+    argParse.parse(arguments);
+  }
 }
