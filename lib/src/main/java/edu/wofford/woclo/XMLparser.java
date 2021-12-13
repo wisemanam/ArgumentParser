@@ -7,12 +7,6 @@ import org.w3c.dom.*;
 import org.xml.sax.*;
 
 public class XMLparser {
-  // will return argumentParser with all the arguments added to it
-  public static ArgumentParser parseXML(File XMLfile) {
-    // convert file to giant string
-    String giantString = "";
-    return parseXML(giantString);
-  }
 
   public static ArgumentParser parseXML(String giantXmlString) {
     ArgumentParser argParse = new ArgumentParser();
