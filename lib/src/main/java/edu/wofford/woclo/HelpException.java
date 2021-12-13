@@ -59,10 +59,11 @@ public class HelpException extends RuntimeException {
       String name = argParse.getNonPositionalNames().get(i);
       Argument arg = argParse.getArgument(name);
       String shortName = "";
-
+      String defaultValue = "";
       if (arg instanceof OptionalArgument) {
         OptionalArgument optArg = (OptionalArgument) arg;
         shortName = optArg.getShortName();
+        defaultValue = optArg.getValueAsString();
       }
 
       // if there is a short name
@@ -78,6 +79,24 @@ public class HelpException extends RuntimeException {
       argumentList.add(name_str);
       argumentList.add("(" + arg.getType() + ")");
       argumentList.add(arg.getDescription());
+
+      if (arg.hasAcceptedValues()) {
+        StringBuilder sb = new StringBuilder();
+        String[] accepted = arg.getAcceptedValues();
+
+        sb.append("{" + accepted[0] + ", " + accepted[1] + ", " + accepted[2] + "}");
+
+        // for (int j = 0; j < accepted.length - 1; j++) {
+        //   sb.append(accepted[j] + ", ");
+        // }
+        // sb.append(accepted[accepted.length - 1] + "}");
+
+        System.out.println(sb.toString());
+
+        argumentList.add(sb.toString());
+      }
+
+      argumentList.add("(default: " + defaultValue + ")");
 
       if (arg.getType().equals("boolean")) {
         flags.add(argumentList);
@@ -185,6 +204,10 @@ public class HelpException extends RuntimeException {
         sb.append(String.join("", Collections.nCopies(numSpaces2, " ")));
 
         sb.append(namedStringList.get(i).get(2));
+        for (int j = 3; j < namedStringList.get(i).size(); j++) {
+          sb.append(" " + namedStringList.get(i).get(j));
+        }
+
         sb.append("\n");
       }
       s += sb.toString() + "\n\n";
@@ -216,6 +239,6 @@ public class HelpException extends RuntimeException {
       }
       s += sb.toString();
     }
-    return s;
+    return s.trim();
   }
 }
