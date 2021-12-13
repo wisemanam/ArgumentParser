@@ -36,6 +36,10 @@ public class ArgumentParser {
     trashcan = new ArrayList<String>();
   }
 
+  /**
+   * This is a copy constructor that takes an ArgumentParser and produces a shallow copy of that parser.
+   * @param argParse the ArgumentParser to be copied
+   */
   public ArgumentParser(ArgumentParser argParse) {
     this.args = argParse.args;
     this.short_args = argParse.short_args;
@@ -159,6 +163,14 @@ public class ArgumentParser {
     short_args.put(short_name, name);
   }
 
+  /**
+   * This method adds a non-positional argument using the name, type, description, and a boolean
+   * determining whether or not the argument is required.
+   * @param name the name that will be used to retrieve this argument from ArgumentParser
+   * @param type the type that the value will be when it is retreived from ArgumentParser
+   * @param description the description of the argument used in the help message
+   * @param required a boolean stating whether or not the argument is required
+   */
   public void addNonPositional(String name, String type, String description, boolean required) {
     Argument arg = new OptionalArgument(name, type, description, required);
     nonpositional_names.add(name);
@@ -166,6 +178,15 @@ public class ArgumentParser {
     required_names.add(name);
   }
 
+  /**
+   * This method adds a non-positional argument using the name, short name, type, description, and a boolean
+   * determining whether or not the argument is required.
+   * @param name the name that will be used to retrieve this argument from ArgumentParser
+   * @param shortname the short name that can be used to enter the argument into the command line
+   * @param type the type that the value will be when it is retreived from ArgumentParser
+   * @param description the description of the argument used in the help message
+   * @param required a boolean stating whether or not the argument is required
+   */
   public void addNonPositional(
       String name, String shortname, String type, String description, boolean required) {
     Argument arg = new OptionalArgument(name, shortname, type, description, required);
@@ -176,6 +197,15 @@ public class ArgumentParser {
     required_names.add(name);
   }
 
+  /**
+   * This method adds a non-positional argument using the name, type, description, a list of 
+   * accepted values, and a boolean determining whether or not the argument is required.
+   * @param name the name that will be used to retrieve this argument from ArgumentParser
+   * @param type the type that the value will be when it is retreived from ArgumentParser
+   * @param description the description of the argument used in the help message
+   * @param accepted the list of accepted values for this argument
+   * @param required a boolean stating whether or not the argument is required
+   */
   public void addNonPositional(
       String name, String type, String description, String[] accepted, boolean required) {
     Argument arg = new OptionalArgument(name, type, description, accepted, required);
@@ -184,6 +214,16 @@ public class ArgumentParser {
     required_names.add(name);
   }
 
+  /**
+   * This method adds a non-positional argument using the name, short name, type, description, a list of 
+   * accepted values, and a boolean determining whether or not the argument is required.
+   * @param name the name that will be used to retrieve this argument from ArgumentParser
+   * @param shortname the short name that can be used to enter the argument into the command line
+   * @param type the type that the value will be when it is retreived from ArgumentParser
+   * @param description the description of the argument used in the help message
+   * @param accepted the list of accepted values for this argument
+   * @param required a boolean stating whether or not the argument is required
+   */
   public void addNonPositional(
       String name,
       String shortname,
@@ -199,13 +239,23 @@ public class ArgumentParser {
     required_names.add(name);
   }
 
+  /**
+   * Adds a group of mutually exclusive arguments to the ArgumentParser.
+   * @param mutuallyExclusive the list of arguments that are mutually exclusive
+   */
   public void addMutuallyExclusiveGroup(List<String> mutuallyExclusive) {
     if (mutuallyExclusive.size() > 1) {
       mutually_exclusive.add(mutuallyExclusive);
     }
   }
 
-  public boolean mutuallyExclusiveError(List<String> mutexc, String[] arguments) {
+  /**
+   * Returns true if there are two arguments that are mutually exclusive
+   * @param mutexc a list of the mutually exclusive arguments
+   * @param arguments the list of arguments from the command line
+   * @return true if there is are conflicting arguments, false otherwise
+   */
+  protected boolean mutuallyExclusiveError(List<String> mutexc, String[] arguments) {
     int numContains = 0;
     String[] check_digits = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."};
     Queue<String> args = new LinkedList<String>();
@@ -237,7 +287,12 @@ public class ArgumentParser {
     }
   }
 
-  public void positionalFound(String name, String value) {
+  /**
+   * Parses the positional argument and enters its information into the ArgumentParser
+   * @param name the name of the positional argument
+   * @param value the value of the positional argument
+   */
+  private void positionalFound(String name, String value) {
     Argument arg = args.get(name);
     if (!arg.hasAcceptedValues()) {
       if (arg.getType().equals("integer")) {
@@ -280,7 +335,14 @@ public class ArgumentParser {
     }
   }
 
-  public int shortnameStackedFound(String short_name, Queue<String> arguments, int num_required) {
+  /**
+   * 
+   * @param short_name
+   * @param arguments the queue of arguments
+   * @param num_required the number of required arguments in the stacked flags
+   * @return the number of required arguments in the stacked flags
+   */
+  private int shortnameStackedFound(String short_name, Queue<String> arguments, int num_required) {
     String name = short_args.get(short_name);
     Argument arg = args.get(name);
     if (arg == null) {
@@ -300,7 +362,7 @@ public class ArgumentParser {
     return num_required;
   }
 
-  public int shortnameFound(String short_name, Queue<String> arguments, int num_required) {
+  private int shortnameFound(String short_name, Queue<String> arguments, int num_required) {
     String name = short_args.get(short_name);
     Argument arg = args.get(name);
     if (arg == null) {
