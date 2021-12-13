@@ -6,36 +6,28 @@ import java.util.*;
 
 /** The HelpException is thrown by ArgumentParser when "--help" or "--h" is one of the arguments. */
 public class HelpException extends RuntimeException {
-  ArgumentParser argParse;
   List<List<String>> allArgumentsList;
   List<List<String>> positionalStringList;
   List<List<String>> namedStringList;
   List<String> helpArgs;
   List<List<String>> flags;
-  /**
-   * Takes a message and prints it when HelpException is thrown.
-   *
-   * @param message the message that the user wishes to print when the HelpException is thrown.
-   */
-  public HelpException(String message) {
-    super(message);
-  }
+  String summaryString;
 
   public HelpException(ArgumentParser argParse) {
-    this.argParse = new ArgumentParser(argParse);
-    allArgumentsList = new ArrayList<List<String>>();
     positionalStringList = new ArrayList<List<String>>();
     namedStringList = new ArrayList<List<String>>();
     helpArgs = new ArrayList<String>();
     flags = new ArrayList<List<String>>();
+    allArgumentsList = getArgumentList(argParse);
+    summaryString = getSummaryString(argParse) + "\n\n";
   }
 
-  protected void getArgumentList() {
+  private List<List<String>> getArgumentList(ArgumentParser argParse) {
+    List<List<String>> allArgs = new ArrayList<List<String>>();
     // add help flags
     helpArgs.add("-h, --help");
     helpArgs.add("show this help message and exit");
-    allArgumentsList.add(helpArgs);
-
+    allArgs.add(helpArgs);
     // add positionals
     // ["length", "(float)", "the length of the volume"]
 
@@ -48,7 +40,7 @@ public class HelpException extends RuntimeException {
       argumentList.add(arg.getDescription());
 
       positionalStringList.add(argumentList);
-      allArgumentsList.add(argumentList);
+      allArgs.add(argumentList);
     }
 
     // add named args
@@ -61,6 +53,7 @@ public class HelpException extends RuntimeException {
       String shortName = "";
       String defaultValue = "";
       boolean required = false;
+
       if (arg instanceof OptionalArgument) {
         OptionalArgument optArg = (OptionalArgument) arg;
         shortName = optArg.getShortName();
@@ -119,8 +112,10 @@ public class HelpException extends RuntimeException {
       } else {
         namedStringList.add(argumentList);
       }
-      allArgumentsList.add(argumentList);
+      allArgs.add(argumentList);
     }
+    // System.out.println(allArgs.toString());
+    return allArgs;
   }
 
   private int findSpacing() {
@@ -133,10 +128,8 @@ public class HelpException extends RuntimeException {
     return m + 2;
   }
 
-  private String getSummaryString(String demoName) {
-    getArgumentList();
-    String str = "usage: java " + demoName + " [-h] ";
-
+  private String getSummaryString(ArgumentParser argParse) {
+    String str = "";
     List<String> nonPositionals = argParse.getNonPositionalNames();
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < nonPositionals.size(); i++) {
@@ -172,8 +165,10 @@ public class HelpException extends RuntimeException {
     return str.trim();
   }
 
-  public String getHelpMessage(String demoName, String demoDescription) {
-    String s = getSummaryString(demoName) + "\n\n";
+  public String getHelpMessage(ArgumentParser argParse, String demoName, String demoDescription) {
+    String s = "usage: java " + demoName + " [-h] ";
+
+    s += summaryString;
     s += demoDescription + "\n\n";
 
     int numSpaces1 = 0;
