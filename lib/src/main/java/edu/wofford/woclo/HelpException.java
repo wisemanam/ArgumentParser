@@ -13,6 +13,10 @@ public class HelpException extends RuntimeException {
   List<List<String>> flags;
   String summaryString;
 
+  /**
+   * The constructor for HelpException requires the ArgumentParser
+   * @param argParse the ArgumentParser
+   */
   public HelpException(ArgumentParser argParse) {
     positionalStringList = new ArrayList<List<String>>();
     namedStringList = new ArrayList<List<String>>();
@@ -22,15 +26,19 @@ public class HelpException extends RuntimeException {
     summaryString = getSummaryString(argParse) + "\n\n";
   }
 
+  /**
+   * getArgumentList takes the ArgumentParser and returns a list of lists where each internal list
+   * represents a line. Each element in the internal list is sepearated by a designated number of spaces.
+   */
   private List<List<String>> getArgumentList(ArgumentParser argParse) {
     List<List<String>> allArgs = new ArrayList<List<String>>();
     // add help flags
     helpArgs.add("-h, --help");
     helpArgs.add("show this help message and exit");
     allArgs.add(helpArgs);
+
     // add positionals
     // ["length", "(float)", "the length of the volume"]
-
     for (int i = 0; i < argParse.getPositionalNames().size(); i++) {
       List<String> argumentList = new ArrayList<String>();
       String name = argParse.getPositionalNames().get(i);
@@ -118,6 +126,11 @@ public class HelpException extends RuntimeException {
     return allArgs;
   }
 
+  /**
+   * findSpacing calculates the number of spaces that go in between the first and second segment of strings
+   * in a line.
+   * @return the number of spaces that go in between the first and second segment of strings in a line
+   */
   private int findSpacing() {
     int m = 0;
     for (int i = 0; i < allArgumentsList.size(); i++) {
@@ -128,6 +141,11 @@ public class HelpException extends RuntimeException {
     return m + 2;
   }
 
+  /**
+   * Takes an ArgumentParser and returns the string that will go at the beginning of the help message
+   * @param argParse the ArgumentParser
+   * @return the string that goes at the beginning of the help message
+   */
   private String getSummaryString(ArgumentParser argParse) {
     String str = "";
     List<String> nonPositionals = argParse.getNonPositionalNames();
@@ -165,6 +183,14 @@ public class HelpException extends RuntimeException {
     return str.trim();
   }
 
+  /**
+   * Takes an ArgumentParser, the name of the demo, and the description of the demo and creates the help
+   * message as a string.
+   * @param argParse the ArgumentParser
+   * @param demoName the name of the demo
+   * @param demoDescription the description of the demo
+   * @return the help message for the demo
+   */
   public String getHelpMessage(ArgumentParser argParse, String demoName, String demoDescription) {
     String s = "usage: java " + demoName + " [-h] ";
 
