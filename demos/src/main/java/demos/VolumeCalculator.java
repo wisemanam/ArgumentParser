@@ -7,8 +7,13 @@ import java.util.Arrays;
 
 public class VolumeCalculator {
   public String volumeCalculator(String xml, String[] arguments) {
+    ArgumentParser parser = null;
     try {
-      ArgumentParser parser = XMLparser.parseXML(xml);
+      parser = XMLparser.parseXML(xml);
+    } catch (MissingFromXMLException e) {
+      return "VolumeCalculator error: invalid XML";
+    }
+    try {
       parser.parse(arguments);
       float length = parser.getValue("length");
       float width = parser.getValue("width");
@@ -28,13 +33,11 @@ public class VolumeCalculator {
       double val2 = bd.doubleValue();
       return String.valueOf(val2);
     } catch (HelpException e) {
-      return e.getHelpMessage("VolumeCalculator", "Calculate the volume.");
+      return e.getHelpMessage(parser, "VolumeCalculator", "Calculate the volume.");
     } catch (TooManyException e) {
       return "VolumeCalculator error: the value " + e.getFirstExtra() + " matches no argument";
     } catch (TooFewException e) {
       return "VolumeCalculator error: the argument " + e.getNextExpectedName() + " is required";
-    } catch (MissingFromXMLException e) {
-      return "VolumeCalculator error: invalid XML";
     } catch (MutualExclusionException e) {
       return "VolumeCalculator error: mutual exclusion ["
           + e.getMutuallyExcList().get(0)
