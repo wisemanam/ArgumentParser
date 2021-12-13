@@ -110,7 +110,7 @@ public class VolumeCalculatorTest {
     assertEquals("VolumeCalculator error: invalid XML", result);
   }
 
-  // @Test
+  @Test
   public void testHelp() {
     String xml =
         "<?xml version=\"1.0\"?>"
@@ -162,7 +162,7 @@ public class VolumeCalculatorTest {
     VolumeCalculator v = new VolumeCalculator();
     String result = v.volumeCalculator(xml, args);
     String help =
-        "usage: java VolumeCalculator [-h] [-t TYPE] [-p PRECISION] length width height\n\nCalculate the volume.\n\npositional arguments:\n length                               (float)       the length of the volume\n width                                (float)       the width of the volume\n height                               (float)       the height of the volume\n\nnamed arguments:\n -h, --help                           show this help message and exit\n -t TYPE, --type TYPE                 (string)      the type of volume {box, pyramid, ellipsoid} (default: box)\n -p PRECISION, --precision PRECISION  (integer)     the maximum number of decimal places for the volume (default: 4)";
+        "usage: java VolumeCalculator [-h] [-t TYPE] [-p PRECISION] length width height\n\nCalculate the volume.\n\npositional arguments:\n length                               (float)       the length of the volume\n width                                (float)       the width of the volume\n height                               (float)       the height of the volume\n\nnamed arguments:\n -h, --help                           show this help message and exit\n -t TYPE, --type TYPE                 (string)      the type of volume {box, pyramid, ellipsoid} (default: box)\n -p PRECISION, --precision PRECISION  (integer)     the maximum number of decimal places for the volume (default: 5)";
     assertEquals(help, result);
   }
 }

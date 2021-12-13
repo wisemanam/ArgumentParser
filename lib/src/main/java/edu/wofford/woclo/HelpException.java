@@ -81,18 +81,8 @@ public class HelpException extends RuntimeException {
                 + arg.getName()
                 + " "
                 + arg.getName().toUpperCase();
-      }
-      // else if (!shortName.equals("") && arg.getType().equals("boolean")) {
-      //   name_str += " -" + shortName + ", " + "--" + arg.getName().trim();
-      // }
-      else if (shortName.equals("") && !arg.getType().equals("boolean")) {
+      } else if (shortName.equals("") && !arg.getType().equals("boolean")) {
         name_str += "--" + arg.getName() + " " + arg.getName().toUpperCase();
-      }
-      // else {
-      //   name_str += "--" + arg.getName();
-      // }
-      if (arg.getType().equals("boolean")) {
-        // name_str += "\n";
       }
       argumentList.add(name_str);
       if (!arg.getType().equals("boolean")) {
@@ -104,7 +94,6 @@ public class HelpException extends RuntimeException {
         StringBuilder sb = new StringBuilder();
         String[] accepted = arg.getAcceptedValues();
 
-        // sb.append("{" + accepted[0] + ", " + accepted[1] + ", " + accepted[2] + "}");
         sb.append("{");
 
         for (int j = 0; j < accepted.length - 1; j++) {
@@ -246,7 +235,6 @@ public class HelpException extends RuntimeException {
         sb.append(flags.get(i).get(0));
         numSpaces1 = findSpacing() - flags.get(i).get(0).length() + 1;
         sb.append(String.join("", Collections.nCopies(numSpaces1, " ")));
-        // sb.append(flags.get(i).get(1));
         sb.append("\n");
       }
       s += sb.toString();
