@@ -172,14 +172,26 @@ public class OptionalArgument extends Argument {
     return short_name;
   }
 
+  /**
+   * Returns the value of the argument as a string
+   * @return the value of the argument
+   */
   public String getValueAsString() {
     return value;
   }
 
+  /**
+   * Returns true if the argument is required, false otherwise.
+   * @return a boolean stating whether or not the boolean is required
+   */
   public boolean isRequired() {
     return required;
   }
 
+  /**
+   * Returns true if the argument has a short name, false otherwise.
+   * @return a boolean stating whether or not the argument has a short name
+   */
   public boolean hasShortName() {
     return !short_name.equals("");
   }
