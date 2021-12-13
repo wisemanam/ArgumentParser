@@ -336,8 +336,9 @@ public class ArgumentParser {
   }
 
   /**
-   * 
-   * @param short_name
+   * Parses a stack of boolean arguments and enters their information into the ArgumentParser and updates the
+   * number of arguments that are required.
+   * @param short_name the current short name in the stack
    * @param arguments the queue of arguments
    * @param num_required the number of required arguments in the stacked flags
    * @return the number of required arguments in the stacked flags
@@ -362,6 +363,14 @@ public class ArgumentParser {
     return num_required;
   }
 
+  /**
+   * Enters a short named argument into the ArgumentParser and updates the number of arguments that are
+   * required.
+   * @param short_name the short name of the argument
+   * @param arguments the queue of the arguments given on the command line
+   * @param num_required the number of arguments that are required
+   * @return the number of arguments that are required
+   */
   private int shortnameFound(String short_name, Queue<String> arguments, int num_required) {
     String name = short_args.get(short_name);
     Argument arg = args.get(name);
@@ -425,7 +434,15 @@ public class ArgumentParser {
     return num_required;
   }
 
-  public int nonpositionalFound(String name, Queue<String> arguments, int num_required) {
+  /**
+   * Parses the nonpositional arguments, enters their information into the ArgumentParser, and updates the
+   * number of arguments required.
+   * @param name the name of the nonpositional argument
+   * @param arguments the queue of arguments given on the command line
+   * @param num_required the number of arguments that are required
+   * @return the number of arguments that are required
+   */
+  private int nonpositionalFound(String name, Queue<String> arguments, int num_required) {
     Argument arg = args.get(name);
     if (arg == null) {
       throw new ArgumentNameNotSpecifiedException(name);
@@ -618,6 +635,10 @@ public class ArgumentParser {
     return args.size();
   }
 
+  /**
+   * Returns a list containing the names of all the positional arguments.
+   * @return a list containing the names of all the positional arguments
+   */
   public List<String> getPositionalNames() {
     List<String> cloned = new ArrayList<>();
     for (int i = 0; i < positional_names.size(); i++) {
@@ -626,6 +647,10 @@ public class ArgumentParser {
     return cloned;
   }
 
+  /**
+   * Returns a list of all the nonpositional names.
+   * @return a list of all the nonpositional names
+   */
   public List<String> getNonPositionalNames() {
     List<String> cloned = new ArrayList<>();
     for (int i = 0; i < nonpositional_names.size(); i++) {
@@ -634,18 +659,35 @@ public class ArgumentParser {
     return cloned;
   }
 
+  /**
+   * Returns a list of all the required arguments.
+   * @return a list of all the required arguments
+   */
   public List<String> getRequiredNames() {
     return new ArrayList<String>(required_names);
   }
 
+  /**
+   * Returns a list of the mutually exlusive groups (in lists).
+   * @return A list of lists holding mutually exclusive arguments.
+   */
   public List<List<String>> getMutuallyExclusive() {
     return new ArrayList<List<String>>(mutually_exclusive);
   }
 
+  /**
+   * Returns all the short names of arguments.
+   * @return a list containing the short names of the arguments with short names
+   */
   public List<String> getShortNames() {
     return new ArrayList<String>(short_name_names);
   }
 
+  /**
+   * Returns the argument with the associated short name.
+   * @param shortName the short name of the argument
+   * @return the argument associated with the short name
+   */
   public Argument getArgByShortName(String shortName) {
     String l = short_args.get(shortName);
     return getArgument(l);
