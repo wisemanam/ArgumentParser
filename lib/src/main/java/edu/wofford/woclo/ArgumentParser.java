@@ -36,6 +36,17 @@ public class ArgumentParser {
     trashcan = new ArrayList<String>();
   }
 
+  public ArgumentParser(ArgumentParser argParse) {
+    this.args = argParse.args;
+    this.short_args = argParse.short_args;
+    this.positional_names = argParse.positional_names;
+    this.nonpositional_names = argParse.nonpositional_names;
+    this.short_name_names = argParse.short_name_names;
+    this.required_names = argParse.required_names;
+    this.mutually_exclusive = argParse.mutually_exclusive;
+    this.trashcan = argParse.trashcan;
+  }
+
   /**
    * The addPositional method adds an expected argument to ArgumentParser that will not be named
    * when arguments are given on the command line.

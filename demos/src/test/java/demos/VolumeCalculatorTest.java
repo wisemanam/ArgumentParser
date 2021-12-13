@@ -59,7 +59,7 @@ public class VolumeCalculatorTest {
     assertEquals("125.664", result);
   }
 
-  // @Test
+  @Test
   public void testMissingDefault() {
     String xml =
         "<?xml version=\"1.0\"?>"
@@ -164,5 +164,348 @@ public class VolumeCalculatorTest {
     String help =
         "usage: java VolumeCalculator [-h] [-t TYPE] [-p PRECISION] length width height\n\nCalculate the volume.\n\npositional arguments:\n length                               (float)       the length of the volume\n width                                (float)       the width of the volume\n height                               (float)       the height of the volume\n\nnamed arguments:\n -h, --help                           show this help message and exit\n -t TYPE, --type TYPE                 (string)      the type of volume {box, pyramid, ellipsoid} (default: box)\n -p PRECISION, --precision PRECISION  (integer)     the maximum number of decimal places for the volume (default: 5)";
     assertEquals(help, result);
+  }
+
+  @Test
+  public void testBox() {
+    String xml =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "<name>length</name>"
+            + "</positional>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<name>width</name>"
+            + "<description>the width of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<description>the height of the volume</description>"
+            + "<name>height</name>"
+            + "<type>float</type>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<description>the type of volume</description>"
+            + "<shortname>t</shortname>"
+            + "<type>string</type>"
+            + "<name>type</name>"
+            + "<default>"
+            + "<value>box</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>box</restriction>"
+            + "<restriction>pyramid</restriction>"
+            + "<restriction>ellipsoid</restriction>"
+            + "</restrictions>"
+            + "</named>"
+            + "<named>"
+            + "<default>"
+            + "<value>4</value>"
+            + "</default>"
+            + "<type>integer</type>"
+            + "<description>the maximum number of decimal places for the volume</description>"
+            + "<name>precision</name>"
+            + "<shortname>p</shortname>"
+            + "</named>"
+            + "</namedArgs>"
+            + "</arguments>";
+    String[] args = {"2", "5", "-p", "3", "3"};
+    VolumeCalculator v = new VolumeCalculator();
+    String result = v.volumeCalculator(xml, args);
+    assertEquals("30.0", result);
+  }
+
+  @Test
+  public void testPyramid() {
+    String xml =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "<name>length</name>"
+            + "</positional>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<name>width</name>"
+            + "<description>the width of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<description>the height of the volume</description>"
+            + "<name>height</name>"
+            + "<type>float</type>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<description>the type of volume</description>"
+            + "<shortname>t</shortname>"
+            + "<type>string</type>"
+            + "<name>type</name>"
+            + "<default>"
+            + "<value>box</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>box</restriction>"
+            + "<restriction>pyramid</restriction>"
+            + "<restriction>ellipsoid</restriction>"
+            + "</restrictions>"
+            + "</named>"
+            + "<named>"
+            + "<default>"
+            + "<value>4</value>"
+            + "</default>"
+            + "<type>integer</type>"
+            + "<description>the maximum number of decimal places for the volume</description>"
+            + "<name>precision</name>"
+            + "<shortname>p</shortname>"
+            + "</named>"
+            + "</namedArgs>"
+            + "</arguments>";
+    String[] args = {"2", "--type", "pyramid", "5", "-p", "3", "3"};
+    VolumeCalculator v = new VolumeCalculator();
+    String result = v.volumeCalculator(xml, args);
+    assertEquals("10.0", result);
+  }
+
+  @Test
+  public void testTooMany() {
+    String xml =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "<name>length</name>"
+            + "</positional>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<name>width</name>"
+            + "<description>the width of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<description>the height of the volume</description>"
+            + "<name>height</name>"
+            + "<type>float</type>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<description>the type of volume</description>"
+            + "<shortname>t</shortname>"
+            + "<type>string</type>"
+            + "<name>type</name>"
+            + "<default>"
+            + "<value>box</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>box</restriction>"
+            + "<restriction>pyramid</restriction>"
+            + "<restriction>ellipsoid</restriction>"
+            + "</restrictions>"
+            + "</named>"
+            + "<named>"
+            + "<default>"
+            + "<value>4</value>"
+            + "</default>"
+            + "<type>integer</type>"
+            + "<description>the maximum number of decimal places for the volume</description>"
+            + "<name>precision</name>"
+            + "<shortname>p</shortname>"
+            + "</named>"
+            + "</namedArgs>"
+            + "</arguments>";
+    String[] args = {"2", "--type", "ellipsoid", "5", "-p", "3", "3", "9"};
+    VolumeCalculator v = new VolumeCalculator();
+    String result = v.volumeCalculator(xml, args);
+    assertEquals(result, "VolumeCalculator error: the value 9 matches no argument");
+  }
+
+  @Test
+  public void testTooFew() {
+    String xml =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "<name>length</name>"
+            + "</positional>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<name>width</name>"
+            + "<description>the width of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<description>the height of the volume</description>"
+            + "<name>height</name>"
+            + "<type>float</type>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<description>the type of volume</description>"
+            + "<shortname>t</shortname>"
+            + "<type>string</type>"
+            + "<name>type</name>"
+            + "<default>"
+            + "<value>box</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>box</restriction>"
+            + "<restriction>pyramid</restriction>"
+            + "<restriction>ellipsoid</restriction>"
+            + "</restrictions>"
+            + "</named>"
+            + "<named>"
+            + "<default>"
+            + "<value>4</value>"
+            + "</default>"
+            + "<type>integer</type>"
+            + "<description>the maximum number of decimal places for the volume</description>"
+            + "<name>precision</name>"
+            + "<shortname>p</shortname>"
+            + "</named>"
+            + "</namedArgs>"
+            + "</arguments>";
+    String[] args = {"2", "--type", "ellipsoid", "5", "-p", "3"};
+    VolumeCalculator v = new VolumeCalculator();
+    String result = v.volumeCalculator(xml, args);
+    assertEquals(result, "VolumeCalculator error: the argument height is required");
+  }
+
+  @Test
+  public void testMissingRequired() {
+    String xml =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "<name>length</name>"
+            + "</positional>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<name>width</name>"
+            + "<description>the width of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<description>the height of the volume</description>"
+            + "<name>height</name>"
+            + "<type>float</type>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<description>the type of volume</description>"
+            + "<shortname>t</shortname>"
+            + "<type>string</type>"
+            + "<name>type</name>"
+            + "<required/>"
+            + "<default>"
+            + "<value>box</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>box</restriction>"
+            + "<restriction>pyramid</restriction>"
+            + "<restriction>ellipsoid</restriction>"
+            + "</restrictions>"
+            + "</named>"
+            + "<named>"
+            + "<default>"
+            + "<value>4</value>"
+            + "</default>"
+            + "<type>integer</type>"
+            + "<description>the maximum number of decimal places for the volume</description>"
+            + "<name>precision</name>"
+            + "<shortname>p</shortname>"
+            + "</named>"
+            + "</namedArgs>"
+            + "</arguments>";
+    String[] args = {"2", "5", "3", "-p", "3"};
+    VolumeCalculator v = new VolumeCalculator();
+    String result = v.volumeCalculator(xml, args);
+    assertEquals(result, "VolumeCalculator error: required named argument type not given");
+  }
+
+  @Test
+  public void testMutualExclusionError() {
+    String xml =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "<name>length</name>"
+            + "</positional>"
+            + "<positional>"
+            + "<type>float</type>"
+            + "<name>width</name>"
+            + "<description>the width of the volume</description>"
+            + "</positional>"
+            + "<positional>"
+            + "<description>the height of the volume</description>"
+            + "<name>height</name>"
+            + "<type>float</type>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<description>the type of volume</description>"
+            + "<shortname>t</shortname>"
+            + "<type>string</type>"
+            + "<name>type</name>"
+            + "<default>"
+            + "<value>box</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>box</restriction>"
+            + "<restriction>pyramid</restriction>"
+            + "<restriction>ellipsoid</restriction>"
+            + "</restrictions>"
+            + "</named>"
+            + "<named>"
+            + "<default>"
+            + "<value>4</value>"
+            + "</default>"
+            + "<type>integer</type>"
+            + "<required/>"
+            + "<description>the maximum number of decimal places for the volume</description>"
+            + "<name>precision</name>"
+            + "<shortname>p</shortname>"
+            + "</named>"
+            + "<named>"
+            + "<name>foo</name>"
+            + "<type>boolean</type>"
+            + "<shortname>f</shortname>"
+            + "<default><value>false</value></default>"
+            + "</named>"
+            + "<named>"
+            + "<name>bar</name>"
+            + "<type>boolean</type>"
+            + "<default><value>false</value></default>"
+            + "</named>"
+            + "</namedArgs>"
+            + "<mutuallyExclusive>"
+            + "<group>"
+            + "<name>foo</name>"
+            + "<name>precision</name>"
+            + "</group>"
+            + "</mutuallyExclusive>"
+            + "</arguments>";
+    String[] args = {"2", "-f", "--type", "ellipsoid", "5", "-p", "2", "3"};
+    VolumeCalculator v = new VolumeCalculator();
+    String result = v.volumeCalculator(xml, args);
+    assertEquals(result, "VolumeCalculator error: mutual exclusion [foo, precision]");
   }
 }

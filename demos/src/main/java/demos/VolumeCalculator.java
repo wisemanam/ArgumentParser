@@ -20,7 +20,7 @@ public class VolumeCalculator {
         volume = length * width * height;
       } else if (type.equals("pyramid")) {
         volume = length * width * height / 3;
-      } else if (type.equals("ellipsoid")) {
+      } else {
         volume = (float) Math.PI * length * width * height * 4 / 3;
       }
       Double d = volume.doubleValue();
@@ -29,14 +29,6 @@ public class VolumeCalculator {
       return String.valueOf(val2);
     } catch (HelpException e) {
       return e.getHelpMessage("VolumeCalculator", "Calculate the volume.");
-      // return "usage: java VolumeCalculator [-h] [-t TYPE] [-p PRECISION] length width
-      // height\n\nCalculate the volume.\n\npositional arguments:\n length
-      //     (float)       the length of the volume\n width                                (float)
-      //     the width of the volume\n height                               (float)       the height
-      // of the volume\n\nnamed arguments:\n -h, --help                           show this help
-      // message and exit\n -t TYPE, --type TYPE                 (string)      the type of volume
-      // {box, pyramid, ellipsoid} (default: box)\n -p PRECISION, --precision PRECISION  (integer)
-      //   the maximum number of decimal places for the volume (default: 4)";
     } catch (TooManyException e) {
       return "VolumeCalculator error: the value " + e.getFirstExtra() + " matches no argument";
     } catch (TooFewException e) {

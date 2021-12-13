@@ -22,7 +22,7 @@ public class HelpException extends RuntimeException {
   }
 
   public HelpException(ArgumentParser argParse) {
-    this.argParse = argParse;
+    this.argParse = new ArgumentParser(argParse);
     allArgumentsList = new ArrayList<List<String>>();
     positionalStringList = new ArrayList<List<String>>();
     namedStringList = new ArrayList<List<String>>();
@@ -75,14 +75,14 @@ public class HelpException extends RuntimeException {
             "-"
                 + shortName
                 + " "
-                + arg.getName().toUpperCase()
+                + arg.getName().toUpperCase(Locale.ENGLISH)
                 + ", "
                 + "--"
                 + arg.getName()
                 + " "
-                + arg.getName().toUpperCase();
+                + arg.getName().toUpperCase(Locale.ENGLISH);
       } else if (shortName.equals("") && !arg.getType().equals("boolean")) {
-        name_str += "--" + arg.getName() + " " + arg.getName().toUpperCase();
+        name_str += "--" + arg.getName() + " " + arg.getName().toUpperCase(Locale.ENGLISH);
       }
       argumentList.add(name_str);
       if (!arg.getType().equals("boolean")) {
@@ -154,7 +154,7 @@ public class HelpException extends RuntimeException {
         }
 
         if (!optArg.getType().equals("boolean")) {
-          sb.append(" " + optArg.getName().toUpperCase());
+          sb.append(" " + optArg.getName().toUpperCase(Locale.ENGLISH));
         }
 
         if (!optArg.isRequired()) {
