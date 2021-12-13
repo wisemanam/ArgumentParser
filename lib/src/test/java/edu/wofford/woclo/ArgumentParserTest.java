@@ -1645,6 +1645,269 @@ public class ArgumentParserTest {
 
   @Test
   public void testTryMutuallyExclusive() {
-    
+    ArgumentParser argParse = new ArgumentParser();
+    List<String> mutually_exclusive = new ArrayList<>();
+    mutually_exclusive.add("foo");
+    argParse.addMutuallyExclusiveGroup(mutually_exclusive);
+    int len = argParse.getMutuallyExclusive().size();
+    assertEquals(len, 0);
+  }
+
+  @Test
+  public void testRequiredNamedMissingShortName() {
+    RequiredArgumentMissingException e =
+        assertThrows(
+            RequiredArgumentMissingException.class,
+            () -> {
+              String[] arguments = {"6", "--shape", "square"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("int1", "integer", "int");
+              argParse.addNonPositional("shape", "s", "string", "shape", true);
+              argParse.addNonPositional("test", "t", "integer", "test", true);
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getMissingRequired(), "test");
+  }
+
+  @Test
+  public void testRequiredNamedMissingShortName2() {
+    RequiredArgumentMissingException e =
+        assertThrows(
+            RequiredArgumentMissingException.class,
+            () -> {
+              String[] arguments = {"6", "--shape", "square", "-t", "6", "-a", "4", "-4.5"};
+              ArgumentParser argParse = new ArgumentParser();
+              argParse.addPositional("int1", "integer", "int");
+              argParse.addPositional("float1", "float", "float");
+              argParse.addNonPositional("shape", "s", "string", "shape", true);
+              argParse.addNonPositional("test", "t", "integer", "test", true);
+              argParse.addNonPositional("test2", "r", "integer", "test2", true);
+              argParse.addNonPositional("test3", "a", "integer", "test3", "5");
+              argParse.parse(arguments);
+            });
+    assertEquals(e.getMissingRequired(), "test2");
+  }
+
+  @Test
+  public void testMissingNameInXML() {
+    MissingFromXMLException e =
+        assertThrows(
+            MissingFromXMLException.class,
+            () -> {
+              String test =
+                  "<?xml version=\"1.0\"?>"
+                      + "<arguments>"
+                      + "<positionalArgs>"
+                      + "<positional>"
+                      + "<type>float</type>"
+                      + "<description>the length of the volume</description>"
+                      + "</positional>"
+                      + "</positionalArgs>"
+                      + "</arguments>";
+              ArgumentParser a = XMLparser.parseXML(test);
+            });
+    assertEquals(e.getMissing(), "name");
+  }
+
+  @Test
+  public void testMissingTypeInXML() {
+    MissingFromXMLException e =
+        assertThrows(
+            MissingFromXMLException.class,
+            () -> {
+              String test =
+                  "<?xml version=\"1.0\"?>"
+                      + "<arguments>"
+                      + "<positionalArgs>"
+                      + "<positional>"
+                      + "<name>length</name>"
+                      + "<description>the length of the volume</description>"
+                      + "</positional>"
+                      + "</positionalArgs>"
+                      + "</arguments>";
+              ArgumentParser a = XMLparser.parseXML(test);
+            });
+    assertEquals(e.getMissing(), "type");
+  }
+
+  @Test
+  public void testRestrictionPositionalXML() {
+    String test =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<name>length</name>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "<restrictions>"
+            + "<restriction>4.5</restriction>"
+            + "<restriction>5.5</restriction>"
+            + "</restrictions>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "</arguments>";
+    String[] arguments = {"4.5"};
+    ArgumentParser a = XMLparser.parseXML(test);
+    a.parse(arguments);
+    float length = a.getValue("length");
+    assertEquals(length, 4.5, 0.1);
+  }
+
+  @Test
+  public void testMissingNameNamedInXML() {
+    MissingFromXMLException e =
+        assertThrows(
+            MissingFromXMLException.class,
+            () -> {
+              String test =
+                  "<?xml version=\"1.0\"?>"
+                      + "<arguments>"
+                      + "<namedArgs>"
+                      + "<named>"
+                      + "<type>float</type>"
+                      + "<description>the length of the volume</description>"
+                      + "<default>"
+                      + "<value>4.5</value>"
+                      + "</default>"
+                      + "</named>"
+                      + "</namedArgs>"
+                      + "</arguments>";
+              ArgumentParser a = XMLparser.parseXML(test);
+            });
+    assertEquals(e.getMissing(), "name");
+  }
+
+  @Test
+  public void testMissingTypeNamedInXML() {
+    MissingFromXMLException e =
+        assertThrows(
+            MissingFromXMLException.class,
+            () -> {
+              String test =
+                  "<?xml version=\"1.0\"?>"
+                      + "<arguments>"
+                      + "<namedArgs>"
+                      + "<named>"
+                      + "<name>length</name>"
+                      + "<description>the length of the volume</description>"
+                      + "<default>"
+                      + "<value>4.5</value>"
+                      + "</default>"
+                      + "</named>"
+                      + "</namedArgs>"
+                      + "</arguments>";
+              ArgumentParser a = XMLparser.parseXML(test);
+            });
+    assertEquals(e.getMissing(), "type");
+  }
+
+  @Test
+  public void testRestrictionNamedXML() {
+    String test =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<name>length</name>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "<default>"
+            + "<value>5.5</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>4.5</restriction>"
+            + "<restriction>5.5</restriction>"
+            + "</restrictions>"
+            + "</named>"
+            + "</namedArgs>"
+            + "</arguments>";
+    String[] arguments = {"--length", "4.5"};
+    ArgumentParser a = XMLparser.parseXML(test);
+    a.parse(arguments);
+    float length = a.getValue("length");
+    assertEquals(length, 4.5, 0.1);
+  }
+
+  @Test
+  public void testRestrictionRequiredNamedXML() {
+    String test =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<name>length</name>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "<default>"
+            + "<value>5.5</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>4.5</restriction>"
+            + "<restriction>5.5</restriction>"
+            + "</restrictions>"
+            + "<required/>"
+            + "</named>"
+            + "</namedArgs>"
+            + "</arguments>";
+    String[] arguments = {"--length", "4.5"};
+    ArgumentParser a = XMLparser.parseXML(test);
+    a.parse(arguments);
+    float length = a.getValue("length");
+    assertEquals(length, 4.5, 0.1);
+  }
+
+  @Test
+  public void testRestrictionRequiredShortNameNamedXML() {
+    String test =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<name>length</name>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "<default>"
+            + "<value>5.5</value>"
+            + "</default>"
+            + "<restrictions>"
+            + "<restriction>4.5</restriction>"
+            + "<restriction>5.5</restriction>"
+            + "</restrictions>"
+            + "<required/>"
+            + "<shortname>l</shortname>"
+            + "</named>"
+            + "</namedArgs>"
+            + "</arguments>";
+    String[] arguments = {"--length", "4.5"};
+    ArgumentParser a = XMLparser.parseXML(test);
+    a.parse(arguments);
+    float length = a.getValue("length");
+    assertEquals(length, 4.5, 0.1);
+  }
+
+  @Test
+  public void testRequiredXML() {
+    String test =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<namedArgs>"
+            + "<named>"
+            + "<name>length</name>"
+            + "<type>float</type>"
+            + "<description>the length of the volume</description>"
+            + "<default>"
+            + "<value>5.5</value>"
+            + "</default>"
+            + "<required/>"
+            + "</named>"
+            + "</namedArgs>"
+            + "</arguments>";
+    String[] arguments = {"--length", "4.5"};
+    XMLparser x = new XMLparser();
+    ArgumentParser a = x.parseXML(test);
+    a.parse(arguments);
+    float length = a.getValue("length");
+    assertEquals(length, 4.5, 0.1);
   }
 }
