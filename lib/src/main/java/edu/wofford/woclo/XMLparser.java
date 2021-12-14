@@ -114,7 +114,7 @@ public class XMLparser {
    * adds the nonpositional arguments to the ArgumentParser
    *
    * @param argParse the ArgumentParser
-   * @param pos_list the list of nonpositional arguments
+   * @param named_list the list of nonpositional arguments
    * @return the ArgumentParser
    */
   public static ArgumentParser parseNonpositionals(ArgumentParser argParse, NodeList named_list) {
