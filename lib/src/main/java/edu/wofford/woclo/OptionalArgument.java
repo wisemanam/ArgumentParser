@@ -174,6 +174,7 @@ public class OptionalArgument extends Argument {
 
   /**
    * Returns the value of the argument as a string
+   *
    * @return the value of the argument
    */
   public String getValueAsString() {
@@ -182,6 +183,7 @@ public class OptionalArgument extends Argument {
 
   /**
    * Returns true if the argument is required, false otherwise.
+   *
    * @return a boolean stating whether or not the boolean is required
    */
   public boolean isRequired() {
@@ -190,6 +192,7 @@ public class OptionalArgument extends Argument {
 
   /**
    * Returns true if the argument has a short name, false otherwise.
+   *
    * @return a boolean stating whether or not the argument has a short name
    */
   public boolean hasShortName() {

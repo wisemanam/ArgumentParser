@@ -3,9 +3,7 @@ package edu.wofford.woclo;
 import java.io.*;
 import java.util.*;
 
-/**
- * This exception is thrown when a required argument is not given by the user.
- */
+/** This exception is thrown when a required argument is not given by the user. */
 public class RequiredArgumentMissingException extends RuntimeException {
   private List<String> required_names;
   private String[] arguments;
@@ -13,8 +11,9 @@ public class RequiredArgumentMissingException extends RuntimeException {
   private Map<String, String> short_to_long;
 
   /**
-   * The constructor takes a list of the names of the required arguments, a list of the arguments given by
-   * the user, and a map that maps the short names to the long names of the arguments.
+   * The constructor takes a list of the names of the required arguments, a list of the arguments
+   * given by the user, and a map that maps the short names to the long names of the arguments.
+   *
    * @param required_names a list of the names of the required arguments
    * @param arguments a list of the arguments given by the user
    * @param short_to_long a map that maps the short names of the arguments to the long names
@@ -29,6 +28,7 @@ public class RequiredArgumentMissingException extends RuntimeException {
 
   /**
    * Returns the name of the required argument that is missing.
+   *
    * @return
    */
   public String getMissingRequired() {
