@@ -15,6 +15,7 @@ public class HelpException extends RuntimeException {
 
   /**
    * The constructor for HelpException requires the ArgumentParser
+   *
    * @param argParse the ArgumentParser
    */
   public HelpException(ArgumentParser argParse) {
@@ -28,7 +29,8 @@ public class HelpException extends RuntimeException {
 
   /**
    * getArgumentList takes the ArgumentParser and returns a list of lists where each internal list
-   * represents a line. Each element in the internal list is sepearated by a designated number of spaces.
+   * represents a line. Each element in the internal list is sepearated by a designated number of
+   * spaces.
    */
   private List<List<String>> getArgumentList(ArgumentParser argParse) {
     List<List<String>> allArgs = new ArrayList<List<String>>();
@@ -127,9 +129,11 @@ public class HelpException extends RuntimeException {
   }
 
   /**
-   * findSpacing calculates the number of spaces that go in between the first and second segment of strings
-   * in a line.
-   * @return the number of spaces that go in between the first and second segment of strings in a line
+   * findSpacing calculates the number of spaces that go in between the first and second segment of
+   * strings in a line.
+   *
+   * @return the number of spaces that go in between the first and second segment of strings in a
+   *     line
    */
   private int findSpacing() {
     int m = 0;
@@ -142,7 +146,9 @@ public class HelpException extends RuntimeException {
   }
 
   /**
-   * Takes an ArgumentParser and returns the string that will go at the beginning of the help message
+   * Takes an ArgumentParser and returns the string that will go at the beginning of the help
+   * message
+   *
    * @param argParse the ArgumentParser
    * @return the string that goes at the beginning of the help message
    */
@@ -184,8 +190,9 @@ public class HelpException extends RuntimeException {
   }
 
   /**
-   * Takes an ArgumentParser, the name of the demo, and the description of the demo and creates the help
-   * message as a string.
+   * Takes an ArgumentParser, the name of the demo, and the description of the demo and creates the
+   * help message as a string.
+   *
    * @param argParse the ArgumentParser
    * @param demoName the name of the demo
    * @param demoDescription the description of the demo

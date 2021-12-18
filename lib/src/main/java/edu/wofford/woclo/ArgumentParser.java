@@ -37,7 +37,9 @@ public class ArgumentParser {
   }
 
   /**
-   * This is a copy constructor that takes an ArgumentParser and produces a shallow copy of that parser.
+   * This is a copy constructor that takes an ArgumentParser and produces a shallow copy of that
+   * parser.
+   *
    * @param argParse the ArgumentParser to be copied
    */
   public ArgumentParser(ArgumentParser argParse) {
@@ -166,6 +168,7 @@ public class ArgumentParser {
   /**
    * This method adds a non-positional argument using the name, type, description, and a boolean
    * determining whether or not the argument is required.
+   *
    * @param name the name that will be used to retrieve this argument from ArgumentParser
    * @param type the type that the value will be when it is retreived from ArgumentParser
    * @param description the description of the argument used in the help message
@@ -179,8 +182,9 @@ public class ArgumentParser {
   }
 
   /**
-   * This method adds a non-positional argument using the name, short name, type, description, and a boolean
-   * determining whether or not the argument is required.
+   * This method adds a non-positional argument using the name, short name, type, description, and a
+   * boolean determining whether or not the argument is required.
+   *
    * @param name the name that will be used to retrieve this argument from ArgumentParser
    * @param shortname the short name that can be used to enter the argument into the command line
    * @param type the type that the value will be when it is retreived from ArgumentParser
@@ -198,8 +202,9 @@ public class ArgumentParser {
   }
 
   /**
-   * This method adds a non-positional argument using the name, type, description, a list of 
+   * This method adds a non-positional argument using the name, type, description, a list of
    * accepted values, and a boolean determining whether or not the argument is required.
+   *
    * @param name the name that will be used to retrieve this argument from ArgumentParser
    * @param type the type that the value will be when it is retreived from ArgumentParser
    * @param description the description of the argument used in the help message
@@ -215,8 +220,9 @@ public class ArgumentParser {
   }
 
   /**
-   * This method adds a non-positional argument using the name, short name, type, description, a list of 
-   * accepted values, and a boolean determining whether or not the argument is required.
+   * This method adds a non-positional argument using the name, short name, type, description, a
+   * list of accepted values, and a boolean determining whether or not the argument is required.
+   *
    * @param name the name that will be used to retrieve this argument from ArgumentParser
    * @param shortname the short name that can be used to enter the argument into the command line
    * @param type the type that the value will be when it is retreived from ArgumentParser
@@ -241,6 +247,7 @@ public class ArgumentParser {
 
   /**
    * Adds a group of mutually exclusive arguments to the ArgumentParser.
+   *
    * @param mutuallyExclusive the list of arguments that are mutually exclusive
    */
   public void addMutuallyExclusiveGroup(List<String> mutuallyExclusive) {
@@ -251,6 +258,7 @@ public class ArgumentParser {
 
   /**
    * Returns true if there are two arguments that are mutually exclusive
+   *
    * @param mutexc a list of the mutually exclusive arguments
    * @param arguments the list of arguments from the command line
    * @return true if there is are conflicting arguments, false otherwise
@@ -289,6 +297,7 @@ public class ArgumentParser {
 
   /**
    * Parses the positional argument and enters its information into the ArgumentParser
+   *
    * @param name the name of the positional argument
    * @param value the value of the positional argument
    */
@@ -336,8 +345,9 @@ public class ArgumentParser {
   }
 
   /**
-   * Parses a stack of boolean arguments and enters their information into the ArgumentParser and updates the
-   * number of arguments that are required.
+   * Parses a stack of boolean arguments and enters their information into the ArgumentParser and
+   * updates the number of arguments that are required.
+   *
    * @param short_name the current short name in the stack
    * @param arguments the queue of arguments
    * @param num_required the number of required arguments in the stacked flags
@@ -364,8 +374,9 @@ public class ArgumentParser {
   }
 
   /**
-   * Enters a short named argument into the ArgumentParser and updates the number of arguments that are
-   * required.
+   * Enters a short named argument into the ArgumentParser and updates the number of arguments that
+   * are required.
+   *
    * @param short_name the short name of the argument
    * @param arguments the queue of the arguments given on the command line
    * @param num_required the number of arguments that are required
@@ -435,8 +446,9 @@ public class ArgumentParser {
   }
 
   /**
-   * Parses the nonpositional arguments, enters their information into the ArgumentParser, and updates the
-   * number of arguments required.
+   * Parses the nonpositional arguments, enters their information into the ArgumentParser, and
+   * updates the number of arguments required.
+   *
    * @param name the name of the nonpositional argument
    * @param arguments the queue of arguments given on the command line
    * @param num_required the number of arguments that are required
@@ -637,6 +649,7 @@ public class ArgumentParser {
 
   /**
    * Returns a list containing the names of all the positional arguments.
+   *
    * @return a list containing the names of all the positional arguments
    */
   public List<String> getPositionalNames() {
@@ -649,6 +662,7 @@ public class ArgumentParser {
 
   /**
    * Returns a list of all the nonpositional names.
+   *
    * @return a list of all the nonpositional names
    */
   public List<String> getNonPositionalNames() {
@@ -661,6 +675,7 @@ public class ArgumentParser {
 
   /**
    * Returns a list of all the required arguments.
+   *
    * @return a list of all the required arguments
    */
   public List<String> getRequiredNames() {
@@ -669,6 +684,7 @@ public class ArgumentParser {
 
   /**
    * Returns a list of the mutually exlusive groups (in lists).
+   *
    * @return A list of lists holding mutually exclusive arguments.
    */
   public List<List<String>> getMutuallyExclusive() {
@@ -677,6 +693,7 @@ public class ArgumentParser {
 
   /**
    * Returns all the short names of arguments.
+   *
    * @return a list containing the short names of the arguments with short names
    */
   public List<String> getShortNames() {
@@ -685,6 +702,7 @@ public class ArgumentParser {
 
   /**
    * Returns the argument with the associated short name.
+   *
    * @param shortName the short name of the argument
    * @return the argument associated with the short name
    */

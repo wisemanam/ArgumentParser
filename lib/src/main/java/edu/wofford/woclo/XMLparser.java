@@ -7,12 +7,13 @@ import org.w3c.dom.*;
 import org.xml.sax.*;
 
 /**
- * The XMLparser class helps read arguments into an ArgumentParser from an XML string and write arguments from
- * an ArgumentParser into an XML string.
+ * The XMLparser class helps read arguments into an ArgumentParser from an XML string and write
+ * arguments from an ArgumentParser into an XML string.
  */
 public class XMLparser {
   /**
    * parseXML takes a string and parses the arguments into an ArgumentParser
+   *
    * @param giantXmlString an XML string that contains the arguments to be parsed
    * @return the ArgumentParser containing the arguments in the XML string
    */
@@ -47,8 +48,9 @@ public class XMLparser {
   }
 
   /**
-   * parsePositionals takes an ArgumentParser and the names of the positional arguments and adds the positional
-   * arguments to the ArgumentParser
+   * parsePositionals takes an ArgumentParser and the names of the positional arguments and adds the
+   * positional arguments to the ArgumentParser
+   *
    * @param argParse the ArgumentParser
    * @param pos_list the list of positional arguments
    * @return the ArgumentParser
@@ -108,8 +110,9 @@ public class XMLparser {
   }
 
   /**
-   * parseNonpositionals takes an ArgumentParser and the names of the nonpositional arguments and adds the 
-   * nonpositional arguments to the ArgumentParser
+   * parseNonpositionals takes an ArgumentParser and the names of the nonpositional arguments and
+   * adds the nonpositional arguments to the ArgumentParser
+   *
    * @param argParse the ArgumentParser
    * @param pos_list the list of nonpositional arguments
    * @return the ArgumentParser
@@ -206,8 +209,9 @@ public class XMLparser {
   }
 
   /**
-   * parseMutuallyExclusive takes the ArgumentParser and a list of mutually exclusive groups
-   * and adds those groups to the ArgumentParser.
+   * parseMutuallyExclusive takes the ArgumentParser and a list of mutually exclusive groups and
+   * adds those groups to the ArgumentParser.
+   *
    * @param argParse the ArgumentParser
    * @param mut_exc_list the list of lists containing mutually exclusive arguments
    * @return the ArgumentParser
@@ -240,6 +244,7 @@ public class XMLparser {
 
   /**
    * parserToXML takes an ArgumentParser and converts the arguments it contains into an XML string
+   *
    * @param argParse the ArgumentParser
    * @return the XML string containing the arguments in the ArgumentParser
    */
@@ -282,6 +287,7 @@ public class XMLparser {
 
   /**
    * argumentToXML takes an Argument and converts it into XML format
+   *
    * @param argParse the ArgumentParser
    * @param a the Argument
    * @return the String containing the argument in XML format
@@ -338,8 +344,9 @@ public class XMLparser {
   }
 
   /**
-   * mutualExclusiveGroupToXML takes a group of mutually exclusive arguments and returns a string of those
-   * arguments in XML format
+   * mutualExclusiveGroupToXML takes a group of mutually exclusive arguments and returns a string of
+   * those arguments in XML format
+   *
    * @param group the group of mutually exclusive arguments
    * @return the String of arguments in XML format
    */
