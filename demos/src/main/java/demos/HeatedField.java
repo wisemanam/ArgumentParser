@@ -16,13 +16,9 @@ public class HeatedField {
     argParse.addPositional(
         "y", "integer", "the y coordinate of the internal cell {1, 2, 3, 4, 5, 6, 7, 8}", accepted);
     argParse.addNonPositional(
-        "temperature",
-        "t",
-        "float",
-        "the initial temperature of internal cells (default: 32.0)",
-        "32.0");
+        "temperature", "t", "float", "the initial temperature of internal cells", "32.0");
     argParse.addNonPositional(
-        "minutes", "m", "integer", "the number of minutes to apply heating (default: 10)", "10");
+        "minutes", "m", "integer", "the number of minutes to apply heating", "10");
     try {
       argParse.parse(arguments);
       float north = argParse.getValue("north");
@@ -111,7 +107,7 @@ public class HeatedField {
       String type = e.getExpectedType();
       return "HeatedField error: the value " + value + " is not of type " + type;
     } catch (HelpException e) {
-      return "usage: java HeatedField [-h] [-t TEMPERATURE] [-m MINUTES] north south east west x y\n\nCalculate the internal cell temperature.\n\npositional arguments:\n north                                      (float)       the temperature of the north edge\n south                                      (float)       the temperature of the south edge\n east                                       (float)       the temperature of the east edge\n west                                       (float)       the temperature of the west edge\n x                                          (integer)     the x coordinate of the internal cell {1, 2, 3, 4, 5, 6, 7, 8}\n y                                          (integer)     the y coordinate of the internal cell {1, 2, 3, 4, 5, 6, 7, 8}\n\nnamed arguments:\n -h, --help                                 show this help message and exit\n -t TEMPERATURE, --temperature TEMPERATURE  (float)       the initial temperature of internal cells (default: 32.0)\n -m MINUTES, --minutes MINUTES              (integer)     the number of minutes to apply heating (default: 10)";
+      return e.getHelpMessage(argParse, "HeatedField", "Calculate the internal cell temperature.");
     }
   }
 

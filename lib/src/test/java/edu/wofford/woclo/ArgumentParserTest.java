@@ -2010,4 +2010,24 @@ public class ArgumentParserTest {
             });
     assertEquals(e.getHelpMessage(argParse, demo_name, demo_description), help);
   }
+
+  @Test
+  public void testMissingDescriptionXML() {
+    String test =
+        "<?xml version=\"1.0\"?>"
+            + "<arguments>"
+            + "<positionalArgs>"
+            + "<positional>"
+            + "<name>length</name>"
+            + "<type>float</type>"
+            + "</positional>"
+            + "</positionalArgs>"
+            + "</arguments>";
+    XMLparser x = new XMLparser();
+    ArgumentParser a = x.parseXML(test);
+    String[] arguments = {"4.5"};
+    a.parse(arguments);
+    float length = a.getValue("length");
+    assertEquals(length, 4.5);
+  }
 }
